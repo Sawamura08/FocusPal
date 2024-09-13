@@ -1,0 +1,148 @@
+@use "../../../app.component.scss" as *;
+@use "../../../icons/font-awesome-6-pro-main/css/all.css" as *;
+
+main {
+  background: $mainColor;
+
+  width: 100%;
+  min-height: 100dvh;
+  max-height: 100dvh;
+  overflow: none;
+  display: flex;
+  flex-direction: column;
+  font-family: $fontFamily;
+
+  position: relative;
+  z-index: 1;
+
+  .create-account {
+    width: 80%;
+    height: 20dvh;
+    padding: 2rem;
+
+    h6 {
+      color: white;
+      font-size: 2rem;
+    }
+  }
+
+  .signup-bg {
+    width: 100%;
+    height: 80vh;
+    background-color: white;
+    border-top-left-radius: 2.5rem;
+    border-top-right-radius: 2.5rem;
+    padding: 2rem;
+
+    .signup-container {
+      width: 100%;
+
+      .user-input-container {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+
+        .form-input-container {
+          width: 100%;
+
+          label {
+            color: $mainColor;
+            font-weight: 600;
+            font-size: 1rem;
+          }
+
+          .form-inputs {
+            position: relative;
+            width: 100%;
+
+            .userInput {
+              border: none;
+              border-bottom: 1px solid #6c757d;
+              width: 100%;
+              font-size: 1rem;
+              padding: 0.5rem;
+              outline: none;
+              font-family: $subText;
+            }
+
+            .userInput.ng-invalid.ng-touched {
+              border-color: red;
+            }
+
+            .userInput.ng-valid.ng-touched ~ .icon {
+              color: green;
+            }
+
+            .icon {
+              position: absolute;
+              top: 20%;
+              right: 5%;
+              transform: translate(30%, 10%);
+              font-size: 1.25rem;
+              color: #adb5bd;
+            }
+
+            .eye {
+              position: absolute;
+              top: 20%;
+              right: 5%;
+              transform: translate(30%, 10%);
+              font-size: 1.25rem;
+              color: #adb5bd;
+            }
+          }
+
+          .error {
+            font-size: 0.8rem;
+            font-family: $subText;
+            color: red;
+          }
+        }
+
+        .button-container {
+          margin: 0 auto;
+          margin-block-start: 2rem;
+          width: 80%;
+
+          .btn {
+            @include buttonTheme($mainColor, $neutralColor, $shadow);
+            width: 100%;
+            font-size: 1.25rem;
+            border-radius: 16px;
+
+            &:active {
+              top: 4px;
+              box-shadow: $mainColor 0px 3px 2px, #000 0px 3px 5px;
+            }
+          }
+        }
+      }
+
+      .signUp-container {
+        width: 100%;
+        text-align: right;
+        margin-top: 4rem;
+
+        p {
+          font-size: 1rem;
+          opacity: 0.8;
+          margin-block: 0.5rem;
+        }
+        h6 {
+          font-size: 1rem;
+          text-decoration: underline;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+}
+.loading {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  width: 100%;
+  height: 100vh;
+}

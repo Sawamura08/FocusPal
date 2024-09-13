@@ -1,0 +1,145 @@
+<main>
+  <header class="create-account">
+    <h6>Create Your Account</h6>
+  </header>
+
+  <div class="signup-bg">
+    <div class="signup-container">
+      <form
+        action=""
+        class="user-input-container"
+        [formGroup]="userDatas"
+        (ngSubmit)="signUpSubmit()"
+      >
+        <section class="form-input-container">
+          <label for="userName">Username</label>
+          <div class="form-inputs">
+            <input
+              type="text"
+              name="userName"
+              id="userName"
+              class="userInput"
+              formControlName="userName"
+            />
+            <span class="icon"><i class="fa-solid fa-check"></i></span>
+          </div>
+
+          <div
+            class="error-container"
+            *ngIf="userName?.invalid && (userName?.dirty || userName?.touched)"
+          >
+            <p class="error" *ngIf="userName?.errors?.['required']">
+              This is a required Field
+            </p>
+          </div>
+        </section>
+        <section class="form-input-container">
+          <label for="email">Email Address</label>
+          <div class="form-inputs">
+            <input
+              type="email"
+              name="email"
+              id="email"
+              class="userInput"
+              formControlName="email"
+            />
+            <span class="icon"><i class="fa-solid fa-check"></i></span>
+          </div>
+
+          <div
+            class="error-container"
+            *ngIf="email?.invalid && (email?.dirty || email?.touched)"
+          >
+            <p class="error" *ngIf="email?.errors?.['required']">
+              This is a required Field
+            </p>
+            <p class="error" *ngIf="email?.errors?.['email']">
+              Please enter valid email address
+            </p>
+          </div>
+        </section>
+        <section class="form-input-container">
+          <label for="password">Password</label>
+          <div class="form-inputs">
+            <input
+              [type]="passwordVisibility.password ? 'text' : 'password'"
+              name="password"
+              id="password"
+              class="userInput"
+              formControlName="password"
+            />
+            <span class="eye"
+              ><i
+                class="fa-solid"
+                [ngClass]="
+                  passwordVisibility.password ? 'fa-eye' : 'fa-eye-slash'
+                "
+                (click)="toggleVisibility('password')"
+              ></i
+            ></span>
+          </div>
+
+          <div
+            class="error-container"
+            *ngIf="password?.invalid && (password?.dirty || password?.touched)"
+          >
+            <p class="error" *ngIf="password?.errors?.['required']">
+              This is a required Field
+            </p>
+          </div>
+        </section>
+        <section class="form-input-container">
+          <label for="confirmPass">Confirm Password</label>
+          <div class="form-inputs">
+            <input
+              [type]="passwordVisibility.confirmPassword ? 'text' : 'password'"
+              name="confirmPass"
+              id="confirmPass"
+              class="userInput"
+              formControlName="confirmPassword"
+            />
+            <span class="eye"
+              ><i
+                class="fa-solid"
+                (click)="toggleVisibility('confirmPassword')"
+                [ngClass]="
+                  passwordVisibility.confirmPassword ? 'fa-eye' : 'fa-eye-slash'
+                "
+              ></i
+            ></span>
+          </div>
+          <div
+            class="error-container"
+            *ngIf="
+              confirmPassword?.invalid &&
+              (confirmPassword?.dirty || confirmPassword?.touched)
+            "
+          >
+            <p class="error" *ngIf="confirmPassword?.errors?.['required']">
+              This is a required Field
+            </p>
+          </div>
+          <div
+            class="error-container"
+            *ngIf="userDatas.errors?.['passwordsMismatch'] && (confirmPassword?.dirty || confirmPassword?.touched)"
+          >
+            <p class="error">Password do not match</p>
+          </div>
+        </section>
+
+        <section class="button-container">
+          <button class="btn" [ngStyle]="disabledBtn()">Sign Up</button>
+        </section>
+      </form>
+
+      <section class="signUp-container">
+        <p>Already have account?</p>
+        <h6>Sign In</h6>
+      </section>
+    </div>
+  </div>
+</main>
+
+<div class="loading" *ngIf="isLoading">
+  <app-loading></app-loading>
+</div>

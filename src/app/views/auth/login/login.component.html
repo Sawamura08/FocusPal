@@ -1,0 +1,68 @@
+<main>
+  <header class="greetings">
+    <h4>Hello,</h4>
+    <h4>Sign In!</h4>
+  </header>
+
+  <section class="signIn-bg">
+    <div class="signIn-container">
+      <form class="user-input-container" [formGroup]="userInput">
+        <section class="form-inputs-container">
+          <label for="email">Email</label>
+          <div class="form-inputs">
+            <input
+              type="email"
+              name="email"
+              id="email"
+              class="userInputs"
+              placeholder="Email"
+              formControlName="email"
+            />
+            <span class="icon" [ngClass]="email?.valid ? 'checkError' : ''"
+              ><i class="fa-solid fa-check"></i
+            ></span>
+          </div>
+        </section>
+        <section class="form-inputs-container">
+          <label for="">Password</label>
+          <div class="form-inputs">
+            <input
+              type="{{ isPassVisible ? 'text' : 'password' }}"
+              name="password"
+              id="password"
+              class="userInputs"
+              placeholder="Password"
+              formControlName="password"
+            />
+            <span class="icon" (click)="checkPass()"
+              ><i
+                class="fa-regular"
+                [ngClass]="passStatus ? 'fa-eye' : 'fa-eye-slash'"
+              ></i
+            ></span>
+          </div>
+        </section>
+
+        <section class="forgot-pass">
+          <a class="forgot">Forgot password?</a>
+        </section>
+
+        <section class="button-container">
+          <button
+            class="btn"
+            (click)="submitForms()"
+            [disabled]="formSubmitted"
+            [ngStyle]="disableBtn()"
+          >
+            Sign In
+          </button>
+        </section>
+      </form>
+
+      <section class="signUp-container">
+        <p>Don't have account?</p>
+        <a (click)="signUp()">Sign Up</a>
+      </section>
+    </div>
+  </section>
+</main>

@@ -1,0 +1,34 @@
+@font-face {
+  font-family: "FeatherBold";
+  src: url("/featherbold.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "DIN-light";
+  src: url("/DIN-fonts/light.otf") format("opentype");
+}
+
+$subText: "DIN-light";
+$fontFamily: "FeatherBold";
+$mainColor: #ff6f61;
+$shadow: #c0392b;
+$textColor: #2d2d2d;
+$neutralColor: #fff5f2;
+
+@mixin buttonTheme($bgColor, $textColor, $shadow) {
+  padding: 0.75rem;
+  background-color: $bgColor;
+  color: $textColor;
+  border-radius: 8px;
+  outline: none;
+  border: none;
+  font-size: 1rem;
+  text-transform: uppercase;
+  font-family: $fontFamily;
+  letter-spacing: 1px;
+  cursor: pointer;
+  box-shadow: 0 7px 2px $shadow, 0px 8px 5px #000;
+  position: relative;
+}
