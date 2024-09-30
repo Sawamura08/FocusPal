@@ -1,0 +1,65 @@
+<main>
+  <header>
+    <app-header [data]="headerData"></app-header>
+  </header>
+  <section class="calendar-module">
+    <section class="calendar-filter">
+      <div class="filter">
+        <div
+          class="choices"
+          (click)="getSchedByFilterType(0)"
+          [ngClass]="filterIndex === 0 ? 'selected' : ''"
+        >
+          Today
+        </div>
+        <div
+          class="choices week"
+          (click)="getSchedByFilterType(1)"
+          [ngClass]="filterIndex === 1 ? 'selected' : ''"
+        >
+          Week
+        </div>
+      </div>
+    </section>
+    <section class="calendar-header">
+      <button (click)="previousDay()" class="btn">
+        <i class="fa-sharp fa-solid fa-arrow-left"></i>
+      </button>
+      <h2>{{ currentMonthName }} {{ currentYear }}</h2>
+      <button (click)="nextDay()" class="btn">
+        <i class="fa-sharp fa-solid fa-arrow-right"></i>
+      </button>
+    </section>
+
+    <section class="calendar-slider">
+      <div class="calendar-scroll">
+        <ul class="week">
+          <li
+            *ngFor="let date of week; index as i"
+            class="date"
+            [ngClass]="{
+              highlighted:
+                date.date === today.getDate() &&
+                date.month === today.getMonth() &&
+                date.year === today.getFullYear()
+            }"
+            (click)="click(i)"
+          >
+            <h6 class="month-date">{{ date.date }}</h6>
+
+            <h6 class="day-of-week">{{ date.dayOfWeek }}</h6>
+          </li>
+        </ul>
+      </div>
+    </section>
+  </section>
+
+  <section class="reminder">
+    <h3>Reminder</h3>
+    <p>Don't Forget your schedule Tomorrow!</p>
+
+    <div class="button-section">
+      <button class="btn" (click)="addSched()">Add Schedule</button>
+    </div>
+  </section>
+</main>

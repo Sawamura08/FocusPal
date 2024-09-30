@@ -6,8 +6,9 @@ import { AuthService } from '../services/auth.service';
 import { Subscription } from 'rxjs';
 import { OnDestroy } from '@angular/core';
 import { NetworkStatusService } from '../../../service/network-status.service';
-import { authResponse } from '../../../interfaces/auth.inferface';
-import { ErrorResponse } from '../../../interfaces/error-response';
+import { ModalType } from '../../../service/pop-modal.service';
+import { PopModalService } from '../../../service/pop-modal.service';
+import { SessionService } from '../../../service/session.service';
 
 @Component({
   selector: 'app-login',
@@ -23,7 +24,9 @@ export class LoginComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private fb: FormBuilder,
     private auth: AuthService,
-    private networkService: NetworkStatusService
+    private networkService: NetworkStatusService,
+    private popModal: PopModalService,
+    private session: SessionService
   ) {
     this.userInput = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -33,6 +36,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.checkNetworkStatus();
+    this.modalSubscribe();
   }
 
   /* FORM GROUP */
@@ -44,23 +48,24 @@ export class LoginComponent implements OnInit, OnDestroy {
   public submitForms = (): void => {
     const user = this.userInput.value;
     this.formSubmitted = true;
-    if (this.userInput.valid) {
-      if (this.networkStatus)
-        this.userSubscribe = this.auth.userAuth(user).subscribe({
-          next: (values: authResponse | ErrorResponse) => {
-            // if ('userId' in values) {
-            //   console.log(values.userId);
-            // }
-            console.log(values);
-            //this.authSucess();
-          },
-          error: (err) => {
-            console.error('Auth Failed', err);
-          },
-        });
-
-      this.userInput.reset();
+    if (this.networkStatus) {
+      this.userSubscribe = this.auth.userAuth(user).subscribe({
+        next: (values) => {
+          if ('success' in values && !values.success) {
+            this.modal = ModalType.INCORRECT;
+          } else {
+            this.authSucess();
+          }
+        },
+        error: (err) => {
+          console.error('Auth Failed', err);
+        },
+      });
+    } else {
+      this.modal = ModalType.NO_INTERNET;
     }
+    this.formSubmitted = false;
+    this.userInput.reset();
   };
 
   //Getter method to check if the email input in the form is valid
@@ -105,18 +110,40 @@ export class LoginComponent implements OnInit, OnDestroy {
   /* ------------- CHECKING THE NETWORK IF ONLINE OR OFFLINE -------------*/
 
   private networkStatus: boolean = false;
-  private checkNetworkStatus = (): boolean => {
-    this.networkService.nextworkStatus$().subscribe((value) => {
+  private checkNetworkStatus = (): void => {
+    this.networkService.networkStatus$().subscribe((value) => {
       this.networkStatus = value;
-      console.log('subscribe success', value);
     });
-
-    return this.networkStatus;
   };
+
+  /* ------------- END CHECKING THE NETWORK IF ONLINE OR OFFLINE -------------*/
+
+  /* ------ modal data --------- */
+  /* warning email is used */
+  modalIncorrect: any = {
+    title: 'Incorrect Email or Password',
+    imgPath: '/extra/warning.png',
+  };
+
+  /* warning No Internet */
+  modalNoInternet: any = {
+    title: 'No Internet Connection',
+    imgPath: '/extra/warning.png',
+  };
+
+  public ModalType = ModalType;
+  modal: ModalType = ModalType.NONE;
+
+  private modalSubscribe = () => {
+    this.popModal.getModalStatus().subscribe((data) => (this.modal = data));
+  };
+
+  /* ------ END modal data --------- */
 
   // unsubscribing
 
   ngOnDestroy(): void {
     if (this.userSubscribe) this.userSubscribe.unsubscribe();
   }
+  // END OF unsubscribing
 }

@@ -59,9 +59,17 @@ main {
     align-items: center;
 
     .title {
-      font-size: 2.25rem;
-      color: $mainColor;
-      font-family: $fontFamily;
+      width: 80vw;
+    }
+  }
+}
+
+@media all and (width >= 700px) and (orientation: portrait) {
+  main {
+    .center {
+      .title {
+        width: 50vw;
+      }
     }
   }
 }

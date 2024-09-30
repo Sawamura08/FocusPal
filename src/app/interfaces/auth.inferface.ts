@@ -5,6 +5,7 @@ export interface auth {
 
 export interface authResponse {
   userId: number;
+  email: string;
 }
 
 export interface userCreation {

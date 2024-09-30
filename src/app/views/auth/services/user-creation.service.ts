@@ -11,14 +11,18 @@ import { ErrorResponse } from '../../../interfaces/error-response';
 export class UserCreationService {
   constructor(private http: HttpClient, private catchErr: AuthService) {}
 
-  private readonly URL = 'https://192.168.1.4:7242/api/user/CreateUser';
+  private readonly URL = 'http://192.168.1.3:7242/api/user/CreateUser';
 
   public createUser = (
     userInfo: userCreation
   ): Observable<userCreation | ErrorResponse> => {
     return this.http.post<userCreation>(this.URL, userInfo).pipe(
       catchError((error) => {
-        return of(error);
+        const errorResponse: ErrorResponse = {
+          success: false,
+          message: error.error?.message || 'Unknown error occurred',
+        };
+        return of(errorResponse); // return as an Observable<ErrorResponse>
       })
     );
   };

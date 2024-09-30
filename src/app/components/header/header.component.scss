@@ -1,0 +1,22 @@
+@use "../../app.component.scss" as *;
+
+.header {
+  width: 100%;
+  padding: 0.5rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  figure {
+    img {
+      width: 3rem;
+      height: 3rem;
+      cursor: pointer;
+    }
+  }
+
+  h6 {
+    font-size: 1.5rem;
+    font-family: $fontFamily;
+  }
+}

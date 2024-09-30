@@ -1,0 +1,53 @@
+@use "../../app.component.scss" as *;
+
+main {
+  max-height: 100dvh;
+  height: 100dvh;
+  background: rgba(185, 147, 147, 0.21);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(3.4px);
+  -webkit-backdrop-filter: blur(3.4px);
+  display: grid;
+  place-content: center;
+
+  font-family: $fontFamily;
+
+  .loader-container {
+    backdrop-filter: none;
+    background: rgba(255, 255, 255, 0.7);
+    padding: 1rem;
+    border-radius: 1rem;
+    height: 40vh;
+
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    justify-content: center;
+    align-items: center;
+    .text {
+      font-size: 24px;
+      margin-top: 20px;
+      color: $mainColor;
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+    .title {
+      color: $textColor;
+    }
+
+    img {
+      width: 75px;
+      height: 75px;
+    }
+
+    .close {
+      @include buttonTheme($mainColor, $neutralColor, $shadow);
+
+      &:active {
+        top: 4px;
+        box-shadow: $mainColor 0px 3px 2px, #000 0px 3px 5px;
+      }
+    }
+  }
+}

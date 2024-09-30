@@ -1,0 +1,139 @@
+<main [@show]="true">
+  <header>
+    <h4>Agreement</h4>
+    <h1 class="terms">Terms and Conditions</h1>
+    <h6 class="date">Last updated on December 10, 2024</h6>
+  </header>
+
+  <section class="intro">
+    <p>
+      These Terms and Conditions ("Terms") govern your use of FocusPal,
+      developed for capstone project purposes. By using the App, you agree to
+      comply with these Terms. If you do not agree to these Terms, you must not
+      use the App.
+    </p>
+  </section>
+
+  <section class="list-terms">
+    <ol class="list">
+      <li class="content">
+        <h1 class="title">Acceptance of Terms</h1>
+        <p>
+          By downloading, accessing, or using the App, you acknowledge that you
+          have read, understood, and agree to be bound by these Terms and any
+          future modifications.
+        </p>
+      </li>
+      <li class="content">
+        <h1 class="title">Purpose of the App</h1>
+        <p>
+          The App has been created as part of an academic capstone project. The
+          primary purpose of the App is to evaluate whether using a task
+          management system can help users improve their productivity. By
+          tracking task completion, setting reminders, and monitoring user
+          engagement, we aim to assess the effectiveness of task management
+          systems in enhancing personal productivity and time management.
+        </p>
+        <p>
+          All information and features provided in the App are solely for
+          research and educational purposes, with the goal of understanding how
+          users interact with task management systems and how such tools can
+          potentially increase efficiency in daily activities.
+        </p>
+      </li>
+      <li class="content">
+        <h1 class="title">User Information and Data Collection</h1>
+        <p>
+          As part of the functionality of the App, we may collect personal
+          information such as but not limited to your name, email address, and
+          any other data you provide while using the App (the "User
+          Information"). All User Information collected will be used exclusively
+          for the purpose of the capstone project, including testing, analysis,
+          and improvements to the App.
+        </p>
+        <p>
+          By accepting these Terms, you grant the developers of the App
+          permission to collect, store, and use your User Information for
+          capstone-related purposes only.
+        </p>
+        <h6 class="important">Important:</h6>
+        <ul class="unordered">
+          <li>
+            The User Information will not be sold, rented, or shared with third
+            parties outside of the context of this project.
+          </li>
+          <li>
+            The data will be used to evaluate the performance and success of the
+            App, including for research, reporting, and academic purposes.
+          </li>
+        </ul>
+      </li>
+      <li class="content">
+        <h1 class="title">Use of Data for Capstone Project</h1>
+        <p>
+          You acknowledge that by accepting these Terms, you give the developers
+          permission to use the data you provide for the purpose of completing
+          the capstone project, including:
+        </p>
+        <ul class="unordered">
+          <li>
+            Data analysis for understanding user behavior and app performance.
+          </li>
+          <li>
+            Reporting the findings in the capstone project presentation or
+            academic submissions.
+          </li>
+          <li>Improving the functionality and user experience of the App.</li>
+        </ul>
+        <p>
+          All data will be anonymized where appropriate in project reports, and
+          any personal identifiers will be removed or obscured in presentations.
+        </p>
+      </li>
+      <li class="content">
+        <h1 class="title">User Responsibilities</h1>
+
+        <p>As a user of the App, you agree to:</p>
+        <ul class="unordered">
+          <li>Provide accurate and truthful information where required.</li>
+          <li>Use the App in a lawful and appropriate manner.</li>
+          <li>
+            Respect the intellectual property rights of the developers and other
+            users.
+          </li>
+        </ul>
+      </li>
+      <li class="content">
+        <h1 class="title">Limitation of Liability</h1>
+        <p>
+          The developers of the App are not responsible for any issues or
+          damages caused by your use of the App, including data loss,
+          unauthorized access to your User Information, or other technical
+          issues. The App is provided "as is" without warranties of any kind.
+        </p>
+      </li>
+      <li class="content">
+        <h1 class="title">Changes to the Terms and Conditions</h1>
+        <p>
+          We may update these Terms from time to time for legal or operational
+          reasons. Any updates will be posted on the App. By continuing to use
+          the App after updates are posted, you agree to the revised Terms.
+        </p>
+      </li>
+      <li class="content">
+        <h1 class="title">Termination</h1>
+        <p>
+          We reserve the right to suspend or terminate your access to the App at
+          any time for violating these Terms or for any other reason. Upon
+          termination, your right to use the App will cease immediately.
+        </p>
+      </li>
+    </ol>
+    <section class="button-section">
+      <button class="btn accept" (click)="userDecisions(true)">
+        Accept & Continue
+      </button>
+      <button class="btn cancel" (click)="userDecisions(false)">Cancel</button>
+    </section>
+  </section>
+</main>

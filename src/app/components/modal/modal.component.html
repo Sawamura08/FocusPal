@@ -1,0 +1,8 @@
+<main>
+  <div class="loader-container">
+    <img [src]="data?.imgPath" alt="" />
+    <div class="title">{{ data?.title }}</div>
+    <div class="text" *ngIf="text"></div>
+    <button class="close" (click)="close()">Okay</button>
+  </div>
+</main>

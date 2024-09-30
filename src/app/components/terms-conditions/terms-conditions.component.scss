@@ -1,0 +1,102 @@
+@use "../../app.component.scss" as *;
+
+main {
+  height: 100dvh;
+  max-height: 100dvh;
+  overflow-y: scroll;
+  width: 100dvw;
+  padding: 1rem 2rem;
+  background-color: #fcf9f9;
+  font-family: $fontFamily;
+
+  header {
+    margin-block: 1rem 2rem;
+    h4 {
+      text-transform: uppercase;
+      font-family: $subText;
+      font-size: 1rem;
+      font-weight: 100;
+      opacity: 0.7;
+    }
+    .terms {
+      font-size: clamp(1.5rem, 1.5vw, 2rem);
+    }
+
+    .date {
+      font-size: 1rem;
+      font-family: $subText;
+      opacity: 0.7;
+    }
+  }
+
+  .intro {
+    font-family: $subText;
+    margin-block-end: 1rem;
+  }
+
+  .list-terms {
+    width: 100%;
+    .list {
+      list-style-type: upper-roman;
+      margin-left: 1rem;
+
+      .content {
+        margin-block: 1rem;
+
+        .title {
+          font-size: 1.5rem;
+          margin-block-end: 1rem;
+        }
+
+        p {
+          font-family: $subText;
+          opacity: 0.8;
+          font-size: 1rem;
+          margin-block-end: 1rem;
+        }
+
+        h6 {
+          font-size: 1rem;
+          text-transform: uppercase;
+          margin-block-end: 1rem;
+        }
+
+        .unordered {
+          margin-left: 1rem;
+          list-style-type: square;
+
+          li {
+            font-family: $subText;
+            font-size: 1rem;
+            margin-block-end: 1rem;
+          }
+        }
+      }
+    }
+
+    .button-section {
+      width: 80%;
+      margin: 0 auto;
+      margin-block: 0.5rem;
+      padding: 1rem;
+      .btn {
+        width: 100%;
+        @include buttonTheme($mainColor, $neutralColor, $shadow);
+        margin-block: 0.5rem;
+
+        &:active {
+          top: 4px;
+          box-shadow: $mainColor 0px 3px 2px, #000 0px 3px 5px;
+        }
+      }
+
+      .cancel {
+        @include buttonTheme($neutralColor, $mainColor, #e2e2e2);
+        &:active {
+          top: 4px;
+          box-shadow: $neutralColor 0 3px 2px, #000 0 3px 5px;
+        }
+      }
+    }
+  }
+}

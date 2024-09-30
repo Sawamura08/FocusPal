@@ -10,12 +10,16 @@ import { ErrorResponse } from '../../../interfaces/error-response';
 export class AuthService {
   constructor(private http: HttpClient) {}
 
-  private readonly url = 'https://192.168.1.4:7242/api/user/UserAuth';
+  private readonly url = 'http://192.168.1.3:7242/api/user/UserAuth';
 
   public userAuth = (user: auth): Observable<authResponse | ErrorResponse> => {
     return this.http.post<authResponse>(this.url, user).pipe(
       catchError((error) => {
-        return of({ success: false, message: 'Authentication Failed' });
+        const errorResponse: ErrorResponse = {
+          success: false,
+          message: error.error?.message || 'Unknown error occurred',
+        };
+        return of(errorResponse); // return as an Observable<ErrorResponse>
       })
     );
   };

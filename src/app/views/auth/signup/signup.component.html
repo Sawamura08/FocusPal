@@ -134,7 +134,7 @@
 
       <section class="signUp-container">
         <p>Already have account?</p>
-        <h6>Sign In</h6>
+        <a [routerLink]="['../login']">Sign In</a>
       </section>
     </div>
   </div>
@@ -142,4 +142,16 @@
 
 <div class="loading" *ngIf="isLoading">
   <app-loading></app-loading>
+</div>
+
+<div class="warning" *ngIf="modal === ModalType.EMAIL_USED">
+  <app-modal [data]="modalData"></app-modal>
+</div>
+
+<div class="warning" *ngIf="modal === ModalType.NO_INTERNET">
+  <app-modal [data]="modalNoInternet"></app-modal>
+</div>
+
+<div class="terms-conditions" *ngIf="isTermsOpen">
+  <app-terms-conditions></app-terms-conditions>
 </div>

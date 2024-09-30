@@ -1,4 +1,34 @@
 [x] : finish the sign in and sign update
-[]: study the indexDB and angular service worker or PWA
-[] :   Create/Edit/Delete Tasks
-[] :  Make usre it has subtask/ categories and  deadlines
+[x]: study the indexDB and angular service worker or PWA
+[x] :   Create/Edit/Delete Tasks
+[x] :  Make usre it has subtask  and  deadlines
+[x] : sync the service worker to the backend (update not yet delete not yet)
+[x] : fix the CORS on 8080 if you used it or just run in on 4200
+[x] : create terms and conidtions
+[x] : create the navigation 
+[x] : create horizontal Calendar
+[] : create function for Calendar (CRUD)
+[] : Make a UI for Calendar
+[] : create filter for Calendar
+
+
+
+
+needed to add
+isUpdated
+isQueued
+
+intial value of isUpdated === 0
+the server is up to date to the data of local Db isUpdated === 1
+
+isQueued check every 1 minute if there is a data to sync
+isQueued will become 1 if the data is on queue 
+turn back to 0 once the data is successfuly done
+
+isSync conditionals
+isSync = 0 and isQueued = 0
+
+every 1 minute check 
+isUpdated = 0 and isQueued = 0
+
+0 1 0

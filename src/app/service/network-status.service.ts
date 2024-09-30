@@ -16,7 +16,7 @@ export class NetworkStatusService {
     this.onlineStatus.next(status);
   };
 
-  public nextworkStatus$ = () => {
+  public networkStatus$ = () => {
     return this.onlineStatus.asObservable();
   };
 }

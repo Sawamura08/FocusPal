@@ -66,3 +66,11 @@
     </div>
   </section>
 </main>
+
+<div class="warning" *ngIf="modal === ModalType.INCORRECT">
+  <app-modal [data]="modalIncorrect"></app-modal>
+</div>
+
+<div class="warning" *ngIf="modal === ModalType.NO_INTERNET">
+  <app-modal [data]="modalNoInternet"></app-modal>
+</div>
