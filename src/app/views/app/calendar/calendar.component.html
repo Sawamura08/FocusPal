@@ -54,6 +54,23 @@
     </section>
   </section>
 
+  <section class="schedule-container">
+    <h3>Schedule Today</h3>
+
+    <div class="container" *ngIf="schedList">
+      <ul class="schedules" *ngFor="let sched of schedList">
+        <li class="sched">
+          <span class="type">{{ sched.type | schedType }}!</span>
+          <span class="time">
+            {{ sched.startTime | date : "h:mm a" }} -
+            {{ sched.endTime | date : "h:mm a" }}
+          </span>
+          <p class="title">{{ sched.title }}</p>
+        </li>
+      </ul>
+    </div>
+  </section>
+
   <section class="reminder">
     <h3>Reminder</h3>
     <p>Don't Forget your schedule Tomorrow!</p>

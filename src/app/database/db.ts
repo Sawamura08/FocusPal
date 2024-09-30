@@ -27,7 +27,7 @@ export interface Schedule {
   startTime: Date;
   endTime: Date;
   repeat: number; // 0 - NONE; 1- DAILY; 2- WEEKLY; 3-MONTHLY; 4- CUSTOM
-  type: number; // 0 - CLASS; 1 - MEETING; 3- FAMILY/DATE;
+  type: number; // 0 - CLASS; 1 - MEETING; 2- DATE; 3- FAMILY/DATE;
   isActive: number; // 0 - inactive; 1 - active
   daysOfWeek?: Array<number>;
 }

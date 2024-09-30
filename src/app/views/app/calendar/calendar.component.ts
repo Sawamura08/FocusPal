@@ -4,6 +4,7 @@ import { SessionService } from '../../../service/session.service';
 import { Subscription } from 'rxjs';
 import { Schedule } from '../../../database/db';
 import { ScheduleService } from '../../../database/schedule.service';
+import { SchedTypePipe } from '../../../pipe/sched-type.pipe';
 
 @Component({
   selector: 'app-calendar',

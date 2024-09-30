@@ -3,7 +3,7 @@
 
 main {
   width: 100dvw;
-  height: 100%;
+  min-height: 100%;
   color: $textColor;
   overflow-y: auto;
 
@@ -105,12 +105,54 @@ main {
 
           .highlighted {
             color: white;
-            background-color: $shadow;
+            background-color: $mainColor;
             border-radius: 8px;
 
             .day-of-week {
               color: white;
             }
+          }
+        }
+      }
+    }
+  }
+
+  .schedule-container {
+    padding: 0.5rem 1rem;
+    font-family: $fontFamily;
+    width: 100dvw;
+
+    .container {
+      width: 100%;
+
+      .schedules {
+        width: 100%;
+        list-style-type: none;
+        display: flex;
+        justify-content: end;
+        .sched {
+          width: 80%;
+          padding: 0.5rem;
+          border-radius: 10px;
+          background-color: $mainColor;
+          color: white;
+          margin-block: 0.5rem;
+
+          .type {
+            font-size: 1rem;
+            font-family: $subText;
+            font-weight: 900;
+            margin-block-end: 1rem;
+          }
+
+          .time {
+            float: right;
+            font-size: 0.8rem;
+            font-family: $subText;
+          }
+
+          .title {
+            font-size: 1rem;
           }
         }
       }

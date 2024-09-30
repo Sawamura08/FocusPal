@@ -22,10 +22,10 @@ export class ScheduleService {
     const dateToday = new Date().toISOString().split('T')[0];
     const newSched: Schedule = {
       userId: id,
-      title: 'IAS 2',
+      title: 'IT Elective 2',
       date: new Date(),
-      startTime: new Date(dateToday + 'T' + '16:30'),
-      endTime: new Date(dateToday + 'T' + '19:30'),
+      startTime: new Date(dateToday + 'T' + '11:30'),
+      endTime: new Date(dateToday + 'T' + '14:30'),
       repeat: 4,
       type: 0,
       isActive: 1,
