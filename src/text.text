@@ -8,9 +8,9 @@
 [x] : create the navigation 
 [x] : create horizontal Calendar
 [] : create function for Calendar (CRUD)
-[] : create the type custom REPEAT
+[x] : create the type custom REPEAT
 [x] : Make a UI for Calendar
-[] : create filter for Calendar
+[] : create filter for Calendar (Daily & WEEKLY)
 [x] : UI FOR TASK ()
 
 

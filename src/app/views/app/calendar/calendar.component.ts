@@ -90,6 +90,13 @@ export class CalendarComponent implements OnInit, OnDestroy {
   filterIndex: number | null = 0;
   public getSchedByFilterType = (index: number) => {
     this.filterIndex = index;
+    // 0 = TODAY/DAILY
+    if (index === 0) {
+      // Call the index query for Daily
+      this.getSchedByDayRepeat();
+    } else {
+      console.log('Week');
+    }
   };
 
   /* GET SESSION OF THE USER */
