@@ -45,19 +45,22 @@ export class ScheduleService {
 
   /* GET SCHEDULE BY DATE | REPEAT */
 
-  public getAllTaskDefault = async (): Promise<Schedule[]> => {
-    // CHECK THE DATE TODAY ON A 'YYYY-MM-DD' FORMAT
-    const dateToday = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
-    const dayToday = new Date().getDay();
+  public getAllTaskDefault = async (date?: string): Promise<Schedule[]> => {
+    /* CHECK WHETHER THE date has value or null */
+    const dateSelected: string =
+      date ?? this.datePipe.transform(new Date(), 'yyyy-MM-dd') ?? '2024-01-01';
+    const dayToday = new Date(dateSelected).getDay();
     const Repeat = Repition;
 
     try {
       const sched = await db.schedList
+        .where('userId')
+        .equals(1)
         .filter((sched) => {
           // CHECK it has DATE AND IS ONE TIME SCHED ONLY
           if (sched.date && sched.repeat === Repeat.REPEAT_NONE) {
             const schedDate = this.datePipe.transform(sched.date, 'yyyy-MM-dd');
-            return schedDate === dateToday ? true : false;
+            return schedDate === dateSelected ? true : false;
             // CHECK IF THE SCHED IS ON DAILY BASIS
           } else if (sched.repeat === Repeat.REPEAT_DAILY) {
             return true;
@@ -87,6 +90,10 @@ export class ScheduleService {
   };
 
   /* END OF GET SCHEDULE BY DATE | REPEAT */
+
+  public returnSchedDefault = (date?: string) => {
+    this.schedList$ = from(liveQuery(() => this.getAllTaskDefault(date)));
+  };
 
   /* CONVERT DATE TIME TO TIME ONLY AND CHECK THE DIFFERENCE */
 

@@ -41,7 +41,7 @@ export class FilterTaskService {
   public getTaskByDueDate = async (): Promise<Task[]> => {
     const dateToday = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
     const task = await db.taskList
-      .filter((task) => task.dueDate.toISOString().includes('2024-09-18'))
+      .filter((task) => task.dueDate.toISOString().includes(dateToday!))
       .toArray();
 
     return task.sort(

@@ -1,10 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Calendar, CalendarDate } from '../../../class/calendar';
 import { SessionService } from '../../../service/session.service';
-import { Subscription } from 'rxjs';
+import { Subscription, Subject, takeUntil } from 'rxjs';
 import { Schedule } from '../../../database/db';
 import { ScheduleService } from '../../../database/schedule.service';
 import { SchedTypePipe } from '../../../pipe/sched-type.pipe';
+import { DatePipe } from '@angular/common';
+import { PopModalService } from '../../../service/pop-modal.service';
 
 @Component({
   selector: 'app-calendar',
@@ -18,10 +20,18 @@ export class CalendarComponent implements OnInit, OnDestroy {
   private currentStartDate: Date;
   private subscriptionArr: Subscription[] = [];
 
-  constructor(private session: SessionService, private sched: ScheduleService) {
+  constructor(
+    private session: SessionService,
+    private sched: ScheduleService,
+    private datePipe: DatePipe,
+    private popModal: PopModalService
+  ) {
     this.calendar = new Calendar(this.today.getFullYear());
     this.currentStartDate = this.today; // Start with the current week
     this.today = this.calendar.getCurrentDate();
+
+    /* subscribe to behavior subject */
+    this.subscribeBehavior();
   }
 
   ngOnInit(): void {
@@ -74,11 +84,25 @@ export class CalendarComponent implements OnInit, OnDestroy {
   }
 
   /* FILTER BY DATE */
-  public click = (index: number) => {
+  filterDateIndex?: number;
+  private destroySubscription$: Subject<boolean> = new Subject<boolean>();
+  public filterbyDate = (index: number) => {
+    /* SET THE CURRENT INDEX OF THE DATE */
+    this.filterDateIndex = index;
     const date = this.week[index];
-    const setDate: string = `${date?.month + 1}-${date?.date}-${date?.year}`;
-    console.log(setDate);
+    const setDate: string = `${date?.year}-${date?.month + 1}-${date?.date}`;
+
+    /* SET NEW VALUE TO THE SUBJECT */
+    this.destroySubscription$.next(true);
+    this.destroySubscription$.complete();
+
+    /* CALL THE FILTER FOR SCHEDULE */
+    this.sched.returnSchedDefault(setDate);
+
+    /* CALL THE SUBSCRIBE FUNCTION AGAIN */
+    this.getSchedByDayRepeat();
   };
+  /* END */
 
   /* SEND HEADER DATA */
 
@@ -98,6 +122,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
       console.log('Week');
     }
   };
+  /* END */
 
   /* GET SESSION OF THE USER */
   userId: number | null = null;
@@ -112,10 +137,14 @@ export class CalendarComponent implements OnInit, OnDestroy {
   schedList: Schedule[] = [];
   schedDayRepeatSubs!: Subscription;
   public getSchedByDayRepeat = () => {
-    this.schedDayRepeatSubs = this.sched.schedList$.subscribe({
-      next: (value) => (this.schedList = value),
-      error: (err) => console.error('Error Subscribe', err),
-    });
+    this.schedDayRepeatSubs = this.sched.schedList$
+      .pipe(takeUntil(this.destroySubscription$))
+      .subscribe({
+        next: (value) => (this.schedList = value),
+        error: (err) => console.error('Error Subscribe', err),
+      });
+
+    /* put the subscription to array subs */
     this.subscriptionArr.push(this.schedDayRepeatSubs);
   };
 
@@ -129,8 +158,23 @@ export class CalendarComponent implements OnInit, OnDestroy {
 
   /* END OF INSERT NEW SCHED */
 
+  /* SUBSCRIBE TO A BEHAVIOR SUBJECT */
+
+  private behaviorSubscription!: Subscription;
+  public isAddSchedModalOpen: boolean = false;
+  private subscribeBehavior = () => {
+    this.behaviorSubscription = this.popModal.addList$().subscribe({
+      next: (value) => (this.isAddSchedModalOpen = value),
+      error: (err) => console.error('Error Subscribing to Behavior', err),
+    });
+  };
+
+  /* END */
+
+  /* NG ON DESTROY */
   ngOnDestroy(): void {
     if (this.subscriptionArr)
       this.subscriptionArr.forEach((subs) => subs.unsubscribe());
   }
+  /* END */
 }

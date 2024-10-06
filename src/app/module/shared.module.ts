@@ -5,6 +5,7 @@ import { ModalComponent } from '../components/modal/modal.component';
 import { TermsConditionsComponent } from '../components/terms-conditions/terms-conditions.component';
 import { HeaderComponent } from '../components/header/header.component';
 import { SchedTypePipe } from '../pipe/sched-type.pipe';
+import { AddSchedComponent } from '../components/add-sched/add-sched.component';
 
 @NgModule({
   declarations: [
@@ -13,6 +14,7 @@ import { SchedTypePipe } from '../pipe/sched-type.pipe';
     TermsConditionsComponent,
     HeaderComponent,
     SchedTypePipe,
+    AddSchedComponent,
   ],
   imports: [CommonModule],
   exports: [
@@ -21,6 +23,7 @@ import { SchedTypePipe } from '../pipe/sched-type.pipe';
     TermsConditionsComponent,
     HeaderComponent,
     SchedTypePipe,
+    AddSchedComponent,
   ],
 })
 export class SharedModule {}

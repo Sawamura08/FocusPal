@@ -41,9 +41,10 @@
               highlighted:
                 date.date === today.getDate() &&
                 date.month === today.getMonth() &&
-                date.year === today.getFullYear()
+                date.year === today.getFullYear(),
+              dateSelected: filterDateIndex === i
             }"
-            (click)="click(i)"
+            (click)="filterbyDate(i)"
           >
             <h6 class="month-date">{{ date.date }}</h6>
 

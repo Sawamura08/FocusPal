@@ -112,6 +112,10 @@ main {
               color: white;
             }
           }
+
+          .dateSelected {
+            border: 2px dashed $mainColor;
+          }
         }
       }
     }

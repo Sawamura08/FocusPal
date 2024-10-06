@@ -11,7 +11,9 @@
 [x] : create the type custom REPEAT
 [x] : Make a UI for Calendar
 [] : create filter for Calendar (Daily & WEEKLY)
-[x] : UI FOR TASK ()
+[x] : UI for daily date- selected and current date
+[x] : UI FOR SCHED FILTER(DAILY)
+[] : UI FOR ADDING SCHED
 
 
 
