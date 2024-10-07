@@ -6,6 +6,15 @@ import { TermsConditionsComponent } from '../components/terms-conditions/terms-c
 import { HeaderComponent } from '../components/header/header.component';
 import { SchedTypePipe } from '../pipe/sched-type.pipe';
 import { AddSchedComponent } from '../components/add-sched/add-sched.component';
+import { FormsModule } from '@angular/forms';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatButton, MatButtonModule } from '@angular/material/button';
+import { MatInputModule } from '@angular/material/input';
+import {
+  provideNativeDateAdapter,
+  MatNativeDateModule,
+} from '@angular/material/core';
+import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 
 @NgModule({
   declarations: [
@@ -16,7 +25,15 @@ import { AddSchedComponent } from '../components/add-sched/add-sched.component';
     SchedTypePipe,
     AddSchedComponent,
   ],
-  imports: [CommonModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    MatDatepickerModule,
+    MatButtonModule,
+    MatInputModule,
+    MatNativeDateModule,
+    NgxMaterialTimepickerModule,
+  ],
   exports: [
     LoadingComponent,
     ModalComponent,

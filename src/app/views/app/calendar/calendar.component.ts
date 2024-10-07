@@ -4,7 +4,6 @@ import { SessionService } from '../../../service/session.service';
 import { Subscription, Subject, takeUntil } from 'rxjs';
 import { Schedule } from '../../../database/db';
 import { ScheduleService } from '../../../database/schedule.service';
-import { SchedTypePipe } from '../../../pipe/sched-type.pipe';
 import { DatePipe } from '@angular/common';
 import { PopModalService } from '../../../service/pop-modal.service';
 
@@ -152,8 +151,8 @@ export class CalendarComponent implements OnInit, OnDestroy {
 
   /* INSERT NEW SCHED */
 
-  public addSched = async () => {
-    await this.sched.insertSched(1);
+  public addSched = () => {
+    this.popModal.addListModal(true);
   };
 
   /* END OF INSERT NEW SCHED */
@@ -164,7 +163,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
   public isAddSchedModalOpen: boolean = false;
   private subscribeBehavior = () => {
     this.behaviorSubscription = this.popModal.addList$().subscribe({
-      next: (value) => (this.isAddSchedModalOpen = value),
+      next: (value) => (this.isAddSchedModalOpen = true),
       error: (err) => console.error('Error Subscribing to Behavior', err),
     });
   };

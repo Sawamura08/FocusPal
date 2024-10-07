@@ -12,6 +12,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { provideHttpClient } from '@angular/common/http';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { DatePipe } from '@angular/common';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 @NgModule({
   declarations: [AppsComponent, AuthComponent, AppComponent, StarterComponent],
@@ -27,7 +28,7 @@ import { DatePipe } from '@angular/common';
       registrationStrategy: 'registerWhenStable:30000',
     }),
   ],
-  providers: [provideHttpClient(), DatePipe],
+  providers: [provideHttpClient(), DatePipe, provideAnimationsAsync()],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

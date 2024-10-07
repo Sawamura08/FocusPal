@@ -6,6 +6,7 @@ main {
   min-height: 100%;
   color: $textColor;
   overflow-y: auto;
+  z-index: 1;
 
   .calendar-module {
     .calendar-filter {
@@ -197,5 +198,14 @@ main {
         }
       }
     }
+  }
+
+  .add-list-modal {
+    width: 100dvw;
+    height: 90%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
   }
 }

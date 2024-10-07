@@ -83,4 +83,8 @@
       <button class="btn" (click)="addSched()">Add Schedule</button>
     </div>
   </section>
+
+  <section class="add-list-modal" *ngIf="isAddSchedModalOpen">
+    <app-add-sched></app-add-sched>
+  </section>
 </main>
