@@ -8,7 +8,6 @@ import { PopModalService } from '../../service/pop-modal.service';
   styleUrl: './add-sched.component.scss',
 })
 export class AddSchedComponent {
-  date: string = '';
   userInput: FormGroup;
   constructor(private fb: FormBuilder, private popModal: PopModalService) {
     this.userInput = this.fb.group({
@@ -21,12 +20,11 @@ export class AddSchedComponent {
   currentType: number = 0;
   public selectTypeRepeat = (type: number) => {
     this.currentType = type;
-    console.log(this.typeRepeat[type]);
   };
 
   /* END */
 
-  /* DAYS OF THE WEEK */
+  /* DAYS OF THE WEEK &&  SELECT DAYS*/
   public daysOfWeek: string[] = [
     'Mon',
     'Tue',
@@ -38,8 +36,19 @@ export class AddSchedComponent {
   ];
 
   private daysSelected: number[] = [];
-  public selectDays = (days: number) => {
-    this.daysSelected.push(days);
+  public selectDays = (day: number) => {
+    /* REMOVE THE DAY IF IT'S ALREADY INCLUDED */
+    if (this.daysSelected.includes(day)) {
+      const index: number = this.daysSelected.indexOf(day);
+      this.daysSelected.splice(index, 1);
+      return;
+    }
+
+    this.daysSelected.push(day);
+  };
+
+  public isDaySelected = (day: number): string => {
+    return this.daysSelected.includes(day) ? 'selected' : '';
   };
 
   /* END */
