@@ -12,6 +12,12 @@ export class AddSchedComponent {
   constructor(private fb: FormBuilder, private popModal: PopModalService) {
     this.userInput = this.fb.group({
       title: ['', Validators.required],
+      repeat: ['', Validators.required],
+      date: ['', Validators.required],
+      daysOfWeek: ['', Validators.required],
+      startTime: ['', Validators.required],
+      endTime: ['', Validators.required],
+      type: ['', Validators.required],
     });
   }
 
@@ -53,10 +59,42 @@ export class AddSchedComponent {
 
   /* END */
 
+  /* CATEGORY */
+
+  public categories: string[] = ['Class', 'Meeting', 'Date', 'Family/Friends'];
+
+  public categoryCurrentIndex: number = 0;
+
+  public selectCategory = (value: number) => {
+    this.categoryCurrentIndex = value;
+  };
+
+  /* END */
+
   /* CLOSE THE MODAL */
 
   public closeModal = () => {
     this.popModal.addListModal(false);
+  };
+
+  /* END */
+
+  /* FORM INPUTS */
+
+  get title() {
+    return this.userInput.get('title');
+  }
+
+  /* END */
+
+  /* VALIDATORS */
+
+  public validators = (inputs: any): boolean => {
+    if ((inputs?.dirty || inputs?.touched) && inputs?.invalid) {
+      return false;
+    }
+
+    return true;
   };
 
   /* END */

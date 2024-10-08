@@ -6,7 +6,7 @@ import { TermsConditionsComponent } from '../components/terms-conditions/terms-c
 import { HeaderComponent } from '../components/header/header.component';
 import { SchedTypePipe } from '../pipe/sched-type.pipe';
 import { AddSchedComponent } from '../components/add-sched/add-sched.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatButton, MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
@@ -33,6 +33,7 @@ import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
     MatInputModule,
     MatNativeDateModule,
     NgxMaterialTimepickerModule,
+    ReactiveFormsModule,
   ],
   exports: [
     LoadingComponent,

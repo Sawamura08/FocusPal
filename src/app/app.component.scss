@@ -16,10 +16,11 @@ $mainColor: #ff6f61;
 $shadow: #c0392b;
 $textColor: #2d2d2d;
 $neutralColor: #fff5f2;
+$grayColor: #e5eafc;
 
 @mixin buttonTheme($bgColor, $textColor, $shadow) {
   padding: 0.75rem;
-  background-color: $bgColor;
+  background: linear-gradient(to top, $mainColor, $shadow);
   color: $textColor;
   border-radius: 8px;
   outline: none;

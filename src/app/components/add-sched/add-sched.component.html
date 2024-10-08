@@ -1,6 +1,6 @@
 <div class="modal-background">
   <section class="modal-container">
-    <form action="" class="add-sched">
+    <form action="" class="add-sched" [formGroup]="userInput">
       <div class="main-information">
         <span class="close" (click)="closeModal()"
           ><i class="fa-thin fa-xmark"></i
@@ -8,7 +8,17 @@
         <h2 class="title">New Schedule</h2>
         <section class="form-input">
           <label for="title">Title</label>
-          <input type="text" class="inputs" id="title" />
+          <input
+            type="text"
+            class="inputs"
+            id="title"
+            formControlName="title"
+          />
+          <div class="hint-text">
+            <div class="hints" *ngIf="!validators(title)">
+              <p>This is a required Field</p>
+            </div>
+          </div>
         </section>
 
         <!-- END -->
@@ -35,13 +45,14 @@
         <section class="form-input" *ngIf="currentType === 0">
           <mat-form-field class="date-picker">
             <mat-label>Choose a date</mat-label>
-            <input matInput [matDatepicker]="picker" />
+            <input matInput [matDatepicker]="picker" formControlName="date" />
             <mat-hint>MM/DD/YYYY</mat-hint>
+
             <mat-datepicker-toggle
               matIconSuffix
               [for]="picker"
             ></mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
+            <mat-datepicker touchUi="true" #picker></mat-datepicker>
           </mat-form-field>
         </section>
         <!-- END -->
@@ -65,17 +76,66 @@
         </section>
         <!-- END -->
 
-        <section class="form-input">
-          <label for="startTime" class="timeLabel">Start Time</label>
-          <input [ngxTimepicker]="timePickers" name="startTime" />
-          <ngx-material-timepicker #timePickers></ngx-material-timepicker>
+        <!-- TIME PICKER -->
+        <div class="time-picker-container">
+          <section class="form-input">
+            <label for="startTime" class="timeLabel">Start Time</label>
+            <input
+              [ngxTimepicker]="timePickers"
+              name="startTime"
+              class="time-picker"
+              id="startTime"
+              formControlName="startTime"
+              readonly
+            />
+
+            <ngx-material-timepicker #timePickers></ngx-material-timepicker>
+          </section>
+          <section class="form-input">
+            <label for="endTime" class="timeLabel">End Time</label>
+            <input
+              [ngxTimepicker]="endTime"
+              name="endTime"
+              class="time-picker"
+              id="endTime"
+              formControlName="endDate"
+              readonly
+            />
+            <ngx-material-timepicker #endTime></ngx-material-timepicker>
+          </section>
+        </div>
+
+        <!-- CATEGORY  -->
+
+        <div class="category-container">
+          <h6 class="title">Category</h6>
+
+          <section class="button-section">
+            <div
+              class="buttons"
+              *ngFor="let category of categories; index as i"
+            >
+              <button
+                class="btn-category"
+                [ngClass]="{ selected: categoryCurrentIndex === i }"
+                (click)="selectCategory(i)"
+              >
+                {{ category }}
+              </button>
+            </div>
+          </section>
+        </div>
+
+        <!-- BUTTON SECTION -->
+
+        <section class="submit-container">
+          <div class="btn-container">
+            <button class="btn">Submit</button>
+          </div>
         </section>
-        <section class="form-input">
-          <label for="endTime" class="timeLabel">End Time</label>
-          <input [ngxTimepicker]="endTime" name="endTime" />
-          <ngx-material-timepicker #endTime></ngx-material-timepicker>
-        </section>
+        <!-- END -->
       </div>
+      <!-- end -->
     </form>
   </section>
 </div>
