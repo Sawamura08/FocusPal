@@ -163,7 +163,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
   public isAddSchedModalOpen: boolean = false;
   private subscribeBehavior = () => {
     this.behaviorSubscription = this.popModal.addList$().subscribe({
-      next: (value) => (this.isAddSchedModalOpen = true),
+      next: (value) => (this.isAddSchedModalOpen = value),
       error: (err) => console.error('Error Subscribing to Behavior', err),
     });
   };

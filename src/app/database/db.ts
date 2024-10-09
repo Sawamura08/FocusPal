@@ -23,11 +23,11 @@ export interface Schedule {
   schedId?: number;
   userId: number;
   title: string;
-  date?: Date;
+  date: Date;
   startTime: Date;
   endTime: Date;
-  repeat: number; // 0 - NONE; 1- DAILY; 2- WEEKLY; 3-MONTHLY; 4- CUSTOM
-  type: number; // 0 - CLASS; 1 - MEETING; 2- DATE; 3- FAMILY/FRIENDS;
+  repeat: number; // 0 - NONE; 1- DAILY; 2- CUSTOM
+  type: number; // 0 - CLASS; 1 - MEETING; 2- FAMILY/FRIENDS; 3- Others
   isActive: number; // 0 - inactive; 1 - active
   daysOfWeek?: Array<number>;
 }

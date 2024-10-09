@@ -1,25 +1,43 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { PopModalService } from '../../service/pop-modal.service';
+import { SessionService } from '../../service/session.service';
+import { Subscription } from 'rxjs';
+import { ScheduleService } from '../../database/schedule.service';
 
 @Component({
   selector: 'app-add-sched',
   templateUrl: './add-sched.component.html',
   styleUrl: './add-sched.component.scss',
 })
-export class AddSchedComponent {
+export class AddSchedComponent implements OnInit {
   userInput: FormGroup;
-  constructor(private fb: FormBuilder, private popModal: PopModalService) {
+  constructor(
+    private fb: FormBuilder,
+    private popModal: PopModalService,
+    private session: SessionService,
+    private sched: ScheduleService
+  ) {
     this.userInput = this.fb.group({
       title: ['', Validators.required],
       repeat: ['', Validators.required],
       date: ['', Validators.required],
-      daysOfWeek: ['', Validators.required],
+      daysOfWeek: [''],
       startTime: ['', Validators.required],
       endTime: ['', Validators.required],
       type: ['', Validators.required],
     });
   }
+
+  ngOnInit(): void {
+    this.getSession();
+  }
+
+  /* FETCH SESSION */
+  private userId?: number;
+  public getSession = async () => {
+    this.userId = await this.session.getUser();
+  };
 
   /* FOR TYPE OF REPEAT = ONE-TIME DAILY CUSTOM */
   public typeRepeat: string[] = ['One-Time', 'Daily', 'Custom'];
@@ -61,7 +79,12 @@ export class AddSchedComponent {
 
   /* CATEGORY */
 
-  public categories: string[] = ['Class', 'Meeting', 'Date', 'Family/Friends'];
+  public categories: string[] = [
+    'Class',
+    'Meeting',
+    'Family/Friends',
+    'Others',
+  ];
 
   public categoryCurrentIndex: number = 0;
 
@@ -85,6 +108,14 @@ export class AddSchedComponent {
     return this.userInput.get('title');
   }
 
+  get startTime() {
+    return this.userInput.get('startTime');
+  }
+
+  get endTime() {
+    return this.userInput.get('endTime');
+  }
+
   /* END */
 
   /* VALIDATORS */
@@ -95,6 +126,62 @@ export class AddSchedComponent {
     }
 
     return true;
+  };
+
+  /* END */
+
+  /* SUBMIT SCHED */
+
+  private setRepeatValues = (repeat: number) => {
+    if (repeat === 2) {
+      if (this.daysSelected.length != 0) {
+        this.userInput.get('daysOfWeek')?.setValue(this.daysSelected);
+      } else {
+        this.currentType = 0;
+        this.userInput.get('repeat')?.setValue(this.currentType);
+      }
+    }
+  };
+
+  private transformTimeToDate = (startTime: Date, endTime: Date) => {
+    //const start =
+    /* const dateToday = new Date().toISOString().split('T')[0]; */
+    /*    startTime: new Date(dateToday + 'T' + '18:30'), */
+  };
+
+  public prepareFormValues = () => {
+    this.userInput.get('repeat')?.setValue(this.currentType);
+    this.userInput.get('type')?.setValue(this.categoryCurrentIndex);
+    const repeat = this.userInput.get('repeat')?.value;
+    this.setRepeatValues(repeat);
+
+    if (repeat != 0) {
+      const date = new Date();
+      this.userInput.get('date')?.setValue(date);
+    }
+  };
+
+  public submit = async () => {
+    //set the sched value before attempting to submit
+    this.prepareFormValues();
+
+    // check all fields
+    this.userInput.markAllAsTouched();
+    if (this.userInput.valid) {
+      //submit the code
+      console.log(this.userInput.value);
+      // const schedId = await this.sched.insertSched(
+      //   this.userId!,
+      //   this.userInput.value
+      // );
+
+      // if (schedId != 0) {
+      //   console.log('Success');
+      //   this.closeModal();
+      // } else {
+      //   console.log('Error!');
+      // }
+    }
   };
 
   /* END */

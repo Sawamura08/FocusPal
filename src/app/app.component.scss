@@ -20,7 +20,7 @@ $grayColor: #e5eafc;
 
 @mixin buttonTheme($bgColor, $textColor, $shadow) {
   padding: 0.75rem;
-  background: linear-gradient(to top, $mainColor, $shadow);
+  background: linear-gradient(to top, $bgColor, $shadow);
   color: $textColor;
   border-radius: 8px;
   outline: none;

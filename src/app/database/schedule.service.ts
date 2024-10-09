@@ -23,23 +23,27 @@ export class ScheduleService {
     return this.schedList$;
   };
 
-  public insertSched = async (id: number) => {
-    const dateToday = new Date().toISOString().split('T')[0];
-    const newSched: Schedule = {
+  public insertSched = async (
+    id: number,
+    schedData: Schedule
+  ): Promise<number> => {
+    const newSched = {
       userId: id,
-      title: 'Eat Dinner',
-      date: new Date(),
-      startTime: new Date(dateToday + 'T' + '18:30'),
-      endTime: new Date(dateToday + 'T' + '19:00'),
-      repeat: 0,
-      type: 0,
+      title: schedData.title,
+      date: schedData.date,
+      startTime: schedData.startTime,
+      endTime: schedData.endTime,
+      repeat: schedData.repeat,
+      type: schedData.type,
       isActive: 1,
     };
 
     try {
       const schedId = await db.schedList.add(newSched);
+      return schedId;
     } catch (err) {
       console.log('Error Insert sched', err);
+      return 0;
     }
   };
 

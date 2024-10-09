@@ -12,8 +12,9 @@
 [x] : Make a UI for Calendar
 [] : create filter for Calendar (Daily & WEEKLY)
 [x] : UI for daily date- selected and current date
-[x] : UI FOR SCHED FILTER(DAILY)
-[] : UI FOR ADDING SCHED
+[] : UI FOR SCHED FILTER(DAILY) (WEEKLY NOT YET NONE)
+[x] : UI FOR ADDING SCHED
+[] : Transform 12hr to 24hr
 
 
 

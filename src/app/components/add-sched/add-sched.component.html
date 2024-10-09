@@ -90,18 +90,28 @@
             />
 
             <ngx-material-timepicker #timePickers></ngx-material-timepicker>
+            <div class="hint-text">
+              <div class="hints" *ngIf="!validators(startTime)">
+                <p>This is a required Field</p>
+              </div>
+            </div>
           </section>
           <section class="form-input">
             <label for="endTime" class="timeLabel">End Time</label>
             <input
-              [ngxTimepicker]="endTime"
+              [ngxTimepicker]="endTimePickers"
               name="endTime"
               class="time-picker"
               id="endTime"
-              formControlName="endDate"
+              formControlName="endTime"
               readonly
             />
-            <ngx-material-timepicker #endTime></ngx-material-timepicker>
+            <ngx-material-timepicker #endTimePickers></ngx-material-timepicker>
+            <div class="hint-text">
+              <div class="hints" *ngIf="!validators(endTime)">
+                <p>This is a required Field</p>
+              </div>
+            </div>
           </section>
         </div>
 
@@ -130,7 +140,7 @@
 
         <section class="submit-container">
           <div class="btn-container">
-            <button class="btn">Submit</button>
+            <button class="btn" (click)="submit()">Submit</button>
           </div>
         </section>
         <!-- END -->
