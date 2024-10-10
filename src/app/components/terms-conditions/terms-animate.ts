@@ -5,4 +5,10 @@ export const termsAnimate = trigger('show', [
     style({ opacity: 0.3, transform: 'TranslateY(-100%)' }),
     animate('500ms ease-in', style({ opacity: 1, transform: 'TranslateY(0)' })),
   ]),
+  transition(':leave', [
+    animate(
+      '500ms ease-out',
+      style({ opacity: 0, transform: 'TranslateY(-100%)' })
+    ),
+  ]),
 ]);

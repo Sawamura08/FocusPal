@@ -17,6 +17,8 @@ export class PopModalService {
     this.modalSubject$ = new BehaviorSubject<ModalType>(ModalType.NONE);
 
     this.addList = new BehaviorSubject<boolean>(false);
+
+    this.updateList = new BehaviorSubject<boolean>(false);
   }
 
   public openModal = (modalType: ModalType) => {
@@ -41,5 +43,17 @@ export class PopModalService {
 
   public addList$ = () => {
     return this.addList.asObservable();
+  };
+
+  /* -------- UPDATE SCHED COMPONENT MODAL */
+
+  private updateList: BehaviorSubject<boolean>;
+
+  public isModalOpen = (value: boolean) => {
+    this.updateList.next(value);
+  };
+
+  public updateList$ = () => {
+    return this.updateList.asObservable();
   };
 }

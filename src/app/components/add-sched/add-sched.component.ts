@@ -1,14 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { PopModalService } from '../../service/pop-modal.service';
 import { SessionService } from '../../service/session.service';
 import { Subscription } from 'rxjs';
 import { ScheduleService } from '../../database/schedule.service';
+import { termsAnimate } from '../terms-conditions/terms-animate';
+import { Schedule } from '../../database/db';
 
 @Component({
   selector: 'app-add-sched',
   templateUrl: './add-sched.component.html',
   styleUrl: './add-sched.component.scss',
+  animations: [termsAnimate],
 })
 export class AddSchedComponent implements OnInit {
   userInput: FormGroup;
@@ -31,6 +34,8 @@ export class AddSchedComponent implements OnInit {
 
   ngOnInit(): void {
     this.getSession();
+
+    this.setExistingData();
   }
 
   /* FETCH SESSION */
@@ -98,6 +103,7 @@ export class AddSchedComponent implements OnInit {
 
   public closeModal = () => {
     this.popModal.addListModal(false);
+    this.popModal.isModalOpen(false);
   };
 
   /* END */
@@ -256,4 +262,29 @@ export class AddSchedComponent implements OnInit {
   };
 
   /* END */
+
+  /* ---------------- UPDATING SCHEDULE ---------------------- */
+
+  @Input() updateData: any;
+
+  public setExistingData = () => {
+    console.log(JSON.stringify(this.updateData, null, 2));
+    if (this.updateData) {
+      this.userInput.get('title')?.setValue(this.updateData?.title);
+      this.userInput.get('date')?.setValue(this.updateData?.date);
+      this.userInput.get('startTime')?.setValue(this.updateData?.startTime);
+      this.userInput.get('endTime')?.setValue(this.updateData?.endTime);
+      this.userInput.get('repeat')?.setValue(this.updateData?.repeat);
+      this.userInput.get('type')?.setValue(this.updateData?.type);
+      this.userInput
+        .get('daysOfWeek')
+        ?.setValue(this.updateData?.daysOfWeek || []);
+
+      this.categoryCurrentIndex = this.updateData?.type;
+      this.currentType = this.updateData?.repeat;
+      if (this.updateData?.daysOfWeek) {
+        this.daysSelected = this.updateData?.daysOfWeek;
+      }
+    }
+  };
 }

@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Calendar, CalendarDate } from '../../../class/calendar';
 import { SessionService } from '../../../service/session.service';
-import { Subscription, Subject, takeUntil } from 'rxjs';
+import { Subscription, Subject, takeUntil, combineLatest } from 'rxjs';
 import { Schedule } from '../../../database/db';
 import { ScheduleService } from '../../../database/schedule.service';
 import { DatePipe } from '@angular/common';
@@ -160,15 +160,40 @@ export class CalendarComponent implements OnInit, OnDestroy {
   /* SUBSCRIBE TO A BEHAVIOR SUBJECT */
 
   private behaviorSubscription!: Subscription;
-  public isAddSchedModalOpen: boolean = false;
+  public modalStatus = {
+    isAddSchedModalOpen: false,
+    isUpdateSchedModalOpen: false,
+  };
   private subscribeBehavior = () => {
-    this.behaviorSubscription = this.popModal.addList$().subscribe({
-      next: (value) => (this.isAddSchedModalOpen = value),
-      error: (err) => console.error('Error Subscribing to Behavior', err),
+    const addSchedModal = this.popModal.addList$();
+    const updateSchedModal = this.popModal.updateList$();
+
+    this.behaviorSubscription = combineLatest([
+      addSchedModal,
+      updateSchedModal,
+    ]).subscribe({
+      next: ([addValue, updateValue]) => {
+        this.modalStatus.isAddSchedModalOpen = addValue;
+        this.modalStatus.isUpdateSchedModalOpen = updateValue;
+      },
+      error: (err) => {
+        console.log('Error on Subscribing on the modal', err);
+      },
     });
   };
 
   /* END */
+
+  /* ----------- UDPATE SCHEDULE -------------------- */
+
+  updateData: Schedule | undefined;
+
+  openModalUpdate = (data: Schedule) => {
+    this.updateData = data;
+    console.log(data);
+
+    this.popModal.isModalOpen(true);
+  };
 
   /* NG ON DESTROY */
   ngOnDestroy(): void {

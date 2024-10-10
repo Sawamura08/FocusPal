@@ -59,7 +59,11 @@
     <h3>Schedule Today</h3>
 
     <div class="container" *ngIf="schedList.length != 0; else noSched">
-      <ul class="schedules" *ngFor="let sched of schedList">
+      <ul
+        class="schedules"
+        *ngFor="let sched of schedList; index as i"
+        (click)="openModalUpdate(schedList[i])"
+      >
         <li class="sched">
           <span class="type">{{ sched.type | schedType }}!</span>
           <span class="time">
@@ -84,7 +88,13 @@
     </div>
   </section>
 
-  <section class="add-list-modal" *ngIf="isAddSchedModalOpen">
+  <!-- INSERT NEW SCHED MODAL -->
+  <section class="add-list-modal" *ngIf="modalStatus.isAddSchedModalOpen">
     <app-add-sched></app-add-sched>
+  </section>
+
+  <!-- UPDATE SCHED MODAL -->
+  <section class="add-list-modal" *ngIf="modalStatus.isUpdateSchedModalOpen">
+    <app-add-sched [updateData]="updateData"></app-add-sched>
   </section>
 </main>

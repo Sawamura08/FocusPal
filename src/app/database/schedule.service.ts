@@ -1,8 +1,9 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { db, Schedule } from './db';
 import { liveQuery } from 'dexie';
-import { Observable, from } from 'rxjs';
+import { BehaviorSubject, Observable, from, of, switchMap } from 'rxjs';
 import { DatePipe } from '@angular/common';
+import { SessionService } from '../service/session.service';
 
 enum Repition {
   REPEAT_NONE = 0,
@@ -12,12 +13,31 @@ enum Repition {
 @Injectable({
   providedIn: 'root',
 })
-export class ScheduleService {
-  schedList$: Observable<Schedule[]>;
-  constructor(private datePipe: DatePipe) {
+export class ScheduleService implements OnInit {
+  schedList$: Observable<any>;
+  private userId$ = new BehaviorSubject<number | undefined>(undefined);
+  constructor(private datePipe: DatePipe, private session: SessionService) {
     /* ----------- QUERY FETCH data from DB REACTIVELY/ ON LIVE */
-    this.schedList$ = from(liveQuery(() => this.getAllTaskDefault()));
+    this.getSession();
+    this.schedList$ = this.userId$.pipe(
+      switchMap((userId) => {
+        if (userId === undefined) {
+          return from(Promise.resolve([])); // or some default value
+        }
+        return from(liveQuery(() => this.getAllTaskDefault(userId)));
+      })
+    );
   }
+  ngOnInit(): void {}
+
+  /* GET SESSION */
+  private userId?: number;
+  private getSession = async () => {
+    this.userId = await this.session.getUser();
+    this.userId$.next(this.userId);
+  };
+
+  /* end */
 
   public getSchedList = (): Observable<Schedule[]> => {
     return this.schedList$;
@@ -48,9 +68,16 @@ export class ScheduleService {
     }
   };
 
+  /* UPDATE INFORMATION */
+
+  /* END */
+
   /* GET SCHEDULE BY DATE | REPEAT */
 
-  public getAllTaskDefault = async (date?: string): Promise<Schedule[]> => {
+  public getAllTaskDefault = async (
+    id: number,
+    date?: string
+  ): Promise<Schedule[]> => {
     /* CHECK WHETHER THE date has value or null */
     const dateSelected: string =
       date ?? this.datePipe.transform(new Date(), 'yyyy-MM-dd') ?? '2024-01-01';
@@ -60,7 +87,7 @@ export class ScheduleService {
     try {
       const sched = await db.schedList
         .where('userId')
-        .equals(1)
+        .equals(id)
         .filter((sched) => {
           // CHECK it has DATE AND IS ONE TIME SCHED ONLY
           if (sched.date && sched.repeat === Repeat.REPEAT_NONE) {
@@ -97,7 +124,9 @@ export class ScheduleService {
   /* END OF GET SCHEDULE BY DATE | REPEAT */
 
   public returnSchedDefault = (date?: string) => {
-    this.schedList$ = from(liveQuery(() => this.getAllTaskDefault(date)));
+    this.schedList$ = from(
+      liveQuery(() => this.getAllTaskDefault(this.userId!, date))
+    );
   };
 
   /* CONVERT DATE TIME TO TIME ONLY AND CHECK THE DIFFERENCE */
