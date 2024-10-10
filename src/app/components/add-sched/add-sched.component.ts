@@ -50,13 +50,13 @@ export class AddSchedComponent implements OnInit {
 
   /* DAYS OF THE WEEK &&  SELECT DAYS*/
   public daysOfWeek: string[] = [
+    'Sun',
     'Mon',
     'Tue',
     'Wed',
     'Thu',
     'Fri',
     'Sat',
-    'Sun',
   ];
 
   private daysSelected: number[] = [];
@@ -132,6 +132,7 @@ export class AddSchedComponent implements OnInit {
 
   /* SUBMIT SCHED */
 
+  // SET THE REPEAT SCHEDULE
   private setRepeatValues = (repeat: number) => {
     if (repeat === 2) {
       if (this.daysSelected.length != 0) {
@@ -143,11 +144,78 @@ export class AddSchedComponent implements OnInit {
     }
   };
 
-  private transformTimeToDate = (startTime: Date, endTime: Date) => {
-    //const start =
-    /* const dateToday = new Date().toISOString().split('T')[0]; */
+  // CONVERT START AND END TIME TO 24HOUR FORMAT
+
+  private transformTimeToDate = (timeValue: string) => {
+    const dateToday = new Date().toISOString().split('T')[0];
     /*    startTime: new Date(dateToday + 'T' + '18:30'), */
+    let hours24Format: string;
+    const start = timeValue.split(' ');
+    const time = start[0];
+    const amPm = start[1];
+
+    // split hour and minutes
+    const timeSplit = time.split(':');
+
+    const hour = timeSplit[0];
+
+    const intHour = parseInt(hour);
+    const minutes = timeSplit[1];
+
+    const paddedHour = intHour.toString().padStart(2, '0');
+    if (hour === '12' && amPm === 'AM') {
+      hours24Format = `00:${minutes}`; // midnight case
+    } else if (amPm === 'PM' && intHour < 12) {
+      const hours = (intHour + 12).toString();
+      hours24Format = `${hours}:${minutes}`; // convert PM time to 24hr format
+    } else {
+      hours24Format = `${paddedHour}:${minutes}`; // Ensure padding for AM/single-digit hours
+    }
+
+    return new Date(dateToday + 'T' + hours24Format);
   };
+
+  /* SET TIME VALUES TO THE FORM INPUTS */
+  newStartTime: string = '';
+  newEndTime: string = '';
+  public invalidStartTime?: boolean;
+  public invalidEndTime?: boolean;
+
+  public setTimeChange = (
+    timeType: 'startTime' | 'endTime',
+    timeValue: string
+  ) => {
+    this.userInput.get(timeType)?.setValue(timeValue);
+
+    const setValue = this.userInput.get(timeType)?.value;
+
+    if (timeType === 'startTime') {
+      if (setValue != '') {
+        this.invalidStartTime = true;
+        let newFormat: Date = this.transformTimeToDate(setValue);
+        this.userInput.get('startTime')?.setValue(newFormat);
+        return;
+      } else {
+        this.invalidStartTime = false;
+        return;
+      }
+    }
+
+    if (timeType === 'endTime') {
+      if (setValue != '') {
+        this.invalidEndTime = true;
+        let newFormat: Date = this.transformTimeToDate(setValue);
+        this.userInput.get('endTime')?.setValue(newFormat);
+        return;
+      } else {
+        this.invalidEndTime = false;
+        return;
+      }
+    }
+  };
+  /* END */
+
+  // SET OTHER FORM VALUES BEFORE SUBMIT
 
   public prepareFormValues = () => {
     this.userInput.get('repeat')?.setValue(this.currentType);
@@ -161,26 +229,29 @@ export class AddSchedComponent implements OnInit {
     }
   };
 
+  // INSERTING NEW VALUES FOR SCHEDULE
   public submit = async () => {
+    // check all fields
+    this.userInput.markAllAsTouched();
+
     //set the sched value before attempting to submit
     this.prepareFormValues();
 
-    // check all fields
-    this.userInput.markAllAsTouched();
     if (this.userInput.valid) {
       //submit the code
       console.log(this.userInput.value);
-      // const schedId = await this.sched.insertSched(
-      //   this.userId!,
-      //   this.userInput.value
-      // );
 
-      // if (schedId != 0) {
-      //   console.log('Success');
-      //   this.closeModal();
-      // } else {
-      //   console.log('Error!');
-      // }
+      const schedId = await this.sched.insertSched(
+        this.userId!,
+        this.userInput.value
+      );
+
+      if (schedId != 0) {
+        console.log('Success');
+        this.closeModal();
+      } else {
+        console.log('Error!');
+      }
     }
   };
 

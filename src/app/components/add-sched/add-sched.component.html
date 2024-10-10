@@ -79,23 +79,31 @@
         <!-- TIME PICKER -->
         <div class="time-picker-container">
           <section class="form-input">
-            <label for="startTime" class="timeLabel">Start Time</label>
+            <label for="startTimePicker" class="timeLabel">Start Time</label>
             <input
               [ngxTimepicker]="timePickers"
-              name="startTime"
+              name="startTimePicker"
               class="time-picker"
-              id="startTime"
-              formControlName="startTime"
+              id="startTimePicker"
+              [(ngModel)]="newStartTime"
+              [ngModelOptions]="{ standalone: true }"
+              (blur)="setTimeChange('startTime', newStartTime)"
               readonly
             />
 
             <ngx-material-timepicker #timePickers></ngx-material-timepicker>
             <div class="hint-text">
-              <div class="hints" *ngIf="!validators(startTime)">
+              <div
+                class="hints"
+                *ngIf="!validators(startTime) || invalidStartTime === false"
+              >
                 <p>This is a required Field</p>
               </div>
             </div>
           </section>
+          <!-- HIDDEN INPUT FOR START TIME ngx-timepicker doens't accept DATE OBJECT -->
+          <input type="text" name="" id="" formControlName="startTime" hidden />
+          <!-- END -->
           <section class="form-input">
             <label for="endTime" class="timeLabel">End Time</label>
             <input
@@ -103,12 +111,20 @@
               name="endTime"
               class="time-picker"
               id="endTime"
-              formControlName="endTime"
               readonly
+              [(ngModel)]="newEndTime"
+              [ngModelOptions]="{ standalone: true }"
+              (blur)="setTimeChange('endTime', newEndTime)"
             />
             <ngx-material-timepicker #endTimePickers></ngx-material-timepicker>
+            <!-- HIDDEN INPUT FOR START TIME ngx-timepicker doens't accept DATE OBJECT -->
+            <input type="text" name="" id="" formControlName="endTime" hidden />
+            <!-- END -->
             <div class="hint-text">
-              <div class="hints" *ngIf="!validators(endTime)">
+              <div
+                class="hints"
+                *ngIf="!validators(endTime) || invalidEndTime === false"
+              >
                 <p>This is a required Field</p>
               </div>
             </div>

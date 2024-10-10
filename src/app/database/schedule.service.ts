@@ -7,7 +7,7 @@ import { DatePipe } from '@angular/common';
 enum Repition {
   REPEAT_NONE = 0,
   REPEAT_DAILY = 1,
-  REPEAT_CUSTOM = 4,
+  REPEAT_CUSTOM = 2,
 }
 @Injectable({
   providedIn: 'root',
@@ -36,6 +36,7 @@ export class ScheduleService {
       repeat: schedData.repeat,
       type: schedData.type,
       isActive: 1,
+      daysOfWeek: schedData.daysOfWeek,
     };
 
     try {
