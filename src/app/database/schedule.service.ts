@@ -70,6 +70,20 @@ export class ScheduleService implements OnInit {
 
   /* UPDATE INFORMATION */
 
+  public updateSchedInfo = async (schedId: number, data: Schedule) => {
+    try {
+      await db.schedList.update(schedId, data).then((success) => {
+        if (success) {
+          console.log('Success');
+        } else {
+          console.log('False');
+        }
+      });
+    } catch (err) {
+      console.log('Error Update Sched', err);
+    }
+  };
+
   /* END */
 
   /* GET SCHEDULE BY DATE | REPEAT */

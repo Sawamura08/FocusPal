@@ -155,8 +155,14 @@
         <!-- BUTTON SECTION -->
 
         <section class="submit-container">
-          <div class="btn-container">
+          <div class="btn-container" *ngIf="!isUpdate">
             <button class="btn" (click)="submit()">Submit</button>
+          </div>
+          <div class="btn-container" *ngIf="isUpdate">
+            <button class="btn" (click)="submit()">Delete</button>
+          </div>
+          <div class="btn-container" *ngIf="isUpdate">
+            <button class="btn" (click)="udpateSchedule()">Update</button>
           </div>
         </section>
         <!-- END -->

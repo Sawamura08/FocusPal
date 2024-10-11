@@ -187,11 +187,16 @@ export class CalendarComponent implements OnInit, OnDestroy {
   /* ----------- UDPATE SCHEDULE -------------------- */
 
   updateData: Schedule | undefined;
+  isUpdate: boolean = false;
 
   openModalUpdate = (data: Schedule) => {
-    this.updateData = data;
-    console.log(data);
+    // set the modal to update mode
+    this.isUpdate = true;
 
+    // set the scheduled data for update
+    this.updateData = data;
+
+    // open the modal
     this.popModal.isModalOpen(true);
   };
 

@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs';
 import { ScheduleService } from '../../database/schedule.service';
 import { termsAnimate } from '../terms-conditions/terms-animate';
 import { Schedule } from '../../database/db';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-add-sched',
@@ -19,7 +20,8 @@ export class AddSchedComponent implements OnInit {
     private fb: FormBuilder,
     private popModal: PopModalService,
     private session: SessionService,
-    private sched: ScheduleService
+    private sched: ScheduleService,
+    private datePipe: DatePipe
   ) {
     this.userInput = this.fb.group({
       title: ['', Validators.required],
@@ -139,7 +141,7 @@ export class AddSchedComponent implements OnInit {
   /* SUBMIT SCHED */
 
   // SET THE REPEAT SCHEDULE
-  private setRepeatValues = (repeat: number) => {
+  private setRepeatedDays = (repeat: number) => {
     if (repeat === 2) {
       if (this.daysSelected.length != 0) {
         this.userInput.get('daysOfWeek')?.setValue(this.daysSelected);
@@ -147,6 +149,9 @@ export class AddSchedComponent implements OnInit {
         this.currentType = 0;
         this.userInput.get('repeat')?.setValue(this.currentType);
       }
+    } else {
+      this.daysSelected = [];
+      this.userInput?.get('daysOfWeek')?.setValue(this.daysSelected);
     }
   };
 
@@ -227,7 +232,7 @@ export class AddSchedComponent implements OnInit {
     this.userInput.get('repeat')?.setValue(this.currentType);
     this.userInput.get('type')?.setValue(this.categoryCurrentIndex);
     const repeat = this.userInput.get('repeat')?.value;
-    this.setRepeatValues(repeat);
+    this.setRepeatedDays(repeat);
 
     if (repeat != 0) {
       const date = new Date();
@@ -245,7 +250,6 @@ export class AddSchedComponent implements OnInit {
 
     if (this.userInput.valid) {
       //submit the code
-      console.log(this.userInput.value);
 
       const schedId = await this.sched.insertSched(
         this.userId!,
@@ -266,25 +270,60 @@ export class AddSchedComponent implements OnInit {
   /* ---------------- UPDATING SCHEDULE ---------------------- */
 
   @Input() updateData: any;
+  @Input() isUpdate?: boolean;
 
+  /* SET SCHEDULED DATA */
   public setExistingData = () => {
-    console.log(JSON.stringify(this.updateData, null, 2));
     if (this.updateData) {
-      this.userInput.get('title')?.setValue(this.updateData?.title);
-      this.userInput.get('date')?.setValue(this.updateData?.date);
-      this.userInput.get('startTime')?.setValue(this.updateData?.startTime);
-      this.userInput.get('endTime')?.setValue(this.updateData?.endTime);
-      this.userInput.get('repeat')?.setValue(this.updateData?.repeat);
-      this.userInput.get('type')?.setValue(this.updateData?.type);
-      this.userInput
-        .get('daysOfWeek')
-        ?.setValue(this.updateData?.daysOfWeek || []);
+      // get the ID to update specific SCHEDULE
+      this.schedId = this.updateData.schedId;
+      //SET ALL THE SCHEDULED DATA TO THE FORMS
+      this.userInput.patchValue(this.updateData);
 
-      this.categoryCurrentIndex = this.updateData?.type;
-      this.currentType = this.updateData?.repeat;
-      if (this.updateData?.daysOfWeek) {
-        this.daysSelected = this.updateData?.daysOfWeek;
-      }
+      // set DATA TO UI FORMS
+      this.setDataToForms();
+
+      /* TRANSFORM THE DATE OBJECT TO TIME */
+      this.newStartTime = this.transformDateToTime(this.updateData?.startTime);
+      this.newEndTime = this.transformDateToTime(this.updateData?.endTime);
+    }
+  };
+
+  /* END */
+
+  /* SET DATA TO UI SCHEDULE FORMS */
+
+  public setDataToForms = () => {
+    this.categoryCurrentIndex = this.updateData?.type;
+    this.currentType = this.updateData?.repeat;
+    const selectedDays = this.updateData?.daysOfWeek;
+    if (selectedDays) {
+      this.daysSelected = selectedDays;
+    }
+  };
+
+  /* END */
+
+  /* TRANSFORM DATA OBJECT TO 12HR FORMAT */
+
+  public transformDateToTime = (date: Date): string => {
+    const time = this.datePipe.transform(date, 'h:mm a') || '6:00 AM';
+
+    return time;
+  };
+
+  /* UPDATE DATA */
+  schedId: number = 0;
+  public udpateSchedule = async () => {
+    this.prepareFormValues();
+    this.userInput.markAllAsTouched();
+
+    if (this.userInput.value) {
+      await this.sched
+        .updateSchedInfo(this.schedId, this.userInput.value)
+        .then(() => {
+          this.popModal.isModalOpen(false);
+        });
     }
   };
 }

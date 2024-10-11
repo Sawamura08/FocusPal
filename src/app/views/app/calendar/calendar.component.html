@@ -95,6 +95,9 @@
 
   <!-- UPDATE SCHED MODAL -->
   <section class="add-list-modal" *ngIf="modalStatus.isUpdateSchedModalOpen">
-    <app-add-sched [updateData]="updateData"></app-add-sched>
+    <app-add-sched
+      [updateData]="updateData"
+      [isUpdate]="isUpdate"
+    ></app-add-sched>
   </section>
 </main>
