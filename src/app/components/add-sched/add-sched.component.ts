@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { PopModalService } from '../../service/pop-modal.service';
 import { SessionService } from '../../service/session.service';
@@ -7,6 +7,7 @@ import { ScheduleService } from '../../database/schedule.service';
 import { termsAnimate } from '../terms-conditions/terms-animate';
 import { Schedule } from '../../database/db';
 import { DatePipe } from '@angular/common';
+import { confirmModal } from '../../interfaces/export.object';
 
 @Component({
   selector: 'app-add-sched',
@@ -14,7 +15,7 @@ import { DatePipe } from '@angular/common';
   styleUrl: './add-sched.component.scss',
   animations: [termsAnimate],
 })
-export class AddSchedComponent implements OnInit {
+export class AddSchedComponent implements OnInit, OnDestroy {
   userInput: FormGroup;
   constructor(
     private fb: FormBuilder,
@@ -34,9 +35,16 @@ export class AddSchedComponent implements OnInit {
     });
   }
 
+  private subscriptionArr: Subscription[] = [];
+
   ngOnInit(): void {
+    // FETCH USER SESSION
     this.getSession();
 
+    //SUBSCRIBE FOR CONFIRMATION UPDATE MODAL
+    this.confirmModalSubscribe();
+
+    // SET SCHEDULE DATA IN UPDATE MODE
     this.setExistingData();
   }
 
@@ -314,16 +322,61 @@ export class AddSchedComponent implements OnInit {
 
   /* UPDATE DATA */
   schedId: number = 0;
+  confirmModal: confirmModal = {
+    imgPath: '/extra/warning.png',
+    title: 'Are you sure',
+    text: 'This action cannot be undone.',
+  };
+  confirmation: boolean = false;
   public udpateSchedule = async () => {
     this.prepareFormValues();
     this.userInput.markAllAsTouched();
 
-    if (this.userInput.value) {
-      await this.sched
-        .updateSchedInfo(this.schedId, this.userInput.value)
-        .then(() => {
-          this.popModal.isModalOpen(false);
-        });
+    this.openConfirmModal();
+    // AYUSIN MO TO CONFIRMATION MODAL YUNG UI NG CANCEL AND ACCEPT
+    if (this.userInput.value && this.confirmation) {
+      console.log(this.confirmation);
+      // await this.sched
+      //   .updateSchedInfo(this.schedId, this.userInput.value)
+      //   .then(() => {
+      //     this.popModal.isModalOpen(false);
+      //   });
     }
   };
+
+  /* OPEN CONFIRMATION MODAL */
+  isConfirmModalOpen: boolean = false;
+  public openConfirmModal = () => {
+    this.popModal.setConfirmaModalStatus(true);
+  };
+  /* END */
+
+  /* SUBSCRIBE TO CONFIRMATION MODAL */
+  private confirmModalSubscription!: Subscription;
+
+  public confirmModalSubscribe = () => {
+    this.confirmModalSubscription = this.popModal
+      .getConfirmModalStatus()
+      .subscribe({
+        next: (value) => (this.isConfirmModalOpen = value),
+        error: (err) => console.log('Error subscribe confirmation', err),
+      });
+
+    this.subscriptionArr.push(this.confirmModalSubscription);
+  };
+  /* END */
+
+  /* ACCEPT CONFIRMATION MODAL */
+  public confirmModalAction = () => {
+    this.popModal.getConfirmationModal().subscribe({
+      next: (value) => (this.confirmation = value),
+      error: (err) => console.log('Error at Subsribe to Subject', err),
+    });
+  };
+  /* END */
+
+  ngOnDestroy(): void {
+    if (this.subscriptionArr)
+      this.subscriptionArr.forEach((subs) => subs.unsubscribe());
+  }
 }

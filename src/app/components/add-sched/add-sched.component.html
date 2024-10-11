@@ -171,3 +171,8 @@
     </form>
   </section>
 </div>
+
+<!-- CONFIRMATION MODAL -->
+<section class="confirm-modal" *ngIf="isConfirmModalOpen">
+  <app-modal [data]="confirmModal"></app-modal>
+</section>

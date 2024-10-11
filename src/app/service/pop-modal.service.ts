@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 
 export enum ModalType {
   NONE,
@@ -19,6 +19,8 @@ export class PopModalService {
     this.addList = new BehaviorSubject<boolean>(false);
 
     this.updateList = new BehaviorSubject<boolean>(false);
+
+    this.confirmModalStatus$ = new BehaviorSubject<boolean>(false);
   }
 
   public openModal = (modalType: ModalType) => {
@@ -56,4 +58,35 @@ export class PopModalService {
   public updateList$ = () => {
     return this.updateList.asObservable();
   };
+
+  /* END */
+
+  /* OPEN OR CLOSE CONFIRMATION MODAL */
+
+  private confirmModalStatus$: BehaviorSubject<boolean>;
+
+  public setConfirmaModalStatus = (value: boolean) => {
+    this.confirmModalStatus$.next(value);
+  };
+
+  public getConfirmModalStatus = () => {
+    return this.confirmModalStatus$.asObservable();
+  };
+
+  /* END */
+
+  /* CONFIRMATION RESPONSE MODAL */
+
+  private confirmationModal$: Subject<boolean> = new Subject<boolean>();
+
+  public getConfirmationModal = () => {
+    return this.confirmationModal$.asObservable();
+  };
+
+  public sendValueModal = (value: boolean) => {
+    this.confirmationModal$.next(value);
+    this.confirmationModal$.complete();
+  };
+
+  /* END */
 }

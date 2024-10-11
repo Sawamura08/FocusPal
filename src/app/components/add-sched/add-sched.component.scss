@@ -13,6 +13,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
+  z-index: 2;
 
   .modal-container {
     width: 90dvw;
@@ -322,4 +324,13 @@
       }
     }
   }
+}
+
+.confirm-modal {
+  width: 100dvw;
+  height: 90%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
 }
