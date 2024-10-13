@@ -89,13 +89,27 @@ export class ScheduleService implements OnInit {
 
   /* END */
 
-  /* GET SCHEDULE BY DATE | REPEAT */
+  /* DELETE SCHEDULE */
 
+  public deleteSched = async (schedId: number): Promise<any> => {
+    try {
+      const result = await db.schedList.delete(schedId);
+      return result;
+    } catch (err) {
+      console.log('Error on Deleting sched', err);
+      return false;
+    }
+  };
+
+  /* END */
+
+  /* GET SCHEDULE BY DATE | REPEAT */
   public getAllTaskDefault = async (
     id: number,
     date?: string
   ): Promise<Schedule[]> => {
     /* CHECK WHETHER THE date has value or null */
+
     const dateSelected: string =
       date ?? this.datePipe.transform(new Date(), 'yyyy-MM-dd') ?? '2024-01-01';
     const dayToday = new Date(dateSelected).getDay();

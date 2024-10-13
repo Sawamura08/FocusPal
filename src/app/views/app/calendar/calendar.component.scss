@@ -7,6 +7,7 @@ main {
   color: $textColor;
   overflow-y: auto;
   z-index: 1;
+  background-color: $neutralColor;
 
   .calendar-module {
     .calendar-filter {

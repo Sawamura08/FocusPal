@@ -6,6 +6,9 @@ import { Schedule } from '../../../database/db';
 import { ScheduleService } from '../../../database/schedule.service';
 import { DatePipe } from '@angular/common';
 import { PopModalService } from '../../../service/pop-modal.service';
+import { ToastrService } from 'ngx-toastr';
+import { ToastModalService } from '../../../service/toast-modal.service';
+import { toastModal } from '../../../interfaces/export.object';
 
 @Component({
   selector: 'app-calendar',
@@ -23,7 +26,9 @@ export class CalendarComponent implements OnInit, OnDestroy {
     private session: SessionService,
     private sched: ScheduleService,
     private datePipe: DatePipe,
-    private popModal: PopModalService
+    private popModal: PopModalService,
+    private toastr: ToastrService,
+    private toastNotif: ToastModalService
   ) {
     this.calendar = new Calendar(this.today.getFullYear());
     this.currentStartDate = this.today; // Start with the current week
@@ -41,6 +46,9 @@ export class CalendarComponent implements OnInit, OnDestroy {
     this.getSession();
 
     this.getSchedByDayRepeat();
+
+    /* subscribe to the toast service  */
+    this.toastSubscribe();
   }
 
   /* UPDATE THE WEEK SHOWS 5 DAYS */
@@ -89,11 +97,11 @@ export class CalendarComponent implements OnInit, OnDestroy {
     /* SET THE CURRENT INDEX OF THE DATE */
     this.filterDateIndex = index;
     const date = this.week[index];
+
     const setDate: string = `${date?.year}-${date?.month + 1}-${date?.date}`;
 
     /* SET NEW VALUE TO THE SUBJECT */
     this.destroySubscription$.next(true);
-    this.destroySubscription$.complete();
 
     /* CALL THE FILTER FOR SCHEDULE */
     this.sched.returnSchedDefault(setDate);
@@ -198,6 +206,38 @@ export class CalendarComponent implements OnInit, OnDestroy {
 
     // open the modal
     this.popModal.isModalOpen(true);
+  };
+
+  /* END */
+
+  /* MODAL FOR TOAST NOTIFICATION */
+
+  toastSubscription!: Subscription;
+  public toastSubscribe = () => {
+    this.toastSubscription = this.toastNotif.getToastModal().subscribe({
+      next: (value) => {
+        this.triggerToast(value);
+      },
+      error: (err) => console.log('Error on Toast', err),
+    });
+
+    this.subscriptionArr.push(this.toastSubscription);
+  };
+
+  private triggerToast = (value: toastModal) => {
+    if (value.type === 'Update' && value.status) {
+      this.toastr.success(
+        'Update Successful',
+        'The schedule has been updated successfully.',
+        { timeOut: 2500 }
+      );
+    } else if (value.type === 'Delete' && value.status) {
+      this.toastr.success(
+        'Deletion Successful',
+        'The schedule has been deleted successfully.',
+        { timeOut: 2500 }
+      );
+    }
   };
 
   /* NG ON DESTROY */

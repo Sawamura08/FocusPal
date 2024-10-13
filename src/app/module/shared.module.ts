@@ -15,6 +15,7 @@ import {
   MatNativeDateModule,
 } from '@angular/material/core';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
     MatNativeDateModule,
     NgxMaterialTimepickerModule,
     ReactiveFormsModule,
+    ToastrModule,
   ],
   exports: [
     LoadingComponent,

@@ -13,6 +13,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { DatePipe } from '@angular/common';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [AppsComponent, AuthComponent, AppComponent, StarterComponent],
@@ -21,6 +22,7 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
     AppRoutingModule,
     RouterModule,
     BrowserAnimationsModule,
+    ToastrModule.forRoot(),
     ServiceWorkerModule.register('service-worker.js', {
       enabled: !isDevMode(),
       // Register the ServiceWorker as soon as the application is stable

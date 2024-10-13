@@ -4,3 +4,9 @@ export interface confirmModal {
   text?: string;
   isUpdate?: boolean;
 }
+
+/* TOAST MODAL */
+export interface toastModal {
+  type: string;
+  status: boolean;
+}

@@ -7,8 +7,9 @@ import { ScheduleService } from '../../database/schedule.service';
 import { termsAnimate } from '../terms-conditions/terms-animate';
 import { Schedule } from '../../database/db';
 import { DatePipe } from '@angular/common';
-import { confirmModal } from '../../interfaces/export.object';
+import { confirmModal, toastModal } from '../../interfaces/export.object';
 import { DateTimeService } from '../../service/date-time.service';
+import { ToastModalService } from '../../service/toast-modal.service';
 
 @Component({
   selector: 'app-add-sched',
@@ -24,7 +25,8 @@ export class AddSchedComponent implements OnInit, OnDestroy {
     private session: SessionService,
     private sched: ScheduleService,
     private datePipe: DatePipe,
-    private dateTime: DateTimeService
+    private dateTime: DateTimeService,
+    private toast: ToastModalService
   ) {
     this.userInput = this.fb.group({
       title: ['', Validators.required],
@@ -111,7 +113,7 @@ export class AddSchedComponent implements OnInit, OnDestroy {
 
   /* END */
 
-  /* CLOSE THE MODAL */
+  /* CLOSE THE INSERT SCHED MODAL */
 
   public closeModal = () => {
     this.popModal.addListModal(false);
@@ -236,7 +238,6 @@ export class AddSchedComponent implements OnInit, OnDestroy {
       );
 
       if (schedId != 0) {
-        console.log('Success');
         this.closeModal();
       } else {
         console.log('Error!');
@@ -296,6 +297,7 @@ export class AddSchedComponent implements OnInit, OnDestroy {
   };
   confirmationModalMode: boolean = false;
   confirmation: boolean | null = null;
+  toastType!: toastModal;
 
   public udpateSchedule = async () => {
     this.prepareFormValues();
@@ -304,18 +306,24 @@ export class AddSchedComponent implements OnInit, OnDestroy {
     // this await will not go through unless the user has an action
     this.confirmation = await this.openConfirmModal();
 
-    if (this.userInput.value && this.confirmation) {
-      await this.sched
-        .updateSchedInfo(this.schedId, this.userInput.value)
-        .then((result) => {
-          this.popModal.isModalOpen(false);
-          console.log(result);
-        });
+    /* SET UP THE TOAST TYPE TO UPDATE */
+    this.toastType = {
+      type: 'Update',
+      status: true,
+    };
 
-      console.log('Update');
+    if (this.userInput.value && this.confirmation) {
+      const result = await this.sched.updateSchedInfo(
+        this.schedId,
+        this.userInput.value
+      );
+      this.popModal.isModalOpen(false);
+
+      // if the update is successful this will run
+      /* trigger the toast modal for successfull */
+      result ? this.toast.switchToastModal(this.toastType) : '';
+
       this.popModal.setConfirmaModalStatus(false);
-    } else {
-      console.log('Cancelled');
     }
   };
 
@@ -366,12 +374,19 @@ export class AddSchedComponent implements OnInit, OnDestroy {
   /* ------------- DELETE SCHEDULE ---------------- */
 
   public deleteSchedule = async () => {
+    this.toastType = {
+      type: 'Delete',
+      status: true,
+    };
     this.confirmation = await this.openConfirmModal();
 
     if (this.confirmation) {
-      console.log('delete');
-    } else {
-      console.log('cancelled');
+      await this.sched.deleteSched(this.schedId);
+      this.popModal.setConfirmaModalStatus(false);
+      this.popModal.isModalOpen(false);
+
+      /* TRIGGER THE TOAST MODAL */
+      this.toast.switchToastModal(this.toastType);
     }
   };
 
