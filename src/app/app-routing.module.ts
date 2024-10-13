@@ -44,6 +44,11 @@ const routes: Routes = [
             (m) => m.CalendarModule
           ),
       },
+      {
+        path: 'task',
+        loadChildren: () =>
+          import('./views/app/task/task.module').then((m) => m.TaskModule),
+      },
     ],
   },
   {

@@ -1,1 +1,44 @@
 @use "../../../icons/font-awesome-6-pro-main/css/all.css" as *;
+
+main {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow-x: hidden;
+
+  header {
+    position: relative;
+    width: 100%;
+    z-index: 2;
+  }
+
+  .container {
+    width: 100%;
+  }
+}
+
+.time-bg {
+  position: absolute;
+  top: 0;
+  right: 0;
+  transform: translate(0, 25%);
+  z-index: -1;
+
+  .time {
+    width: 100%;
+    height: 15rem;
+  }
+}
+
+.person-bg {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  transform: translate(0, -50%);
+  z-index: -1;
+
+  .person {
+    width: 100%;
+    height: 10rem;
+  }
+}

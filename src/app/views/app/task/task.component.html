@@ -1,0 +1,18 @@
+<button (click)="filterTaskByStatus()">Filter</button><br />
+<button (click)="insertTasks(userId)">Insert</button><br />
+<button (click)="getTaskToday()">Get Task Today</button><br />
+<button (click)="getByPriorities()">Get Task Priorities</button><br />
+
+<div *ngFor="let task of taskList">
+  <br />
+  <p>TASK LIST</p>
+  <p>taskId - {{ task.taskId }}</p>
+  <p>userId - {{ task.userId }}</p>
+  <p>description - {{ task.description }}</p>
+  <p>Priority - {{ task.priority | textPipe }}</p>
+  <p>subTask - {{ task.subTask }}</p>
+  <p>status - {{ task.status }}</p>
+  <p>dueDate - {{ task.dueDate | date : "medium" }}</p>
+  <p>createdAt - {{ task.createdAt | date : "medium" }}</p>
+  <button (click)="deleteTask(task.taskId!)">Delete</button>
+</div>

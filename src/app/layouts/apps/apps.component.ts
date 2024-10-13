@@ -17,7 +17,7 @@ export class AppsComponent {
   buttonStatus = [
     { status: buttons.HOME, label: 'apps' },
     { status: buttons.CALENDAR, label: 'calendar' },
-    { status: buttons.CHECK_LIST, label: 'checkList' },
+    { status: buttons.CHECK_LIST, label: 'task' },
     { status: buttons.CLOCK, label: 'clock' },
   ];
   valueStatus: buttons = buttons.HOME;

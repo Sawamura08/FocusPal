@@ -13,8 +13,8 @@
 [x] : UI for daily date- selected and current date
 [x] : UI FOR ADDING SCHED
 [x] : Transform 12hr to 24hr
-[] : create function for Calendar (CRUD) LETS DO UPDATE
-[]: success modal
+[x] : create function for Calendar (CRUD) 
+[x]: success modal
 [] : create filter for Calendar (Daily & WEEKLY) WEEKLY NALANG
 [] : UI FOR SCHED FILTER(DAILY) (WEEKLY NOT YET NONE)
 

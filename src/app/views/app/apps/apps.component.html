@@ -1,18 +1,126 @@
-<button (click)="filterTaskByStatus()">Filter</button><br />
-<button (click)="insertTasks(userId)">Insert</button><br />
-<button (click)="getTaskToday()">Get Task Today</button><br />
-<button (click)="getByPriorities()">Get Task Priorities</button><br />
+<main>
+  <header><app-header [homeData]="headerData"></app-header></header>
 
-<div *ngFor="let task of taskList">
-  <br />
-  <p>TASK LIST</p>
-  <p>taskId - {{ task.taskId }}</p>
-  <p>userId - {{ task.userId }}</p>
-  <p>description - {{ task.description }}</p>
-  <p>Priority - {{ task.priority | textPipe }}</p>
-  <p>subTask - {{ task.subTask }}</p>
-  <p>status - {{ task.status }}</p>
-  <p>dueDate - {{ task.dueDate | date : "medium" }}</p>
-  <p>createdAt - {{ task.createdAt | date : "medium" }}</p>
-  <button (click)="deleteTask(task.taskId!)">Delete</button>
+  <section class="container"></section>
+</main>
+
+<div class="time-bg">
+  <svg
+    class="time"
+    width="101"
+    height="181"
+    viewBox="0 0 101 181"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <g filter="url(#filter0_f_452_353)">
+      <path
+        d="M86.3815 70.2341L92.2616 71.9788L94.266 65.2235L88.3859 63.4788M70.6126 80.2552L76.4926 81.9999L78.4971 75.2446L84.3771 76.9894L86.3815 70.2341L80.5015 68.4894L82.5059 61.7341L76.6259 59.9894L78.6303 53.2341L84.5103 54.9788L82.5059 61.7341L88.3859 63.4788L90.3904 56.7235L96.2704 58.4683L94.266 65.2235L100.146 66.9683L98.1416 73.7235L104.022 75.4683L106.026 68.713L111.906 70.4577L115.915 56.9472L121.795 58.6919L123.799 51.9366L64.999 34.4894L62.9946 41.2446L68.8746 42.9894L66.8702 49.7446L72.7502 51.4894L68.7414 64.9999L74.6214 66.7446M74.4882 88.7552L80.3682 90.4999L82.3727 83.7446L76.4926 81.9999M78.3638 97.2552L84.2439 98.9999L86.2483 92.2446L80.3682 90.4999M109.369 165.255L15.2881 137.34L21.3014 117.074L27.1814 118.818L29.1858 112.063L35.0659 113.808L39.0747 100.297L44.9548 102.042L48.9636 88.5316L54.8436 90.2763L58.8525 76.7657L52.9725 75.021L56.9813 61.5105L51.1012 59.7657L55.1101 46.2552L49.2301 44.5105L51.2345 37.7552L45.3544 36.0105L51.3677 15.7446L145.448 43.6602L139.435 63.9261L133.555 62.1813L131.551 68.9366L125.671 67.1919L121.662 80.7024L115.782 78.9577L111.773 92.4683L105.893 90.7235L101.884 104.234L107.764 105.979L103.755 119.489L109.635 121.234L105.626 134.745L111.506 136.489L109.502 143.245L115.382 144.989M94.1328 87.2341L98.1416 73.7235L92.2616 71.9788L90.2571 78.7341L84.3771 76.9894L82.3727 83.7446M95.7375 146.51L97.7419 139.755L91.8619 138.01L95.8707 124.5L89.9907 122.755L93.9995 109.245L88.1195 107.5L90.1239 100.745L84.2439 98.9999L80.235 112.51L86.1151 114.255L82.1062 127.766L87.9863 129.51L85.9818 136.266L50.7016 125.797L52.706 119.042L58.586 120.787L62.5949 107.276L68.4749 109.021L70.4794 102.266L76.3594 104.01L78.3638 97.2552L66.6037 93.7657L64.5993 100.521L58.7193 98.7763L54.7104 112.287L48.8304 110.542L44.8215 124.053L38.9415 122.308L36.9371 129.063L95.7375 146.51Z"
+        fill="url(#paint0_linear_452_353)"
+      />
+    </g>
+    <defs>
+      <filter
+        id="filter0_f_452_353"
+        x="0.288086"
+        y="0.744629"
+        width="160.16"
+        height="179.51"
+        filterUnits="userSpaceOnUse"
+        color-interpolation-filters="sRGB"
+      >
+        <feFlood flood-opacity="0" result="BackgroundImageFix" />
+        <feBlend
+          mode="normal"
+          in="SourceGraphic"
+          in2="BackgroundImageFix"
+          result="shape"
+        />
+        <feGaussianBlur
+          stdDeviation="7.5"
+          result="effect1_foregroundBlur_452_353"
+        />
+      </filter>
+      <linearGradient
+        id="paint0_linear_452_353"
+        x1="98.408"
+        y1="29.7024"
+        x2="62.3284"
+        y2="151.297"
+        gradientUnits="userSpaceOnUse"
+      >
+        <stop stop-color="#C0392B" />
+        <stop offset="1" stop-color="#5A1B14" />
+      </linearGradient>
+    </defs>
+  </svg>
+</div>
+
+<div class="person-bg">
+  <svg
+    class="person"
+    width="114"
+    height="129"
+    viewBox="0 0 114 129"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <g filter="url(#filter0_f_452_337)">
+      <path
+        d="M-29.0002 81.9391C-39.066 57.7972 -28.4921 33.8669 -2.03059 22.8339C24.431 11.801 4.81102 46.8928 14.8768 71.0347C24.9426 95.1767 60.8825 99.2266 34.4209 110.26C7.95937 121.292 -18.9344 106.081 -29.0002 81.9391Z"
+        fill="url(#paint0_linear_452_337)"
+        fill-opacity="0.89"
+      />
+      <path
+        d="M22.5644 57.1528C17.9611 38.1862 29.0165 21.668 50.5185 16.4493C72.0205 11.2307 93.1831 22.3756 97.7864 41.3421C102.39 60.3087 88.6905 79.9147 67.1885 85.1334C45.6864 90.3521 27.1677 76.1194 22.5644 57.1528Z"
+        fill="url(#paint1_linear_452_337)"
+        fill-opacity="0.89"
+      />
+    </g>
+    <defs>
+      <filter
+        id="filter0_f_452_337"
+        x="-47.7539"
+        y="0.164062"
+        width="161.431"
+        height="128.754"
+        filterUnits="userSpaceOnUse"
+        color-interpolation-filters="sRGB"
+      >
+        <feFlood flood-opacity="0" result="BackgroundImageFix" />
+        <feBlend
+          mode="normal"
+          in="SourceGraphic"
+          in2="BackgroundImageFix"
+          result="shape"
+        />
+        <feGaussianBlur
+          stdDeviation="7.5"
+          result="effect1_foregroundBlur_452_337"
+        />
+      </filter>
+      <linearGradient
+        id="paint0_linear_452_337"
+        x1="131.109"
+        y1="65.7626"
+        x2="132.881"
+        y2="124.061"
+        gradientUnits="userSpaceOnUse"
+      >
+        <stop offset="0.3" stop-color="#C0392B" />
+        <stop offset="1" stop-color="#5A1B14" />
+      </linearGradient>
+      <linearGradient
+        id="paint1_linear_452_337"
+        x1="57.2566"
+        y1="67.1148"
+        x2="44.9337"
+        y2="27.2957"
+        gradientUnits="userSpaceOnUse"
+      >
+        <stop offset="0.3" stop-color="#C0392B" />
+        <stop offset="1" stop-color="#5A1B14" />
+      </linearGradient>
+    </defs>
+  </svg>
 </div>

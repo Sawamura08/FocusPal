@@ -3,10 +3,10 @@ import { CommonModule } from '@angular/common';
 
 import { AppsRoutingModule } from './apps-routing.module';
 import { AppsComponent } from './apps.component';
-import { TextPipePipe } from '../../../pipe/text-pipe.pipe';
+import { SharedModule } from '../../../module/shared.module';
 
 @NgModule({
-  declarations: [AppsComponent, TextPipePipe],
-  imports: [CommonModule, AppsRoutingModule],
+  declarations: [AppsComponent],
+  imports: [CommonModule, AppsRoutingModule, SharedModule],
 })
 export class AppsModule {}

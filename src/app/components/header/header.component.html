@@ -1,9 +1,27 @@
-<section class="header">
+<section class="header" *ngIf="!home">
   <figure>
     <img src="/FocusPal Logo/3.png" alt="Focus Pal Logo" />
   </figure>
   <h6>{{ headerText }}</h6>
   <figure>
     <img src="/extra/profile.png" alt="Profile" />
+  </figure>
+</section>
+
+<section class="home-header" *ngIf="home">
+  <div class="hamburger-menu" (click)="toggleMenu()">
+    <span
+      class="line-bar"
+      *ngFor="let span of spanArr"
+      [ngClass]="{ active: toggle === true }"
+    ></span>
+  </div>
+
+  <h6>{{ headerText }}</h6>
+
+  <figure>
+    <div class="img-container">
+      <img src="/FocusPal Logo/3.png" alt="Focus Pal Logo" />
+    </div>
   </figure>
 </section>
