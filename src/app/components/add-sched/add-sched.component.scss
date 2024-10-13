@@ -317,6 +317,14 @@
                 box-shadow: $mainColor 0px 3px 2px, #000 0px 3px 5px;
               }
             }
+
+            .delete {
+              @include buttonTheme($shadow, $neutralColor, $deleteColor);
+            }
+
+            .update {
+              @include buttonTheme($updateColor, $neutralColor, $updateShadow);
+            }
           }
         }
 

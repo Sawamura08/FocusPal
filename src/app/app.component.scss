@@ -18,6 +18,13 @@ $textColor: #2d2d2d;
 $neutralColor: #fff5f2;
 $grayColor: #e5eafc;
 
+/* DELETE */
+$deleteColor: #bf0603;
+
+/* UPDATE */
+$updateColor: #70e000;
+$updateShadow: #38b000;
+
 @mixin buttonTheme($bgColor, $textColor, $shadow) {
   padding: 0.75rem;
   background: linear-gradient(to top, $bgColor, $shadow);

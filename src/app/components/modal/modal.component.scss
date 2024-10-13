@@ -26,15 +26,18 @@ main {
     justify-content: center;
     align-items: center;
     .text {
-      font-size: 24px;
-      margin-top: 20px;
-      color: $mainColor;
+      font-size: 1rem;
+      color: $subText;
       text-align: center;
-      text-transform: uppercase;
     }
 
-    .title {
+    .title,
+    .update-title {
       color: $textColor;
+    }
+
+    .update-title {
+      font-size: 1.5rem;
     }
 
     img {
@@ -42,12 +45,27 @@ main {
       height: 75px;
     }
 
-    .close {
-      @include buttonTheme($mainColor, $neutralColor, $shadow);
+    .button-section {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
 
-      &:active {
-        top: 4px;
-        box-shadow: $mainColor 0px 3px 2px, #000 0px 3px 5px;
+      .button-containers {
+        width: 100%;
+        .btn {
+          width: 100%;
+          @include buttonTheme($mainColor, $neutralColor, $shadow);
+
+          &:active {
+            top: 4px;
+            box-shadow: $mainColor 0px 3px 2px, #000 0px 3px 5px;
+          }
+        }
+
+        .cancel {
+          @include buttonTheme($neutralColor, $textColor, $grayColor);
+        }
       }
     }
   }

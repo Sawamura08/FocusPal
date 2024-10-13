@@ -85,7 +85,6 @@ export class PopModalService {
 
   public sendValueModal = (value: boolean) => {
     this.confirmationModal$.next(value);
-    this.confirmationModal$.complete();
   };
 
   /* END */

@@ -70,17 +70,20 @@ export class ScheduleService implements OnInit {
 
   /* UPDATE INFORMATION */
 
-  public updateSchedInfo = async (schedId: number, data: Schedule) => {
+  public updateSchedInfo = async (
+    schedId: number,
+    data: Schedule
+  ): Promise<boolean> => {
     try {
-      await db.schedList.update(schedId, data).then((success) => {
-        if (success) {
-          console.log('Success');
-        } else {
-          console.log('False');
-        }
-      });
+      const success = await db.schedList.update(schedId, data);
+      if (success) {
+        return true;
+      } else {
+        return false;
+      }
     } catch (err) {
       console.log('Error Update Sched', err);
+      return false;
     }
   };
 

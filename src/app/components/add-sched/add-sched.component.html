@@ -159,10 +159,14 @@
             <button class="btn" (click)="submit()">Submit</button>
           </div>
           <div class="btn-container" *ngIf="isUpdate">
-            <button class="btn" (click)="submit()">Delete</button>
+            <button class="btn delete" (click)="deleteSchedule()">
+              Delete
+            </button>
           </div>
           <div class="btn-container" *ngIf="isUpdate">
-            <button class="btn" (click)="udpateSchedule()">Update</button>
+            <button class="btn update" (click)="udpateSchedule()">
+              Update
+            </button>
           </div>
         </section>
         <!-- END -->
@@ -174,5 +178,8 @@
 
 <!-- CONFIRMATION MODAL -->
 <section class="confirm-modal" *ngIf="isConfirmModalOpen">
-  <app-modal [data]="confirmModal"></app-modal>
+  <app-modal
+    [data]="confirmModal"
+    [confirmation]="confirmationModalMode"
+  ></app-modal>
 </section>

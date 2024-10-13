@@ -8,6 +8,7 @@ import { termsAnimate } from '../terms-conditions/terms-animate';
 import { Schedule } from '../../database/db';
 import { DatePipe } from '@angular/common';
 import { confirmModal } from '../../interfaces/export.object';
+import { DateTimeService } from '../../service/date-time.service';
 
 @Component({
   selector: 'app-add-sched',
@@ -22,7 +23,8 @@ export class AddSchedComponent implements OnInit, OnDestroy {
     private popModal: PopModalService,
     private session: SessionService,
     private sched: ScheduleService,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private dateTime: DateTimeService
   ) {
     this.userInput = this.fb.group({
       title: ['', Validators.required],
@@ -163,37 +165,6 @@ export class AddSchedComponent implements OnInit, OnDestroy {
     }
   };
 
-  // CONVERT START AND END TIME TO 24HOUR FORMAT
-
-  private transformTimeToDate = (timeValue: string) => {
-    const dateToday = new Date().toISOString().split('T')[0];
-    /*    startTime: new Date(dateToday + 'T' + '18:30'), */
-    let hours24Format: string;
-    const start = timeValue.split(' ');
-    const time = start[0];
-    const amPm = start[1];
-
-    // split hour and minutes
-    const timeSplit = time.split(':');
-
-    const hour = timeSplit[0];
-
-    const intHour = parseInt(hour);
-    const minutes = timeSplit[1];
-
-    const paddedHour = intHour.toString().padStart(2, '0');
-    if (hour === '12' && amPm === 'AM') {
-      hours24Format = `00:${minutes}`; // midnight case
-    } else if (amPm === 'PM' && intHour < 12) {
-      const hours = (intHour + 12).toString();
-      hours24Format = `${hours}:${minutes}`; // convert PM time to 24hr format
-    } else {
-      hours24Format = `${paddedHour}:${minutes}`; // Ensure padding for AM/single-digit hours
-    }
-
-    return new Date(dateToday + 'T' + hours24Format);
-  };
-
   /* SET TIME VALUES TO THE FORM INPUTS */
   newStartTime: string = '';
   newEndTime: string = '';
@@ -211,7 +182,7 @@ export class AddSchedComponent implements OnInit, OnDestroy {
     if (timeType === 'startTime') {
       if (setValue != '') {
         this.invalidStartTime = true;
-        let newFormat: Date = this.transformTimeToDate(setValue);
+        let newFormat: Date = this.dateTime.transformTimeToDate(setValue);
         this.userInput.get('startTime')?.setValue(newFormat);
         return;
       } else {
@@ -223,7 +194,7 @@ export class AddSchedComponent implements OnInit, OnDestroy {
     if (timeType === 'endTime') {
       if (setValue != '') {
         this.invalidEndTime = true;
-        let newFormat: Date = this.transformTimeToDate(setValue);
+        let newFormat: Date = this.dateTime.transformTimeToDate(setValue);
         this.userInput.get('endTime')?.setValue(newFormat);
         return;
       } else {
@@ -292,8 +263,12 @@ export class AddSchedComponent implements OnInit, OnDestroy {
       this.setDataToForms();
 
       /* TRANSFORM THE DATE OBJECT TO TIME */
-      this.newStartTime = this.transformDateToTime(this.updateData?.startTime);
-      this.newEndTime = this.transformDateToTime(this.updateData?.endTime);
+      this.newStartTime = this.dateTime.transformDateToTime(
+        this.updateData?.startTime
+      );
+      this.newEndTime = this.dateTime.transformDateToTime(
+        this.updateData?.endTime
+      );
     }
   };
 
@@ -312,42 +287,46 @@ export class AddSchedComponent implements OnInit, OnDestroy {
 
   /* END */
 
-  /* TRANSFORM DATA OBJECT TO 12HR FORMAT */
-
-  public transformDateToTime = (date: Date): string => {
-    const time = this.datePipe.transform(date, 'h:mm a') || '6:00 AM';
-
-    return time;
-  };
-
   /* UPDATE DATA */
   schedId: number = 0;
   confirmModal: confirmModal = {
     imgPath: '/extra/warning.png',
-    title: 'Are you sure',
+    title: 'Are you sure?',
     text: 'This action cannot be undone.',
   };
-  confirmation: boolean = false;
+  confirmationModalMode: boolean = false;
+  confirmation: boolean | null = null;
+
   public udpateSchedule = async () => {
     this.prepareFormValues();
     this.userInput.markAllAsTouched();
 
-    this.openConfirmModal();
-    // AYUSIN MO TO CONFIRMATION MODAL YUNG UI NG CANCEL AND ACCEPT
+    // this await will not go through unless the user has an action
+    this.confirmation = await this.openConfirmModal();
+
     if (this.userInput.value && this.confirmation) {
-      console.log(this.confirmation);
-      // await this.sched
-      //   .updateSchedInfo(this.schedId, this.userInput.value)
-      //   .then(() => {
-      //     this.popModal.isModalOpen(false);
-      //   });
+      await this.sched
+        .updateSchedInfo(this.schedId, this.userInput.value)
+        .then((result) => {
+          this.popModal.isModalOpen(false);
+          console.log(result);
+        });
+
+      console.log('Update');
+      this.popModal.setConfirmaModalStatus(false);
+    } else {
+      console.log('Cancelled');
     }
   };
 
   /* OPEN CONFIRMATION MODAL */
   isConfirmModalOpen: boolean = false;
-  public openConfirmModal = () => {
+  public openConfirmModal = async (): Promise<boolean> => {
+    this.confirmationModalMode = true;
     this.popModal.setConfirmaModalStatus(true);
+
+    // WILL RETURN THE USER ACTION
+    return await this.confirmModalAction();
   };
   /* END */
 
@@ -367,13 +346,34 @@ export class AddSchedComponent implements OnInit, OnDestroy {
   /* END */
 
   /* ACCEPT CONFIRMATION MODAL */
-  public confirmModalAction = () => {
-    this.popModal.getConfirmationModal().subscribe({
-      next: (value) => (this.confirmation = value),
-      error: (err) => console.log('Error at Subsribe to Subject', err),
+  private modalActionSubscription!: Subscription;
+  public confirmModalAction = (): Promise<boolean> => {
+    // A PROMISE THE WILL DETERMINED IF THE CONFIRMATION IS ACCEPT OR REJECT
+    return new Promise((resolve, reject) => {
+      this.modalActionSubscription = this.popModal
+        .getConfirmationModal()
+        .subscribe({
+          next: (value) => {
+            resolve(value);
+            this.modalActionSubscription.unsubscribe();
+          },
+          error: (err) => reject(err),
+        });
     });
   };
   /* END */
+
+  /* ------------- DELETE SCHEDULE ---------------- */
+
+  public deleteSchedule = async () => {
+    this.confirmation = await this.openConfirmModal();
+
+    if (this.confirmation) {
+      console.log('delete');
+    } else {
+      console.log('cancelled');
+    }
+  };
 
   ngOnDestroy(): void {
     if (this.subscriptionArr)

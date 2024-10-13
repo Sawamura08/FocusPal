@@ -7,16 +7,16 @@
 [x] : create terms and conidtions
 [x] : create the navigation 
 [x] : create horizontal Calendar
-[] : create function for Calendar (CRUD) LETS DO UPDATE
-[]: CONFIRMATION MODAL;
-[]: success modal
+[x]: CONFIRMATION MODAL;
 [x] : create the type custom REPEAT
 [x] : Make a UI for Calendar
-[] : create filter for Calendar (Daily & WEEKLY) 
 [x] : UI for daily date- selected and current date
-[] : UI FOR SCHED FILTER(DAILY) (WEEKLY NOT YET NONE)
 [x] : UI FOR ADDING SCHED
 [x] : Transform 12hr to 24hr
+[] : create function for Calendar (CRUD) LETS DO UPDATE
+[]: success modal
+[] : create filter for Calendar (Daily & WEEKLY) WEEKLY NALANG
+[] : UI FOR SCHED FILTER(DAILY) (WEEKLY NOT YET NONE)
 
 
 

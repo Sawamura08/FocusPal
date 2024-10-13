@@ -1,8 +1,25 @@
 <main>
-  <div class="loader-container">
+  <div class="loader-container" [@slide]="true">
     <img [src]="data?.imgPath" alt="" />
-    <div class="title">{{ data?.title }}</div>
-    <div class="text" *ngIf="text"></div>
-    <button class="close" (click)="close()">Okay</button>
+    <div class="title" *ngIf="!confirmation">
+      <h4>{{ data?.title }}</h4>
+    </div>
+    <div class="update-title" *ngIf="confirmation">
+      <h4>{{ data?.title }}</h4>
+    </div>
+    <div class="text" *ngIf="text">
+      <p>{{ data?.text }}</p>
+    </div>
+    <section class="button-section">
+      <div class="button-containers" *ngIf="!confirmation">
+        <button class="btn" (click)="close()">Okay</button>
+      </div>
+      <div class="button-containers" *ngIf="confirmation">
+        <button class="btn cancel" (click)="cancel()">Cancel</button>
+      </div>
+      <div class="button-containers" *ngIf="confirmation">
+        <button class="btn" (click)="confirm()">Confirm</button>
+      </div>
+    </section>
   </div>
 </main>
