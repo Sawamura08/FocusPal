@@ -15,7 +15,7 @@ enum Repition {
 })
 export class ScheduleService implements OnInit {
   schedList$: Observable<any>;
-  private userId$ = new BehaviorSubject<number | undefined>(undefined);
+  protected userId$ = new BehaviorSubject<number | undefined>(undefined);
   constructor(private datePipe: DatePipe, private session: SessionService) {
     /* ----------- QUERY FETCH data from DB REACTIVELY/ ON LIVE */
     this.getSession();
@@ -31,8 +31,8 @@ export class ScheduleService implements OnInit {
   ngOnInit(): void {}
 
   /* GET SESSION */
-  private userId?: number;
-  private getSession = async () => {
+  protected userId?: number;
+  protected getSession = async () => {
     this.userId = await this.session.getUser();
     this.userId$.next(this.userId);
   };
@@ -57,6 +57,7 @@ export class ScheduleService implements OnInit {
       type: schedData.type,
       isActive: 1,
       daysOfWeek: schedData.daysOfWeek,
+      location: schedData.location,
     };
 
     try {
@@ -104,10 +105,10 @@ export class ScheduleService implements OnInit {
   /* END */
 
   /* GET SCHEDULE BY DATE | REPEAT */
-  public getAllTaskDefault = async (
+  public async getAllTaskDefault(
     id: number,
     date?: string
-  ): Promise<Schedule[]> => {
+  ): Promise<Schedule[]> {
     /* CHECK WHETHER THE date has value or null */
 
     const dateSelected: string =
@@ -150,7 +151,7 @@ export class ScheduleService implements OnInit {
       console.error('Failed to fetch schedules', err);
       return [];
     }
-  };
+  }
 
   /* END OF GET SCHEDULE BY DATE | REPEAT */
 

@@ -40,3 +40,17 @@ $updateShadow: #38b000;
   box-shadow: 0 7px 2px $shadow, 0px 8px 5px #000;
   position: relative;
 }
+
+@mixin inputTheme($color) {
+  padding: 0.5rem 1rem;
+  padding-inline-start: 0;
+  padding-top: 0;
+  border: none;
+  border-bottom: 1px solid $color;
+  background-color: transparent;
+  font-size: 1.25rem;
+  outline: none;
+  font-family: $subText;
+  color: $color;
+  text-align: center;
+}

@@ -131,6 +131,23 @@
           </section>
         </div>
 
+        <!-- LOCATION -->
+
+        <section class="form-input">
+          <label for="location">Location</label>
+          <input
+            type="text"
+            class="inputs"
+            id="location"
+            formControlName="location"
+          />
+          <div class="hint-text">
+            <div class="hints" *ngIf="!validators(location)">
+              <p>This is a required Field</p>
+            </div>
+          </div>
+        </section>
+
         <!-- CATEGORY  -->
 
         <div class="category-container">

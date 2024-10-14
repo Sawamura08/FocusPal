@@ -71,17 +71,7 @@
           }
 
           .inputs {
-            padding: 0.5rem 1rem;
-            padding-inline-start: 0;
-            padding-top: 0;
-            border: none;
-            border-bottom: 1px solid white;
-            background-color: transparent;
-            font-size: 1.25rem;
-            outline: none;
-            font-family: $subText;
-            color: $neutralColor;
-            text-align: center;
+            @include inputTheme($neutralColor);
           }
 
           .hint-text {
@@ -256,6 +246,35 @@
           }
         }
         /* END */
+
+        /* LOCATION */
+        .form-input {
+          width: 100%;
+          display: flex;
+          flex-direction: column;
+          color: $textColor;
+
+          label {
+            font-size: 0.8rem;
+            font-family: $subText;
+            font-weight: bold;
+          }
+
+          .inputs {
+            @include inputTheme($textColor);
+            font-size: 1rem;
+          }
+
+          .hint-text {
+            width: 100%;
+
+            .hints > p {
+              font-size: 0.8rem;
+              font-family: $subText;
+              color: $shadow;
+            }
+          }
+        }
 
         /* Category */
 

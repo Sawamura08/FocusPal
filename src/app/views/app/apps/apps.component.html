@@ -42,6 +42,7 @@
       </ul>
     </section>
 
+    <!-- TASK PROGRESS SUMMARY -->
     <section class="task-progress-container">
       <div class="task-progress">
         <div class="task-header">
@@ -62,6 +63,20 @@
               <p class="due-date">{{ task.dueDate | date : "longDate" }}</p>
             </span>
           </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- CLASS FOR TODAY -->
+
+    <section class="card-container">
+      <div class="card-content">
+        <div class="card-header">
+          <i class="fa-sharp fa-solid fa-thumbtack"></i>
+          <h6 class="card-title">Class Today</h6>
+        </div>
+        <ul class="card-list">
+          <li class="list"></li>
         </ul>
       </div>
     </section>

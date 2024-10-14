@@ -36,6 +36,7 @@ export class AddSchedComponent implements OnInit, OnDestroy {
       startTime: ['', Validators.required],
       endTime: ['', Validators.required],
       type: ['', Validators.required],
+      location: ['', Validators.required],
     });
   }
 
@@ -134,6 +135,10 @@ export class AddSchedComponent implements OnInit, OnDestroy {
 
   get endTime() {
     return this.userInput.get('endTime');
+  }
+
+  get location() {
+    return this.userInput.get('location');
   }
 
   /* END */

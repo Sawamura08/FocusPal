@@ -148,6 +148,8 @@ export class AppsComponent implements OnInit, OnChanges, OnDestroy {
 
   /* END */
 
+  /* CLASS FOR TODAY */
+
   /* ON DESTROY */
   ngOnDestroy(): void {
     if (this.subscriptionArr)

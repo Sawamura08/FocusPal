@@ -31,6 +31,7 @@ export interface Schedule {
   type: number; // 0 - CLASS; 1 - MEETING; 2- FAMILY/FRIENDS; 3- Others
   isActive: number; // 0 - inactive; 1 - active
   daysOfWeek?: Array<number>;
+  location: string; // SET room number for class
 }
 
 export class localDB extends Dexie {
@@ -40,12 +41,12 @@ export class localDB extends Dexie {
 
   constructor() {
     super('myDB');
-    this.version(20).stores({
+    this.version(23).stores({
       taskList:
         '++taskId, userId,description,subTask, status, priority, dueDate, createdAt, isSync, isUpdated,isQueued',
       userList: 'userId,userName',
       schedList:
-        '++schedId,userId,title,date,startTime,endTime,repeat,type,isActive,daysOfWeek',
+        '++schedId,userId,title,date,startTime,endTime,repeat,type,isActive,daysOfWeek,location',
     });
   }
 }
