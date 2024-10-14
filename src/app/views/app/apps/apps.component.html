@@ -1,7 +1,52 @@
 <main>
   <header><app-header [homeData]="headerData"></app-header></header>
 
-  <section class="container"></section>
+  <section class="container">
+    <section class="greeting-container">
+      <h6 class="title">{{ greeting }}</h6>
+      <p class="username">Hello, {{ username }} 👋</p>
+    </section>
+
+    <section class="summary-container">
+      <ul class="summary-list">
+        <li class="list">
+          <h6 class="title">Horray!</h6>
+          <div class="progress-bar-container">
+            <div class="progress-bar completed-task"></div>
+            <p class="progress">4 of 7</p>
+          </div>
+
+          <p class="sub-text">Main Tasks Completed</p>
+        </li>
+        <li class="list">
+          <h6 class="title">Almost Done!</h6>
+          <div class="progress-bar-container">
+            <div class="progress-bar task-pending"></div>
+            <p class="progress">3</p>
+          </div>
+          <p class="sub-text">Main Tasks Pending</p>
+        </li>
+        <li class="list">
+          <h6 class="title">You're</h6>
+          <div class="badge-container">
+            <h6 class="rank-number">#1</h6>
+            <h6 class="username">{{ username }}</h6>
+          </div>
+          <p class="sub-text">6 Completed Task</p>
+          <p class="sub-text">4,500 Points</p>
+        </li>
+      </ul>
+    </section>
+
+    <section class="task-progress-container">
+      <div class="task-progress">
+        <div class="task-header">
+          <i class="fa-solid fa-square-list"></i>
+          <h6>Task in Progress</h6>
+        </div>
+      </div>
+    </section>
+  </section>
 </main>
 
 <div class="time-bg">
