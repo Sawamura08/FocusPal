@@ -7,6 +7,7 @@ main {
   position: relative;
   overflow-x: hidden;
   background-color: $neutralColor;
+  color: $textColor;
 
   header {
     position: relative;
@@ -53,7 +54,6 @@ main {
         list-style-type: none;
         display: flex;
         gap: 1rem;
-        min-width: 100%;
         width: max-content;
 
         .list {
@@ -96,6 +96,8 @@ main {
             }
 
             .progress {
+              width: 100%;
+              text-align: center;
               position: absolute;
               top: 50%;
               left: 50%;
@@ -110,6 +112,126 @@ main {
             opacity: 0.3;
             width: 80%;
           }
+
+          .badge-container {
+            margin-block-start: 1rem;
+            width: 100%;
+            display: grid;
+            grid-template-areas:
+              "a a c"
+              "b b c";
+
+            h6 {
+              font-size: 1.25rem;
+              text-align: center;
+              color: $shadow;
+            }
+
+            .rank-number {
+              grid-area: a;
+            }
+            .username {
+              grid-area: b;
+            }
+
+            figure {
+              width: 100%;
+              grid-area: c;
+              position: relative;
+
+              img {
+                position: absolute;
+                top: 0;
+                right: -100%;
+                transform: rotate(15deg) translate(40%, -30%);
+                width: 4.5rem;
+                height: 4.5rem;
+              }
+            }
+          }
+        }
+
+        .rankings > .sub-text {
+          width: 100%;
+          text-align: start;
+          font-family: $subText;
+          font-weight: bold;
+        }
+      }
+    }
+
+    .task-progress-container {
+      width: 100%;
+      background-color: white;
+      border-radius: 1rem;
+      padding: 1rem;
+
+      .task-progress {
+        width: 100%;
+
+        .task-header {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+
+          i {
+            color: $shadow;
+            font-size: 1.5rem;
+          }
+
+          h6 {
+            font-size: 1.25rem;
+            font-family: $fontFamily;
+          }
+        }
+
+        .task-list-container {
+          margin-block: 1rem;
+          display: flex;
+          flex-direction: column;
+          gap: 0.5rem;
+          list-style-type: none;
+          color: $textColor;
+
+          .tasks {
+            border-radius: 1rem;
+            box-shadow: 0 1px 2px $textColor;
+            padding: 1rem;
+            background: linear-gradient(to right, #f5c0ef, #fff5f2);
+
+            .info-container {
+              display: flex;
+              justify-content: space-between;
+              .title {
+                font-size: 1rem;
+                font-family: "Courier New", Courier, monospace;
+              }
+
+              .sub-task,
+              .due,
+              .due-date {
+                font-family: $subText;
+              }
+
+              .sub-task {
+                font-size: 0.9rem;
+              }
+
+              .due {
+                font-size: 0.7rem;
+                text-align: right;
+                opacity: 0.8;
+              }
+
+              .due-date {
+                font-size: 0.9rem;
+              }
+            }
+          }
+        }
+
+        .task-list-container > .tasks:nth-child(odd) {
+          background: linear-gradient(to right, #f99492, #fff5f2);
         }
       }
     }

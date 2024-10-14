@@ -4,11 +4,12 @@ export interface Task {
   taskId?: number;
   userId: number;
   description: string;
-  subTask?: string;
+  subTask?: string; // it should be array string
   status: number;
   priority: number;
   dueDate: Date;
   createdAt: Date;
+
   isSync: number;
   isUpdated: number;
   isQueued: number;
