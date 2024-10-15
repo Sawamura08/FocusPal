@@ -76,7 +76,34 @@
           <h6 class="card-title">Class Today</h6>
         </div>
         <ul class="card-list">
-          <li class="list"></li>
+          <li class="list" *ngFor="let class of classToday; index as i">
+            <h6 class="title">{{ class.title }}</h6>
+            <p class="add-info">{{ class.location }}</p>
+            <p class="add-info">
+              {{ class.startTime | date : "shortTime" }} -
+              {{ class.endTime | date : "shortTime" }}
+            </p>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- MEETING FOR TODAY -->
+    <section class="card-container">
+      <div class="card-content">
+        <div class="card-header">
+          <i class="fa-sharp fa-solid fa-phone-volume"></i>
+          <h6 class="card-title">Meeting Today</h6>
+        </div>
+        <ul class="card-list">
+          <li class="list" *ngFor="let meeting of meetingToday; index as i">
+            <h6 class="title">{{ meeting.title }}</h6>
+            <p class="add-info">{{ meeting.location }}</p>
+            <p class="add-info">
+              {{ meeting.startTime | date : "shortTime" }} -
+              {{ meeting.endTime | date : "shortTime" }}
+            </p>
+          </li>
         </ul>
       </div>
     </section>

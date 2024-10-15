@@ -45,6 +45,7 @@ main {
       overflow-x: auto;
       -ms-overflow-style: none;
       scrollbar-width: none;
+      box-shadow: 0 3px 2px $textColor;
 
       &::-webkit-scrollbar {
         display: none;
@@ -165,6 +166,7 @@ main {
       background-color: white;
       border-radius: 1rem;
       padding: 1rem;
+      box-shadow: 0 3px 2px $textColor;
 
       .task-progress {
         width: 100%;
@@ -232,6 +234,68 @@ main {
 
         .task-list-container > .tasks:nth-child(odd) {
           background: linear-gradient(to right, #f99492, #fff5f2);
+        }
+      }
+    }
+
+    .card-container {
+      width: 100%;
+      background-color: $neutralColor;
+      padding: 1rem;
+      border-radius: 1rem;
+      box-shadow: 0 3px 2px $textColor;
+      margin-block: 1rem;
+
+      .card-content {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+
+        .card-header {
+          width: 100%;
+          display: flex;
+          gap: 0.5rem;
+
+          i {
+            color: $shadow;
+            font-size: 1.5rem;
+          }
+
+          .card-title {
+            font-size: 1.25rem;
+            font-family: $fontFamily;
+          }
+        }
+
+        .card-list {
+          list-style-type: none;
+          width: 100%;
+          display: flex;
+          flex-direction: column;
+          gap: 0.5rem;
+
+          .list {
+            border-radius: 1rem;
+            box-shadow: 0 1px 2px $textColor;
+            padding: 1rem;
+            width: 100%;
+            color: $neutralColor;
+            background: linear-gradient(to right, $mainColor, $shadow);
+
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+
+            .title {
+              font-size: 0.9rem;
+            }
+
+            .add-info {
+              text-align: center;
+              font-size: 0.8rem;
+            }
+          }
         }
       }
     }

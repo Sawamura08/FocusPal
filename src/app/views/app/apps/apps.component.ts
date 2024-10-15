@@ -13,8 +13,9 @@ import { fetchResponse } from '../../../interfaces/fetch-response';
 import { FetchHomeDataService } from '../../../service/fetch-home-data.service';
 import { SetProgressBar } from '../../../class/set-progress-bar';
 import { FilterTaskService } from '../../../database/filter-task.service';
-import { Task } from '../../../database/db';
-import { Subscription } from 'rxjs';
+import { Schedule, Task } from '../../../database/db';
+import { combineLatest, Subscription } from 'rxjs';
+import { FilterScheduleService } from '../../../database/filter-schedule.service';
 @Component({
   selector: 'app-apps',
   templateUrl: './apps.component.html',
@@ -28,7 +29,8 @@ export class AppsComponent implements OnInit, OnChanges, OnDestroy {
     private fetchHomeData: FetchHomeDataService,
     private el: ElementRef,
     private renderer: Renderer2,
-    private filterTask: FilterTaskService
+    private filterTask: FilterTaskService,
+    private filterSched: FilterScheduleService
   ) {
     this.Progress = new SetProgressBar();
   }
@@ -42,6 +44,9 @@ export class AppsComponent implements OnInit, OnChanges, OnDestroy {
 
     /* FETCH PENDING TASK */
     this.getPendingTask();
+
+    /* FETCH CLASS SCHED TODAY */
+    this.getSchedToday();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -149,6 +154,28 @@ export class AppsComponent implements OnInit, OnChanges, OnDestroy {
   /* END */
 
   /* CLASS FOR TODAY */
+  public classToday: Schedule[] | null = null;
+  public meetingToday: Schedule[] | null = null;
+  private schedSubscription!: Subscription;
+  public getSchedToday = () => {
+    const classSched = this.filterSched.schedList$;
+    const meetingSched = this.filterSched.meetingList$;
+
+    this.schedSubscription = combineLatest([
+      classSched,
+      meetingSched,
+    ]).subscribe({
+      next: ([classToday, meetingToday]) => {
+        this.classToday = classToday;
+        this.meetingToday = meetingToday;
+      },
+      error: (err) => console.log(err),
+    });
+
+    this.subscriptionArr?.push(this.schedSubscription);
+  };
+
+  /* END */
 
   /* ON DESTROY */
   ngOnDestroy(): void {
