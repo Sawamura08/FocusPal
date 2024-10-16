@@ -9,6 +9,7 @@ import { PopModalService } from '../../../service/pop-modal.service';
 import { ToastrService } from 'ngx-toastr';
 import { ToastModalService } from '../../../service/toast-modal.service';
 import { toastModal } from '../../../interfaces/export.object';
+import { WeeklyScheduleService } from '../../../database/weekly-schedule.service';
 
 @Component({
   selector: 'app-calendar',
@@ -28,7 +29,8 @@ export class CalendarComponent implements OnInit, OnDestroy {
     private datePipe: DatePipe,
     private popModal: PopModalService,
     private toastr: ToastrService,
-    private toastNotif: ToastModalService
+    private toastNotif: ToastModalService,
+    private weeklySched: WeeklyScheduleService
   ) {
     this.calendar = new Calendar(this.today.getFullYear());
     this.currentStartDate = this.today; // Start with the current week
@@ -49,6 +51,8 @@ export class CalendarComponent implements OnInit, OnDestroy {
 
     /* subscribe to the toast service  */
     this.toastSubscribe();
+
+    this.getWeeklySched();
   }
 
   /* UPDATE THE WEEK SHOWS 5 DAYS */
@@ -239,6 +243,17 @@ export class CalendarComponent implements OnInit, OnDestroy {
       );
     }
   };
+
+  /* WEEKLY SCHEDULE */
+
+  public getWeeklySched = () => {
+    this.weeklySched.weeklySched$.subscribe({
+      next: (value) => console.log(value),
+      error: (err) => console.error(err),
+    });
+  };
+
+  /* END */
 
   /* NG ON DESTROY */
   ngOnDestroy(): void {

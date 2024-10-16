@@ -191,7 +191,7 @@ main {
           margin-block: 1rem;
           display: flex;
           flex-direction: column;
-          gap: 0.5rem;
+          gap: 1rem;
           list-style-type: none;
           color: $textColor;
 
@@ -228,6 +228,29 @@ main {
               .due-date {
                 font-size: 0.9rem;
               }
+            }
+          }
+
+          .no-schedule {
+            width: 100%;
+            border-radius: 1rem;
+            box-shadow: 0 1px 2px $textColor;
+            padding: 1rem;
+            width: 100%;
+            color: $textColor;
+            background-color: $neutralColor;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+
+            .title {
+              font-size: 1rem;
+            }
+
+            .sub-text {
+              font-size: 0.8rem;
+              opacity: 0.7;
             }
           }
         }
@@ -273,9 +296,10 @@ main {
           width: 100%;
           display: flex;
           flex-direction: column;
-          gap: 0.5rem;
+          gap: 1rem;
 
-          .list {
+          .list,
+          .no-schedule {
             border-radius: 1rem;
             box-shadow: 0 1px 2px $textColor;
             padding: 1rem;
@@ -294,6 +318,22 @@ main {
             .add-info {
               text-align: center;
               font-size: 0.8rem;
+            }
+          }
+
+          .no-schedule {
+            justify-content: center;
+            flex-direction: column;
+            background: $neutralColor;
+            color: $textColor;
+
+            .title {
+              font-size: 1rem;
+            }
+
+            .sub-text {
+              font-size: 0.8rem;
+              opacity: 0.7;
             }
           }
         }

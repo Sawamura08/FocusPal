@@ -16,6 +16,7 @@ import { FilterTaskService } from '../../../database/filter-task.service';
 import { Schedule, Task } from '../../../database/db';
 import { combineLatest, Subscription } from 'rxjs';
 import { FilterScheduleService } from '../../../database/filter-schedule.service';
+import { WeeklyScheduleService } from '../../../database/weekly-schedule.service';
 @Component({
   selector: 'app-apps',
   templateUrl: './apps.component.html',
@@ -30,7 +31,8 @@ export class AppsComponent implements OnInit, OnChanges, OnDestroy {
     private el: ElementRef,
     private renderer: Renderer2,
     private filterTask: FilterTaskService,
-    private filterSched: FilterScheduleService
+    private filterSched: FilterScheduleService,
+    private weeklySched: WeeklyScheduleService
   ) {
     this.Progress = new SetProgressBar();
   }

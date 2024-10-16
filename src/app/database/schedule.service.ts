@@ -5,7 +5,7 @@ import { BehaviorSubject, Observable, from, of, switchMap } from 'rxjs';
 import { DatePipe } from '@angular/common';
 import { SessionService } from '../service/session.service';
 
-enum Repition {
+export enum Repition {
   REPEAT_NONE = 0,
   REPEAT_DAILY = 1,
   REPEAT_CUSTOM = 2,
@@ -16,7 +16,7 @@ enum Repition {
 export class ScheduleService implements OnInit {
   schedList$: Observable<any>;
   protected userId$ = new BehaviorSubject<number | undefined>(undefined);
-  constructor(private datePipe: DatePipe, private session: SessionService) {
+  constructor(protected datePipe: DatePipe, protected session: SessionService) {
     /* ----------- QUERY FETCH data from DB REACTIVELY/ ON LIVE */
     this.getSession();
     this.schedList$ = this.userId$.pipe(

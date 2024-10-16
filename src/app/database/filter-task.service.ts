@@ -44,6 +44,7 @@ export class FilterTaskService {
       .filter((task) => task.dueDate.toISOString().includes(dateToday!))
       .toArray();
 
+    /* SORT BASED ON DUEDATE */
     return task.sort(
       (a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime()
     );

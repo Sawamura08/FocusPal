@@ -22,7 +22,7 @@
           <h6 class="title">Task Tracker</h6>
           <div class="progress-bar-container">
             <div class="progress-bar task-pending"></div>
-            <p class="progress">3</p>
+            <p class="progress">{{ pendingTask }}</p>
           </div>
           <p class="sub-text">Main Tasks Pending</p>
         </li>
@@ -63,6 +63,15 @@
               <p class="due-date">{{ task.dueDate | date : "longDate" }}</p>
             </span>
           </li>
+
+          <!-- NO MEETINGS/CLASS TODAY-->
+          <li
+            class="no-schedule"
+            *ngIf="!pendingTaskList || pendingTaskList.length === 0"
+          >
+            <h4 class="title">🎉No Pending Task, Hooray!🎉</h4>
+            <p class="sub-text">Enjoy your Free Time</p>
+          </li>
         </ul>
       </div>
     </section>
@@ -84,6 +93,15 @@
               {{ class.endTime | date : "shortTime" }}
             </p>
           </li>
+
+          <!-- NO MEETINGS/CLASS TODAY-->
+          <li
+            class="no-schedule"
+            *ngIf="!classToday || classToday.length === 0"
+          >
+            <h4 class="title">🎉No class Scheduled for Today🎉</h4>
+            <p class="sub-text">Enjoy your Free Time</p>
+          </li>
         </ul>
       </div>
     </section>
@@ -103,6 +121,15 @@
               {{ meeting.startTime | date : "shortTime" }} -
               {{ meeting.endTime | date : "shortTime" }}
             </p>
+          </li>
+
+          <!-- NO MEETINGS/CLASS TODAY-->
+          <li
+            class="no-schedule"
+            *ngIf="!meetingToday || meetingToday.length === 0"
+          >
+            <h4 class="title">🎉No Meeting Scheduled for Today🎉</h4>
+            <p class="sub-text">Enjoy your Free Time</p>
           </li>
         </ul>
       </div>
