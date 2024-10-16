@@ -11,6 +11,16 @@ export enum DAYS_OF_WEEK {
   SUNDAY = 0,
 }
 
+export interface Days {
+  Monday: Schedule[];
+  Tuesday: Schedule[];
+  Wednesday: Schedule[];
+  Thursday: Schedule[];
+  Friday: Schedule[];
+  Saturday: Schedule[];
+  Sunday: Schedule[];
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -31,11 +41,9 @@ export class WeeklyScheduleService extends ScheduleService {
     );
   }
 
+  public sundayIndex = 7;
   public getWeeklyTask = async (userId: number, date?: Date): Promise<any> => {
-    let weeklySched = [];
-    const sundayIndex = 7;
-
-    const dayNames = [
+    const dayNames: (keyof Days)[] = [
       'Monday',
       'Tuesday',
       'Wednesday',
@@ -44,7 +52,7 @@ export class WeeklyScheduleService extends ScheduleService {
       'Saturday',
       'Sunday',
     ];
-    let dailySched = {
+    let dailySched: Days = {
       Monday: [],
       Tuesday: [],
       Wednesday: [],
@@ -53,6 +61,8 @@ export class WeeklyScheduleService extends ScheduleService {
       Saturday: [],
       Sunday: [],
     };
+    let dailySchedIndex: number;
+
     /* GET DATE TODAY */
     const currentDate = date ?? new Date();
 
@@ -62,23 +72,30 @@ export class WeeklyScheduleService extends ScheduleService {
     /* GET SUNDAY DATE */
     const datesUntilSunday = this.getDateUntilSunday(mondayDate);
 
+    /* LOOP THROUGH DATES OF THE WHOLE WEEK */
     for (const date of datesUntilSunday) {
-      let days: number;
-      let daysOfWeek = new Date(date).getDay();
-      if (daysOfWeek === DAYS_OF_WEEK.SUNDAY) daysOfWeek = sundayIndex;
+      let dayIndex = new Date(date).getDay();
 
-      days = daysOfWeek - 1;
-      const currentDay = dayNames[days];
-      //console.log(days, dailySched[currentDay]);
+      /* check if it's sunday */
+      if (dayIndex === DAYS_OF_WEEK.SUNDAY) {
+        dayIndex = this.sundayIndex;
+      }
 
-      // FIX THIS MJ THE LOOP OF THE DAYS
-      //const dailySched = await this.getDailySched(userId, date);
-      // weeklySched.push(...dailySched);
+      /* ALIGN DAY INDEX TO DAYNAMES INDEX */
+      dailySchedIndex = dayIndex - 1;
+      const currentDay: keyof Days = dayNames[dailySchedIndex];
+
+      /* FETCH DATA */
+      const currentDaySchedList: Schedule[] = await this.getDailySched(
+        userId,
+        date
+      );
+      dailySched[currentDay] = currentDaySchedList;
     }
+    return dailySched;
   };
 
   private getMonday = (currentDate: Date): Date => {
-    const sundayIndex = 7;
     const todayTimeStamp = currentDate.getTime();
     let todayDayIndex: number = currentDate.getDay();
     let mondayOffset: number;
@@ -87,7 +104,7 @@ export class WeeklyScheduleService extends ScheduleService {
     let mondayDateStamp: number;
 
     /* IF TODAY IS SUNDAY COVERT IT TO 7 */
-    if (todayDayIndex === DAYS_OF_WEEK.SUNDAY) todayDayIndex = sundayIndex;
+    if (todayDayIndex === DAYS_OF_WEEK.SUNDAY) todayDayIndex = this.sundayIndex;
 
     if (todayDayIndex != DAYS_OF_WEEK.MONDAY) {
       /* GET THE HOW MANY DAYS TO GO BACK TO MONDAY */
@@ -102,12 +119,11 @@ export class WeeklyScheduleService extends ScheduleService {
   };
 
   private getDateUntilSunday = (mondayDate: Date) => {
-    const sundayIndex = 7;
     const mondayTimeStamp = mondayDate.getTime();
     let dateUntilSundayArr: string[] = [];
     let daysUntilSunday: number = 0;
 
-    for (let i = daysUntilSunday; i < sundayIndex; i++) {
+    for (let i = daysUntilSunday; i < this.sundayIndex; i++) {
       const millisecondsInDay: number = 24 * 60 * 60 * 1000;
       const untilSundayMilliseconds: number =
         daysUntilSunday * millisecondsInDay;
