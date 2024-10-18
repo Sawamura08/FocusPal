@@ -1,0 +1,25 @@
+<div class="weekly-sched">
+  <section class="header">
+    <span class="icon"><i class="fa-sharp fa-solid fa-calendar-week"></i></span>
+    <h3 class="title">Weekly Schedule</h3>
+  </section>
+
+  <section class="schedule-container">
+    <!-- Days -->
+    <div class="sched-per-day" *ngFor="let day of dayNames">
+      <h1 class="day">{{ day }}</h1>
+      <ul class="sched-list">
+        <li class="sched" *ngFor="let sched of schedList?.[day]; index as i">
+          <div class="top">
+            <h3>{{ sched.type | schedType }}!</h3>
+            <span class="time">
+              {{ sched.startTime | date : "shortTime" }} -
+              {{ sched.endTime | date : "shortTime" }}
+            </span>
+          </div>
+          <h3 class="title">{{ sched.title }}</h3>
+        </li>
+      </ul>
+    </div>
+  </section>
+</div>

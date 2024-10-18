@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { PopModalService } from '../../service/pop-modal.service';
+import { Subscription } from 'rxjs';
 
 enum buttons {
   HOME,
@@ -12,8 +14,12 @@ enum buttons {
   templateUrl: './apps.component.html',
   styleUrl: './apps.component.scss',
 })
-export class AppsComponent {
-  constructor(private route: Router, private actRoute: ActivatedRoute) {}
+export class AppsComponent implements OnInit, OnDestroy {
+  constructor(
+    private route: Router,
+    private actRoute: ActivatedRoute,
+    private popModal: PopModalService
+  ) {}
   buttonStatus = [
     { status: buttons.HOME, label: 'apps' },
     { status: buttons.CALENDAR, label: 'calendar' },
@@ -21,6 +27,12 @@ export class AppsComponent {
     { status: buttons.CLOCK, label: 'clock' },
   ];
   valueStatus: buttons = buttons.HOME;
+
+  ngOnInit(): void {
+    /* SUBSCRIBE ADDTASK MODAL */
+    this.addTaskSubscribe();
+    this.addTaskSubscribe();
+  }
 
   public navigate = (button: { status: buttons; label: string }) => {
     this.valueStatus = button.status;
@@ -31,4 +43,21 @@ export class AppsComponent {
   public buttonStyle = (status: buttons) => {
     return this.valueStatus === status ? 'selected' : '';
   };
+
+  /* SUBSCRIBE ADDTASK MODAL */
+  public modalStatus: boolean | null = null;
+  private addTaskSubscription!: Subscription;
+  private addTaskSubscribe = () => {
+    this.addTaskSubscription = this.popModal.getAddTaskModalStatus().subscribe({
+      next: (value) => (this.modalStatus = true),
+      error: (err) => console.error('Error Subscribe Add Task', err),
+    });
+  };
+
+  /* OPEN ADD TASK */
+  public openModal = () => this.popModal.changeAddTaskModalStatus(true);
+
+  ngOnDestroy(): void {
+    if (this.addTaskSubscription) this.addTaskSubscription.unsubscribe();
+  }
 }

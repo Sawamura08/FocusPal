@@ -3,12 +3,14 @@ import Dexie, { Table } from 'dexie';
 export interface Task {
   taskId?: number;
   userId: number;
-  description: string;
-  subTask?: string; // it should be array string
-  status: number;
+  title: string;
+  description?: string;
+  subTask?: Array<string>; // it should be array string
+  status: number; // pending OR completed
   priority: number;
   dueDate: Date;
   createdAt: Date;
+  taskCategory: number; // 0 - personal; 1- academic
 
   isSync: number;
   isUpdated: number;
@@ -41,9 +43,9 @@ export class localDB extends Dexie {
 
   constructor() {
     super('myDB');
-    this.version(23).stores({
+    this.version(24).stores({
       taskList:
-        '++taskId, userId,description,subTask, status, priority, dueDate, createdAt, isSync, isUpdated,isQueued',
+        '++taskId, userId, title,description,subTask, status, priority, dueDate, createdAt, taskCategory, isSync, isUpdated,isQueued',
       userList: 'userId,userName',
       schedList:
         '++schedId,userId,title,date,startTime,endTime,repeat,type,isActive,daysOfWeek,location',

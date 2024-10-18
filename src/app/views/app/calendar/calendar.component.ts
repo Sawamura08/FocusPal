@@ -51,8 +51,6 @@ export class CalendarComponent implements OnInit, OnDestroy {
 
     /* subscribe to the toast service  */
     this.toastSubscribe();
-
-    this.getWeeklySched();
   }
 
   /* UPDATE THE WEEK SHOWS 5 DAYS */
@@ -68,6 +66,8 @@ export class CalendarComponent implements OnInit, OnDestroy {
 
     this.week.shift();
     this.week.push(newDate);
+
+    this.filterbyDate(this.filterDateIndex!);
   }
 
   /* GET PREVIOUS DAY */
@@ -78,6 +78,8 @@ export class CalendarComponent implements OnInit, OnDestroy {
 
     this.week.pop();
     this.week.splice(0, 0, newDate);
+
+    this.filterbyDate(this.filterDateIndex!);
   }
 
   get currentMonthName(): string {
@@ -122,15 +124,13 @@ export class CalendarComponent implements OnInit, OnDestroy {
   /* END OF SEND HEADER DATA */
 
   /* FILTER BY DAY OR WEEKLY */
-  filterIndex: number | null = 0;
+  filterIndex: number = 0;
   public getSchedByFilterType = (index: number) => {
     this.filterIndex = index;
     // 0 = TODAY/DAILY
     if (index === 0) {
       // Call the index query for Daily
       this.getSchedByDayRepeat();
-    } else {
-      console.log('Week');
     }
   };
   /* END */
@@ -229,28 +229,27 @@ export class CalendarComponent implements OnInit, OnDestroy {
   };
 
   private triggerToast = (value: toastModal) => {
+    /* RESET NOTIF */
+    const toastModalReset: toastModal = {
+      type: '',
+      status: false,
+    };
     if (value.type === 'Update' && value.status) {
       this.toastr.success(
         'Update Successful',
         'The schedule has been updated successfully.',
         { timeOut: 2500 }
       );
+
+      this.toastNotif.switchToastModal(toastModalReset);
     } else if (value.type === 'Delete' && value.status) {
       this.toastr.success(
         'Deletion Successful',
         'The schedule has been deleted successfully.',
         { timeOut: 2500 }
       );
+      this.toastNotif.switchToastModal(toastModalReset);
     }
-  };
-
-  /* WEEKLY SCHEDULE */
-
-  public getWeeklySched = () => {
-    this.weeklySched.weeklySched$.subscribe({
-      next: (value) => console.log(value),
-      error: (err) => console.error(err),
-    });
   };
 
   /* END */

@@ -14,15 +14,23 @@ export enum ModalType {
 export class PopModalService {
   modalSubject$: BehaviorSubject<ModalType>;
   constructor() {
+    /* MODAL FOR ERROR ON SIGN IN / SIGN UP */
     this.modalSubject$ = new BehaviorSubject<ModalType>(ModalType.NONE);
 
+    /* ADDING SCHED MODAL */
     this.addList = new BehaviorSubject<boolean>(false);
 
+    /* UPDATE SCHED MODAL */
     this.updateList = new BehaviorSubject<boolean>(false);
 
+    /* DELETE / UPDATE CONFIRMATION MODAL */
     this.confirmModalStatus$ = new BehaviorSubject<boolean>(false);
+
+    /* ADD TASK MODAL */
+    this.addTaskModal$ = new BehaviorSubject<boolean>(false);
   }
 
+  /* ---------MODAL FOR ERROR ON SIGN IN / SIGN UP------- */
   public openModal = (modalType: ModalType) => {
     this.modalSubject$.next(modalType);
   };
@@ -35,6 +43,8 @@ export class PopModalService {
     return this.modalSubject$.asObservable();
   };
 
+  /* --------------- END ---------------------- */
+
   /* --------- ADD SCHED COMPONENT MODAL ------------- */
 
   private addList: BehaviorSubject<boolean>;
@@ -46,6 +56,7 @@ export class PopModalService {
   public addList$ = () => {
     return this.addList.asObservable();
   };
+  /* --------------- END ---------------------- */
 
   /* -------- UPDATE SCHED COMPONENT MODAL */
 
@@ -59,7 +70,7 @@ export class PopModalService {
     return this.updateList.asObservable();
   };
 
-  /* END */
+  /* --------------- END ---------------------- */
 
   /* OPEN OR CLOSE CONFIRMATION MODAL */
 
@@ -73,7 +84,7 @@ export class PopModalService {
     return this.confirmModalStatus$.asObservable();
   };
 
-  /* END */
+  /* --------------- END ---------------------- */
 
   /* CONFIRMATION RESPONSE MODAL */
 
@@ -87,5 +98,30 @@ export class PopModalService {
     this.confirmationModal$.next(value);
   };
 
-  /* END */
+  /* --------------- END ---------------------- */
+
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+
+  /* --------------- ADD TASK MODAL ---------------------- */
+
+  private addTaskModal$: BehaviorSubject<boolean>;
+
+  public getAddTaskModalStatus = () => {
+    return this.addTaskModal$.asObservable();
+  };
+
+  public changeAddTaskModalStatus = (status: boolean) => {
+    this.addTaskModal$.next(status);
+  };
+
+  /* --------------- END ---------------------- */
 }

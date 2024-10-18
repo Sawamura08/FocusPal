@@ -20,7 +20,9 @@
       </button>
     </section>
     <section class="icon-container">
-      <button class="btn add"><i class="fa-solid fa-plus-large"></i></button>
+      <button class="btn add" (click)="openModal()">
+        <i class="fa-solid fa-plus-large"></i>
+      </button>
     </section>
     <section class="icon-container">
       <button class="btn" (click)="navigate(buttonStatus[2])">
@@ -40,3 +42,7 @@
     </section>
   </nav>
 </main>
+
+<section class="add-task-modal" *ngIf="modalStatus">
+  <app-add-task></app-add-task>
+</section>

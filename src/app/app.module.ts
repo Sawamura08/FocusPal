@@ -14,9 +14,17 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { DatePipe } from '@angular/common';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { ToastrModule } from 'ngx-toastr';
+import { SharedModule } from './module/shared.module';
+import { AddTaskComponent } from './components/add-task/add-task.component';
 
 @NgModule({
-  declarations: [AppsComponent, AuthComponent, AppComponent, StarterComponent],
+  declarations: [
+    AppsComponent,
+    AuthComponent,
+    AppComponent,
+    StarterComponent,
+    AddTaskComponent,
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -29,6 +37,7 @@ import { ToastrModule } from 'ngx-toastr';
       // or after 30 seconds (whichever comes first).
       registrationStrategy: 'registerWhenStable:30000',
     }),
+    SharedModule,
   ],
   providers: [provideHttpClient(), DatePipe, provideAnimationsAsync()],
   bootstrap: [AppComponent],

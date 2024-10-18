@@ -33,15 +33,17 @@ export class DatabaseService {
     const currentDate = this.datePipe.transform(new Date(), 'YYYY-MM-dd HH:mm');
     const newTask: Task = {
       userId: id,
+      title: '',
       description: 'Buy Gaming Chair ',
       status: 0,
-      subTask: '',
+      subTask: [],
       priority: 1,
       dueDate: new Date('2024-10-26 12:00'),
       createdAt: new Date(currentDate!),
       isSync: 0,
       isUpdated: 0,
       isQueued: 0,
+      taskCategory: 0,
     };
     try {
       const taskId = await db.taskList.add(newTask);

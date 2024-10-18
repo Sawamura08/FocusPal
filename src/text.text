@@ -15,9 +15,9 @@
 [x] : Transform 12hr to 24hr
 [x] : create function for Calendar (CRUD) 
 [x]: success modal
-[] : create filter for Calendar (Daily & WEEKLY) WEEKLY NALANG
-[] : UI FOR SCHED FILTER(DAILY) (WEEKLY NOT YET NONE)
-[] : FIX TOASTER NOTIF
+[x] : create filter for Calendar (Daily & WEEKLY) WEEKLY NALANG
+[x] : UI FOR SCHED FILTER(DAILY) (WEEKLY NOT YET NONE)
+[x] : FIX TOASTER NOTIF
 
 
 

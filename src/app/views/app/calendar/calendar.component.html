@@ -55,7 +55,7 @@
     </section>
   </section>
 
-  <section class="schedule-container">
+  <section class="schedule-container" *ngIf="filterIndex === 0">
     <h3>Schedule Today</h3>
 
     <div class="container" *ngIf="schedList.length != 0; else noSched">
@@ -77,6 +77,10 @@
     <ng-template #noSched>
       <h3 class="no-sched">Empty Schedule</h3>
     </ng-template>
+  </section>
+
+  <section class="weekly-sched-container" *ngIf="filterIndex != 0">
+    <app-weekly-sched></app-weekly-sched>
   </section>
 
   <section class="reminder">
