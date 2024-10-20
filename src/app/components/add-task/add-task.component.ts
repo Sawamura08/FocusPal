@@ -19,8 +19,20 @@ export class AddTaskComponent implements OnInit {
   private addTaskSubscription!: Subscription;
   private addTaskSubscribe = () => {
     this.addTaskSubscription = this.popModal.getAddTaskModalStatus().subscribe({
-      next: (value) => (this.modalStatus = value),
+      next: (value) => (this.modalStatus = true),
       error: (err) => console.error('Error Subscribe Add Task', err),
     });
   };
+
+  /* SETTING UP BUTTON ON-CLICKS ON FORMS */
+  categoryIndex: number | null = null;
+  public selectCategory = (index: number) => {
+    this.categoryIndex = index;
+  };
+
+  priorityIndex: number | null = null;
+  public selectPriority = (index: number) => {
+    this.priorityIndex = index;
+  };
+  /* END */
 }

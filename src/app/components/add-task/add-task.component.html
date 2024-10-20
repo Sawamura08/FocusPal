@@ -5,16 +5,66 @@
       <span class="icon"><i class="fa-regular fa-xmark"></i></span>
     </div>
     <form action="" class="modal-content">
-      <section class="form-input drop-down">
+      <section class="form-input select">
         <span class="icon"><i class="fa-regular fa-clipboard-list"></i></span>
-        <label for="category">Task Category</label>
-        <select name="" id="category" class="category">
-          <option value="" disabled selected hidden>
-            Select Task Category
-          </option>
-          <option value="0">Personal</option>
-          <option value="1">Academic</option>
-        </select>
+        <div class="user-select">
+          <label for="category">Task Category</label>
+          <div class="category">
+            <button
+              type="button"
+              class="btn-category"
+              (click)="selectCategory(0)"
+              [ngClass]="{ selected: categoryIndex === 0 }"
+            >
+              Personal</button
+            ><button
+              type="button"
+              class="btn-category"
+              (click)="selectCategory(1)"
+              [ngClass]="{ selected: categoryIndex === 1 }"
+            >
+              Academic
+            </button>
+          </div>
+        </div>
+        <div class="error-container">
+          <!-- <div class="error-message"><p>This field is required</p></div> -->
+        </div>
+      </section>
+
+      <section class="form-input select">
+        <span class="icon"><i class="fa-regular fa-clipboard-list"></i></span>
+        <div class="user-select">
+          <label for="category">Task Priority</label>
+          <div class="category">
+            <button
+              type="button"
+              class="btn-category"
+              (click)="selectPriority(0)"
+              [ngClass]="{ selected: priorityIndex === 0 }"
+            >
+              Low</button
+            ><button
+              type="button"
+              class="btn-category"
+              (click)="selectPriority(1)"
+              [ngClass]="{ selected: priorityIndex === 1 }"
+            >
+              Medium
+            </button>
+            <button
+              type="button"
+              class="btn-category"
+              (click)="selectPriority(2)"
+              [ngClass]="{ selected: priorityIndex === 2 }"
+            >
+              High
+            </button>
+          </div>
+        </div>
+        <div class="error-container">
+          <!-- <div class="error-message"><p>This field is required</p></div> -->
+        </div>
       </section>
 
       <section class="form-input text-input">

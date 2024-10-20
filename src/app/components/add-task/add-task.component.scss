@@ -15,7 +15,7 @@
   align-items: center;
 
   .add-task-container {
-    width: 80%;
+    width: 90%;
     background-color: $neutralColor;
     border-radius: 1rem;
     padding: 1rem;
@@ -50,41 +50,72 @@
 
       .form-input {
         width: 100%;
-        padding: 1rem;
+        padding: 0.75rem 1rem;
         border-radius: 1rem;
         box-shadow: 0 3px 5px $textColor;
         background-color: $neutralColor;
       }
 
-      .drop-down {
+      .select {
         width: 100%;
-        display: grid;
-        grid-template-areas: "a b b" " a c c";
+        display: flex;
+        flex-wrap: wrap;
 
         .icon {
-          grid-area: a;
-          text-align: center;
+          display: grid;
+          place-items: center;
           font-size: 2rem;
           color: $textColor;
+          width: 20%;
         }
 
-        label {
-          grid-area: b;
-          font-family: $subText;
-          margin-block-end: 0;
-          font-size: 0.8rem;
-          padding-inline-start: 3px;
+        .user-select {
+          width: 80%;
+          label {
+            width: 100%;
+            font-family: $subText;
+            margin-block-end: 0;
+            font-size: 0.8rem;
+            padding-inline-start: 3px;
+          }
+
+          .category {
+            margin-block-start: 0.25rem;
+            width: 100%;
+            display: flex;
+            gap: 1rem;
+
+            .btn-category {
+              padding: 0.25rem 0.5rem;
+              border-radius: 1rem;
+              font-size: 0.8rem;
+              outline: none;
+              border: 1px solid $textColor;
+              font-family: $subText;
+              background-color: $neutralColor;
+              width: 100%;
+            }
+
+            .selected {
+              background: linear-gradient(to right, $mainColor, $shadow);
+              border: 1px solid $shadow;
+              color: $neutralColor;
+            }
+          }
         }
 
-        .category {
-          margin-block-start: 0;
-          grid-area: c;
-          border: none;
-          outline: none;
-          background-color: transparent;
-          font-size: 1rem;
-          font-family: $subText;
-          padding: 0;
+        .error-container {
+          margin-block-start: 0.25rem;
+          width: 100%;
+          height: 0.15rem;
+
+          .error-message {
+            p {
+              font-size: 0.6rem;
+              color: $shadow;
+              text-align: center;
+            }
+          }
         }
       }
 
