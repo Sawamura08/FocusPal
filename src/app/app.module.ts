@@ -11,7 +11,7 @@ import { StarterComponent } from './layouts/starter/starter.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { provideHttpClient } from '@angular/common/http';
 import { ServiceWorkerModule } from '@angular/service-worker';
-import { DatePipe } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { ToastrModule } from 'ngx-toastr';
 import { SharedModule } from './module/shared.module';
@@ -23,7 +23,7 @@ import {
   provideNativeDateAdapter,
   MatNativeDateModule,
 } from '@angular/material/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [

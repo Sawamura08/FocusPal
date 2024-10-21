@@ -9,11 +9,11 @@
         ></i
       ></span>
     </div>
-    <form action="" class="modal-content">
+    <form action="" class="modal-content" [formGroup]="userInput">
       <section class="form-input select">
         <span class="icon"><i class="fa-regular fa-clipboard-list"></i></span>
         <div class="user-select">
-          <label for="category">Task Category</label>
+          <p class="label">Task Category</p>
           <div class="category" id="category">
             <button
               type="button"
@@ -40,7 +40,7 @@
       <section class="form-input select">
         <span class="icon"><i class="fa-regular fa-clipboard-list"></i></span>
         <div class="user-select">
-          <label for="priority">Task Priority</label>
+          <p class="label">Task Priority</p>
           <div class="category" id="priority">
             <button
               type="button"
@@ -77,10 +77,16 @@
         <input
           type="text"
           name="title"
+          formControlName="title"
           id="title"
           class="text"
           placeholder="Type Task Title"
         />
+        <div class="error-container">
+          <div class="error-message" *ngIf="!validator('title')">
+            <p>This field is required</p>
+          </div>
+        </div>
       </section>
 
       <section class="form-input text-input">
@@ -95,7 +101,7 @@
       </section>
 
       <section class="form-input text-input">
-        <label for="description">SubTasks</label>
+        <p class="label">SubTasks</p>
         <div class="sub-task-input" *ngIf="isSubTaskMode">
           <input
             type="text"
@@ -127,7 +133,7 @@
       <section class="form-input select timepicker">
         <div class="time">
           <div class="user-select">
-            <label for="category">Start Date</label>
+            <p class="label">Start Date</p>
             <mat-form-field>
               <mat-label>Choose a date</mat-label>
               <input matInput [matDatepicker]="startDate" />
@@ -143,7 +149,7 @@
             </div>
           </div>
           <div class="user-select">
-            <label for="category">Due Date</label>
+            <p class="label">Due Date</p>
             <mat-form-field>
               <mat-label>Choose a date</mat-label>
               <input matInput [matDatepicker]="dueDate" />
@@ -159,6 +165,17 @@
             </div>
           </div>
         </div>
+      </section>
+
+      <section class="button-container">
+        <div class="submit-btn">
+          <button class="btn" (click)="submit()">Submit</button>
+        </div>
+
+        <!-- <div class="edit-btn">
+          <button class="btn delete">Delete</button>
+          <button class="btn update">Update</button>
+        </div> -->
       </section>
     </form>
 

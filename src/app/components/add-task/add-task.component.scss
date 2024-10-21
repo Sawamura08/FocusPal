@@ -67,7 +67,7 @@
 
         .user-select {
           width: 80%;
-          label {
+          .label {
             width: 100%;
             font-family: $subText;
             margin-block-end: 0;
@@ -200,6 +200,7 @@
           }
         }
 
+        .label,
         label {
           font-family: $subText;
           margin-block-end: 0;
@@ -219,6 +220,20 @@
 
         .textarea {
           height: 4rem;
+        }
+
+        .error-container {
+          margin-block-start: 0.25rem;
+          width: 100%;
+          height: 0.15rem;
+
+          .error-message {
+            p {
+              font-size: 0.6rem;
+              color: $shadow;
+              text-align: center;
+            }
+          }
         }
       }
 
@@ -272,6 +287,48 @@
         ::ng-deep .mat-primary {
           background-color: transparent;
           color: $textColor;
+        }
+      }
+
+      .button-container {
+        width: 100%;
+        margin-block: 1rem;
+
+        .submit-btn {
+          width: 90%;
+          margin-inline: auto;
+
+          .btn {
+            @include buttonTheme($mainColor, $neutralColor, $shadow);
+            width: 100%;
+
+            &:active {
+              @include buttonOnClick($mainColor);
+            }
+          }
+        }
+
+        .edit-btn {
+          width: 100%;
+          display: flex;
+          justify-content: space-evenly;
+
+          .btn {
+            @include buttonTheme($updateColor, $neutralColor, $updateShadow);
+            width: 40%;
+
+            &:active {
+              @include buttonOnClick($updateShadow);
+            }
+          }
+
+          .delete {
+            @include buttonTheme($deleteColor, $neutralColor, $shadow);
+
+            &:active {
+              @include buttonOnClick($shadow);
+            }
+          }
         }
       }
     }

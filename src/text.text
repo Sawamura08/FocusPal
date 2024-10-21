@@ -18,6 +18,11 @@
 [x] : create filter for Calendar (Daily & WEEKLY) WEEKLY NALANG
 [x] : UI FOR SCHED FILTER(DAILY) (WEEKLY NOT YET NONE)
 [x] : FIX TOASTER NOTIF
+[] : FILTER FOR ALL SCHEDULE (Optional)
+
+[] : CRUD FOR TASK
+[] : validators for fields tasks 
+[] : UI for tasks;
 
 
 

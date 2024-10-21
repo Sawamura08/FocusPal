@@ -41,6 +41,11 @@ $updateShadow: #38b000;
   position: relative;
 }
 
+@mixin buttonOnClick($color) {
+  top: 4px;
+  box-shadow: $color 0px 3px 2px, #000 0px 3px 5px;
+}
+
 @mixin inputTheme($color) {
   padding: 0.5rem 1rem;
   padding-inline-start: 0;
