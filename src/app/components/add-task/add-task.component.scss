@@ -5,19 +5,14 @@
   width: 100%;
   height: 100%;
   z-index: 3;
-  background: linear-gradient(
-    rgba(0, 0, 0, 0.3),
-    rgba(0, 0, 0, 0.3),
-    rgba(0, 0, 0, 0.3)
-  );
+
   display: flex;
   justify-content: center;
   align-items: center;
 
   .add-task-container {
-    width: 90%;
+    width: 100%;
     background-color: $neutralColor;
-    border-radius: 1rem;
     padding: 1rem;
     z-index: 2;
     position: relative;
@@ -38,7 +33,7 @@
         font-size: 1.25rem;
         position: absolute;
         top: 0;
-        right: 0;
+        left: 0;
       }
     }
 
@@ -59,6 +54,7 @@
       .select {
         width: 100%;
         display: flex;
+        justify-content: space-between;
         flex-wrap: wrap;
 
         .icon {
@@ -66,7 +62,7 @@
           place-items: center;
           font-size: 2rem;
           color: $textColor;
-          width: 20%;
+          width: 15%;
         }
 
         .user-select {
@@ -87,18 +83,21 @@
 
             .btn-category {
               padding: 0.25rem 0.5rem;
-              border-radius: 1rem;
+              border-radius: 8px;
               font-size: 0.8rem;
               outline: none;
               border: 1px solid $textColor;
               font-family: $subText;
               background-color: $neutralColor;
+              opacity: 0.7;
               width: 100%;
+              transition: 0.3s ease-in-out;
             }
 
             .selected {
               background: linear-gradient(to right, $mainColor, $shadow);
               border: 1px solid $shadow;
+              opacity: 1;
               color: $neutralColor;
             }
           }
@@ -122,6 +121,85 @@
       .text-input {
         width: 100%;
 
+        .sub-task-input {
+          width: 90%;
+
+          .subtask {
+            width: 100%;
+            margin: 0.5rem 0 0 0.5rem;
+            font-size: 0.8rem;
+            padding: 0.5rem;
+            border-radius: 8px;
+            outline: none;
+            color: $textColor;
+            font-family: $subText;
+            border: 1px solid rgba(0, 0, 0, 0.3);
+          }
+        }
+
+        .button-container {
+          width: 100%;
+          display: flex;
+          justify-content: space-between;
+          gap: 0.5rem;
+          flex-wrap: wrap;
+          margin-block-start: 0.5rem;
+
+          .btn {
+            width: 50%;
+            border-radius: 8px;
+            padding: 0.5rem;
+            outline: none;
+            background: linear-gradient(to right, $mainColor, $shadow);
+            border: 1px solid $mainColor;
+            color: $neutralColor;
+            font-size: 0.8rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            .fa-solid {
+              font-size: 0.6rem;
+            }
+          }
+        }
+
+        .sub-task-list {
+          margin-block-start: 0.5rem;
+          max-width: 100%;
+          list-style-type: none;
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.5rem;
+
+          .list {
+            border-radius: 8px;
+            padding: 0.5rem;
+            width: 100%;
+            outline: none;
+            background: transparent;
+            text-align: center;
+            border: 1px solid $textColor;
+            color: rgba(0, 0, 0, 0.7);
+            font-size: 0.8rem;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            p {
+              width: 85%;
+            }
+
+            span {
+              width: 15%;
+              .fa-sharp {
+                color: $deleteColor;
+              }
+            }
+          }
+        }
+
         label {
           font-family: $subText;
           margin-block-end: 0;
@@ -141,6 +219,59 @@
 
         .textarea {
           height: 4rem;
+        }
+      }
+
+      .timepicker {
+        width: 100%;
+
+        .time {
+          width: 100%;
+          gap: 1rem;
+          display: flex;
+
+          .user-select {
+            width: 100%;
+          }
+        }
+
+        /* CHANGE THE FONT SIZE OF THE PLACEHOLDER */
+        ::ng-deep
+          .mat-mdc-form-field:not(.mat-form-field-disabled)
+          .mat-mdc-floating-label.mdc-floating-label {
+          font-size: 0.8rem;
+          font-family: $subText;
+        }
+
+        ::ng-deep .mat-mdc-form-field-subscript-wrapper,
+        .mat-mdc-form-field-bottom-align::before {
+          font-size: 0.6rem;
+          font-family: $subText;
+        }
+
+        /* WIDTH OF THE TEXT INPUT */
+        ::ng-deep .mat-mdc-form-field-infix {
+          width: 100%;
+        }
+
+        /* padding of the input tag */
+        ::ng-deep
+          .mat-mdc-text-field-wrapper.mdc-text-field.mdc-text-field--filled {
+          padding: 0;
+        }
+
+        /* font size of the input */
+        ::ng-deep
+          .mat-mdc-form-field:not(.mat-form-field-no-animations)
+          .mdc-text-field__input {
+          font-size: 0.8rem;
+        }
+
+        /* remove the background and the line color was change */
+        ::ng-deep .mdc-text-field--filled:not(.mdc-text-field--disabled),
+        ::ng-deep .mat-primary {
+          background-color: transparent;
+          color: $textColor;
         }
       }
     }

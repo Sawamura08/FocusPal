@@ -16,6 +16,14 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { ToastrModule } from 'ngx-toastr';
 import { SharedModule } from './module/shared.module';
 import { AddTaskComponent } from './components/add-task/add-task.component';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatButton, MatButtonModule } from '@angular/material/button';
+import { MatInputModule } from '@angular/material/input';
+import {
+  provideNativeDateAdapter,
+  MatNativeDateModule,
+} from '@angular/material/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -31,6 +39,12 @@ import { AddTaskComponent } from './components/add-task/add-task.component';
     RouterModule,
     BrowserAnimationsModule,
     ToastrModule.forRoot(),
+    MatDatepickerModule,
+    MatButtonModule,
+    MatInputModule,
+    MatNativeDateModule,
+    ReactiveFormsModule,
+    FormsModule,
     ServiceWorkerModule.register('service-worker.js', {
       enabled: !isDevMode(),
       // Register the ServiceWorker as soon as the application is stable
