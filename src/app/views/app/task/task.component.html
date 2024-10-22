@@ -1,8 +1,3 @@
-<button (click)="filterTaskByStatus()">Filter</button><br />
-<button (click)="insertTasks(userId)">Insert</button><br />
-<button (click)="getTaskToday()">Get Task Today</button><br />
-<button (click)="getByPriorities()">Get Task Priorities</button><br />
-
 <div *ngFor="let task of taskList">
   <br />
   <p>TASK LIST</p>
@@ -15,4 +10,5 @@
   <p>dueDate - {{ task.dueDate | date : "medium" }}</p>
   <p>createdAt - {{ task.createdAt | date : "medium" }}</p>
   <button (click)="deleteTask(task.taskId!)">Delete</button>
+  <button (click)="openUpdateModal()">Update</button>
 </div>

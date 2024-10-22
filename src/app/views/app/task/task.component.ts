@@ -12,6 +12,11 @@ import {
 } from '../../../service/background-sync.service';
 import { NetworkStatusService } from '../../../service/network-status.service';
 import { taskRequest } from '../../../interfaces/Request';
+import {
+  PopModalService,
+  updateMode,
+} from '../../../service/pop-modal.service';
+import { UpdateTaskModeService } from '../../../service/update-task-mode.service';
 
 @Component({
   selector: 'app-task',
@@ -26,7 +31,9 @@ export class TaskComponent {
     private session: SessionService,
     private level: PriorityService,
     private sync: BackgroundSyncService,
-    private network: NetworkStatusService
+    private network: NetworkStatusService,
+    private popModal: PopModalService,
+    private updateMode: UpdateTaskModeService
   ) {}
   taskList: Task[] = [];
   userId!: number;
@@ -46,6 +53,13 @@ export class TaskComponent {
       },
     });
   }
+  /* GET SESSION FOR USER */
+  public getId = async () => {
+    const id = await this.session.getUser();
+
+    this.userId = id;
+  };
+  /* END */
 
   /* get network status*/
   public networkStatus: boolean = false;
@@ -68,14 +82,19 @@ export class TaskComponent {
 
   public type = syncType;
 
-  public insertTasks = (id: number) => {
-    this.db.insertTask(id);
-    if (this.networkStatus) {
-      console.log('INternet good');
-      this.sync.backgroundSync(this.type.SYNC_DATA);
-    }
+  /* OPEN THE UPDATE MODAL */
+
+  public openUpdateModal = () => {
+    // make the modal update mode
+    const mode: updateMode = {
+      mode: true,
+      isOpen: true,
+    };
+
+    this.popModal.changeAddTaskModalStatus(mode);
   };
 
+  /* UPDATE THE TASK */
   public updateTasks = () => {};
 
   public getTaskToday = () => {
@@ -87,13 +106,6 @@ export class TaskComponent {
         console.error('Failed to Fetch Task', err);
       },
     });
-  };
-
-  /* GET SESSION FOR USER */
-  public getId = async () => {
-    const id = await this.session.getUser();
-
-    this.userId = id;
   };
 
   /* FETCH TASK DEPENDING ON PRIORITIES */

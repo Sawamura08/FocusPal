@@ -8,6 +8,11 @@ export enum ModalType {
   INCORRECT,
 }
 
+export interface updateMode {
+  mode: boolean;
+  isOpen: boolean;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -27,7 +32,10 @@ export class PopModalService {
     this.confirmModalStatus$ = new BehaviorSubject<boolean>(false);
 
     /* ADD TASK MODAL */
-    this.addTaskModal$ = new BehaviorSubject<boolean>(false);
+    this.addTaskModal$ = new BehaviorSubject<updateMode>({
+      mode: false,
+      isOpen: false,
+    });
   }
 
   /* ---------MODAL FOR ERROR ON SIGN IN / SIGN UP------- */
@@ -113,13 +121,13 @@ export class PopModalService {
 
   /* --------------- ADD TASK MODAL ---------------------- */
 
-  private addTaskModal$: BehaviorSubject<boolean>;
+  private addTaskModal$: BehaviorSubject<updateMode>;
 
   public getAddTaskModalStatus = () => {
     return this.addTaskModal$.asObservable();
   };
 
-  public changeAddTaskModalStatus = (status: boolean) => {
+  public changeAddTaskModalStatus = (status: updateMode) => {
     this.addTaskModal$.next(status);
   };
 

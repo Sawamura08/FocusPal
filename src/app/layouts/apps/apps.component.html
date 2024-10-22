@@ -43,6 +43,6 @@
   </nav>
 </main>
 
-<section class="add-task-modal" *ngIf="modalStatus">
+<section class="add-task-modal" *ngIf="modalStatus?.isOpen">
   <app-add-task></app-add-task>
 </section>

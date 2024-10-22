@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { PopModalService } from '../../service/pop-modal.service';
+import { PopModalService, updateMode } from '../../service/pop-modal.service';
 import { Subscription } from 'rxjs';
 
 enum buttons {
@@ -45,17 +45,23 @@ export class AppsComponent implements OnInit, OnDestroy {
   };
 
   /* SUBSCRIBE ADDTASK MODAL */
-  public modalStatus: boolean | null = null;
+  public modalStatus: updateMode | null = null;
   private addTaskSubscription!: Subscription;
   private addTaskSubscribe = () => {
     this.addTaskSubscription = this.popModal.getAddTaskModalStatus().subscribe({
-      next: (value) => (this.modalStatus = true),
+      next: (value) => (this.modalStatus = value),
       error: (err) => console.error('Error Subscribe Add Task', err),
     });
   };
 
   /* OPEN ADD TASK */
-  public openModal = () => this.popModal.changeAddTaskModalStatus(true);
+  public openModal = () => {
+    const mode: updateMode = {
+      mode: false,
+      isOpen: true,
+    };
+    this.popModal.changeAddTaskModalStatus(mode);
+  };
 
   ngOnDestroy(): void {
     if (this.addTaskSubscription) this.addTaskSubscription.unsubscribe();

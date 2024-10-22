@@ -29,26 +29,32 @@ export class DatabaseService {
   };
 
   /* INSERT NEW TASK */
-  public insertTask = async (id: number) => {
+  public insertTask = async (
+    id: number,
+    userInputs: Task
+  ): Promise<number | null> => {
     const currentDate = this.datePipe.transform(new Date(), 'YYYY-MM-dd HH:mm');
     const newTask: Task = {
       userId: id,
-      title: '',
-      description: 'Buy Gaming Chair ',
+      title: userInputs.title,
+      description: userInputs.description,
       status: 0,
-      subTask: [],
-      priority: 1,
-      dueDate: new Date('2024-10-26 12:00'),
+      subTask: userInputs.subTask,
+      priority: userInputs.priority,
+      dueDate: userInputs.dueDate,
       createdAt: new Date(currentDate!),
+      taskCategory: userInputs.taskCategory,
+
       isSync: 0,
       isUpdated: 0,
       isQueued: 0,
-      taskCategory: 0,
     };
     try {
       const taskId = await db.taskList.add(newTask);
+      return taskId;
     } catch (err) {
       console.error('Error', err);
+      return null;
     }
   };
 

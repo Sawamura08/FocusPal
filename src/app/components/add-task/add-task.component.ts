@@ -1,5 +1,5 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { PopModalService } from '../../service/pop-modal.service';
+import { Component, OnDestroy, OnInit, Input } from '@angular/core';
+import { PopModalService, updateMode } from '../../service/pop-modal.service';
 import { Subscription } from 'rxjs';
 import {
   FormBuilder,
@@ -8,6 +8,10 @@ import {
   Validators,
 } from '@angular/forms';
 import { AddTaskInput } from '../../class/add-task-input';
+import { SessionService } from '../../service/session.service';
+import { DatabaseService } from '../../database/database.service';
+import { Router, ActivatedRoute } from '@angular/router';
+import { UpdateTaskModeService } from '../../service/update-task-mode.service';
 
 @Component({
   selector: 'app-add-task',
@@ -16,16 +20,23 @@ import { AddTaskInput } from '../../class/add-task-input';
 })
 export class AddTaskComponent implements OnInit, OnDestroy {
   subscriptionArr: Subscription[] = [];
-  constructor(private popModal: PopModalService, private fb: FormBuilder) {
+  @Input() isUpdateMode: updateMode | null = null;
+  constructor(
+    private popModal: PopModalService,
+    private fb: FormBuilder,
+    private session: SessionService,
+    private task: DatabaseService,
+    private route: Router,
+    private actRoute: ActivatedRoute,
+    private updateMode: UpdateTaskModeService
+  ) {
     this.userInput = this.fb.group({
-      userId: ['', Validators.required],
       title: ['', Validators.required],
       description: [''],
       subTask: [''],
       priority: ['', Validators.required],
       startDate: ['', Validators.required],
       dueDate: ['', Validators.required],
-      createdAt: ['', Validators.required],
       taskCategory: ['', Validators.required],
     });
 
@@ -34,7 +45,19 @@ export class AddTaskComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     /* SUBSCRIBE ADDTASK MODAL */
     this.addTaskSubscribe();
+
+    /* FETCH SESSION */
+    this.getSession();
+
+    /* FETCH MODAL MODE INSERT OR UPDATE */
+    this.modalModeObservable();
   }
+
+  /* GET SESSION */
+  private userId: number | null = null;
+  private getSession = async () => {
+    this.userId = await this.session.getUser();
+  };
 
   /* REACTIVE FORMS */
   private addTaskConfig: AddTaskInput;
@@ -52,10 +75,26 @@ export class AddTaskComponent implements OnInit, OnDestroy {
     return this.userInput.get('title');
   }
 
+  get taskCategory() {
+    return this.userInput.get('taskCategory');
+  }
+
+  get priority() {
+    return this.userInput.get('priority');
+  }
+
+  get startDate() {
+    return this.userInput.get('startDate');
+  }
+
+  get dueDate() {
+    return this.userInput.get('dueDate');
+  }
+
   /* END */
 
   /* SUBSCRIBE ADDTASK MODAL */
-  public modalStatus: boolean | null = null;
+  public modalStatus: updateMode | null = null;
   private addTaskSubscription!: Subscription;
   private addTaskSubscribe = () => {
     this.addTaskSubscription = this.popModal.getAddTaskModalStatus().subscribe({
@@ -70,11 +109,21 @@ export class AddTaskComponent implements OnInit, OnDestroy {
   categoryIndex: number | null = null;
   public selectCategory = (index: number) => {
     this.categoryIndex = index;
+
+    // this will set the value for the form TaskCategory
+    if (this.categoryIndex != null) {
+      this.addTaskConfig.setValueOnChange(this.categoryIndex, 'taskCategory');
+    }
   };
 
   priorityIndex: number | null = null;
   public selectPriority = (index: number) => {
     this.priorityIndex = index;
+
+    // this will set the value for the form TaskPriority
+    if (this.priority != null) {
+      this.addTaskConfig.setValueOnChange(this.priorityIndex, 'priority');
+    }
   };
   /* END */
 
@@ -97,7 +146,7 @@ export class AddTaskComponent implements OnInit, OnDestroy {
 
   public setSubTasks = (value: string) => {
     this.subTaskList?.push(value);
-    console.log(JSON.stringify(this.subTaskList));
+    this.addTaskConfig.setValueOnChange(this.subTaskList, 'subTask');
     this.subTaksInput = '';
   };
 
@@ -110,20 +159,58 @@ export class AddTaskComponent implements OnInit, OnDestroy {
   /* CLOSE ADD TASK */
 
   public closeAddTask = () => {
-    this.popModal.changeAddTaskModalStatus(false);
+    /* SET MODE */
+    const mode: updateMode = {
+      mode: false,
+      isOpen: false,
+    };
+    /* CLOSE MODAL */
+    this.popModal.changeAddTaskModalStatus(mode);
   };
   /* NED */
 
   /* SUBMIT FORMS */
 
-  public submit = () => {
+  public submit = async () => {
     this.addTaskConfig.setCategoryValue(
       this.categoryIndex!,
       this.priorityIndex!,
       this.subTaskList
     );
 
-    console.log(this.userInput.value);
+    this.userInput.markAllAsTouched();
+
+    if (this.userInput.valid) {
+      const taskId = await this.task.insertTask(
+        this.userId!,
+        this.userInput.value
+      );
+
+      if (taskId) {
+        this.closeAddTask();
+        this.route.navigate(['task'], { relativeTo: this.actRoute });
+      }
+    }
+  };
+
+  /* ------------------- UPDATE MODE ---------------------------- */
+
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  public modalModeSubscription!: Subscription;
+
+  public modalModeObservable = () => {
+    this.modalModeSubscription = this.popModal
+      .getAddTaskModalStatus()
+      .subscribe({
+        next: (value) => (this.isUpdateMode = value),
+        error: (err) => console.log('Error Subscribe on Update Mode', err),
+      });
   };
 
   /* NG ON DESTORY */

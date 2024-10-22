@@ -33,7 +33,9 @@
           </div>
         </div>
         <div class="error-container">
-          <!-- <div class="error-message"><p>This field is required</p></div> -->
+          <div class="error-message" *ngIf="!validator('taskCategory')">
+            <p>This field is required</p>
+          </div>
         </div>
       </section>
 
@@ -68,7 +70,9 @@
           </div>
         </div>
         <div class="error-container">
-          <!-- <div class="error-message"><p>This field is required</p></div> -->
+          <div class="error-message" *ngIf="!validator('priority')">
+            <p>This field is required</p>
+          </div>
         </div>
       </section>
 
@@ -97,6 +101,7 @@
           cols="20"
           class="text textarea"
           placeholder="Type Task Description"
+          formControlName="description"
         ></textarea>
       </section>
 
@@ -106,10 +111,11 @@
           <input
             type="text"
             class="subtask"
-            name="subtask"
-            id="subtask"
+            name="subTaskList"
+            id="subTaskList"
             placeholder="Add SubTask"
             [(ngModel)]="subTaksInput"
+            [ngModelOptions]="{ standalone: true }"
           />
         </div>
         <div class="button-container">
@@ -136,7 +142,11 @@
             <p class="label">Start Date</p>
             <mat-form-field>
               <mat-label>Choose a date</mat-label>
-              <input matInput [matDatepicker]="startDate" />
+              <input
+                matInput
+                [matDatepicker]="startDate"
+                formControlName="startDate"
+              />
               <mat-hint>MM/DD/YYYY</mat-hint>
               <mat-datepicker-toggle
                 matIconSuffix
@@ -145,14 +155,20 @@
               <mat-datepicker #startDate></mat-datepicker>
             </mat-form-field>
             <div class="error-container">
-              <!-- <div class="error-message"><p>This field is required</p></div> -->
+              <div class="error-message" *ngIf="!validator('startDate')">
+                <p>This field is required</p>
+              </div>
             </div>
           </div>
           <div class="user-select">
             <p class="label">Due Date</p>
             <mat-form-field>
               <mat-label>Choose a date</mat-label>
-              <input matInput [matDatepicker]="dueDate" />
+              <input
+                matInput
+                [matDatepicker]="dueDate"
+                formControlName="dueDate"
+              />
               <mat-hint>MM/DD/YYYY</mat-hint>
               <mat-datepicker-toggle
                 matIconSuffix
@@ -161,21 +177,23 @@
               <mat-datepicker #dueDate></mat-datepicker>
             </mat-form-field>
             <div class="error-container">
-              <!-- <div class="error-message"><p>This field is required</p></div> -->
+              <div class="error-message" *ngIf="!validator('dueDate')">
+                <p>This field is required</p>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
       <section class="button-container">
-        <div class="submit-btn">
+        <div class="submit-btn" *ngIf="!isUpdateMode?.mode">
           <button class="btn" (click)="submit()">Submit</button>
         </div>
 
-        <!-- <div class="edit-btn">
+        <div class="edit-btn" *ngIf="isUpdateMode?.mode">
           <button class="btn delete">Delete</button>
           <button class="btn update">Update</button>
-        </div> -->
+        </div>
       </section>
     </form>
 
