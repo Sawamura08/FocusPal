@@ -17,6 +17,7 @@ import { Schedule, Task } from '../../../database/db';
 import { combineLatest, Subscription } from 'rxjs';
 import { FilterScheduleService } from '../../../database/filter-schedule.service';
 import { WeeklyScheduleService } from '../../../database/weekly-schedule.service';
+import { SessionService } from '../../../service/session.service';
 @Component({
   selector: 'app-apps',
   templateUrl: './apps.component.html',
@@ -32,7 +33,8 @@ export class AppsComponent implements OnInit, OnChanges, OnDestroy {
     private renderer: Renderer2,
     private filterTask: FilterTaskService,
     private filterSched: FilterScheduleService,
-    private weeklySched: WeeklyScheduleService
+    private weeklySched: WeeklyScheduleService,
+    protected session: SessionService
   ) {
     this.Progress = new SetProgressBar();
   }
@@ -75,7 +77,6 @@ export class AppsComponent implements OnInit, OnChanges, OnDestroy {
   public getGreeting = (): void => {
     const index = Math.floor(Math.random() * greetings.length);
     this.greeting = this.greetingsArr[index];
-
     this.getUser();
   };
   /* end */
@@ -83,13 +84,10 @@ export class AppsComponent implements OnInit, OnChanges, OnDestroy {
   /* FETCH USERNAME */
   public username: string | null = null;
   public getUser = async () => {
-    const response: fetchResponse = await this.fetchHomeData.getUsername();
-
-    if (response.status) {
-      this.username = response.value?.userName;
-    } else {
-      console.log(response?.error);
-    }
+    this.session.fetchUserData().subscribe({
+      next: (value) => (this.username = value.userName),
+      error: (err) => console.error(err),
+    });
   };
 
   /* END */

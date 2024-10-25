@@ -7,7 +7,7 @@
       <button class="btn" (click)="navigate(buttonStatus[0])">
         <i
           class="fa-regular fa-house"
-          [ngClass]="buttonStyle(buttonStatus[0].status)"
+          [ngClass]="buttonStyle(buttonStatus[0].path)"
         ></i>
       </button>
     </section>
@@ -15,7 +15,7 @@
       <button class="btn" (click)="navigate(buttonStatus[1])">
         <i
           class="fa-regular fa-calendar-lines-pen"
-          [ngClass]="buttonStyle(buttonStatus[1].status)"
+          [ngClass]="buttonStyle(buttonStatus[1].path)"
         ></i>
       </button>
     </section>
@@ -28,7 +28,7 @@
       <button class="btn" (click)="navigate(buttonStatus[2])">
         <i
           class="fa-sharp fa-regular fa-clipboard-list"
-          [ngClass]="buttonStyle(buttonStatus[2].status)"
+          [ngClass]="buttonStyle(buttonStatus[2].path)"
         ></i>
       </button>
     </section>
@@ -36,7 +36,7 @@
       <button class="btn" (click)="navigate(buttonStatus[3])">
         <i
           class="fa-regular fa-clock-three"
-          [ngClass]="buttonStyle(buttonStatus[3].status)"
+          [ngClass]="buttonStyle(buttonStatus[3].path)"
         ></i>
       </button>
     </section>

@@ -1,16 +1,17 @@
 import { Injectable } from '@angular/core';
 import { db, User } from '../database/db';
 import { fetchResponse } from '../interfaces/fetch-response';
+import { SessionService } from './session.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FetchHomeDataService {
-  constructor() {}
+  constructor(protected session: SessionService) {}
 
   public getUsername = async (): Promise<fetchResponse> => {
     try {
-      const username = await db.userList.get(1);
+      const username = await db.userList.get(50);
       if (username) {
         return { value: username, status: true };
       } else {

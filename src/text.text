@@ -21,7 +21,7 @@
 [] : FILTER FOR ALL SCHEDULE (Optional)
 
 [] : CRUD FOR TASK
-[] : validators for fields tasks 
+[x] : validators for fields tasks 
 [] : UI for tasks;
 
 
