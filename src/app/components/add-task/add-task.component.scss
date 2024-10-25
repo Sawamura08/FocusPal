@@ -9,6 +9,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  opacity: 0;
 
   .add-task-container {
     width: 100%;
@@ -69,6 +70,7 @@
           width: 80%;
           .label {
             width: 100%;
+            font-weight: bold;
             font-family: $subText;
             margin-block-end: 0;
             font-size: 0.8rem;
@@ -87,9 +89,10 @@
               font-size: 0.8rem;
               outline: none;
               border: 1px solid $textColor;
+              box-shadow: 0 1px 2px $textColor;
               font-family: $subText;
               background-color: $neutralColor;
-              opacity: 0.7;
+
               width: 100%;
               transition: 0.3s ease-in-out;
             }
@@ -121,45 +124,76 @@
       .text-input {
         width: 100%;
 
-        .sub-task-input {
-          width: 90%;
-
-          .subtask {
-            width: 100%;
-            margin: 0.5rem 0 0 0.5rem;
-            font-size: 0.8rem;
-            padding: 0.5rem;
-            border-radius: 8px;
-            outline: none;
-            color: $textColor;
-            font-family: $subText;
-            border: 1px solid rgba(0, 0, 0, 0.3);
-          }
-        }
-
-        .button-container {
+        .sub-task-header {
           width: 100%;
           display: flex;
-          justify-content: space-between;
-          gap: 0.5rem;
-          flex-wrap: wrap;
-          margin-block-start: 0.5rem;
 
-          .btn {
-            width: 50%;
-            border-radius: 8px;
-            padding: 0.5rem;
-            outline: none;
-            background: linear-gradient(to right, $mainColor, $shadow);
-            border: 1px solid $mainColor;
-            color: $neutralColor;
-            font-size: 0.8rem;
+          .sub-task-input {
+            width: 90%;
+            animation: enter 500ms ease-in;
+            .subtask {
+              width: 100%;
+              margin: 0.5rem 0 0 0.5rem;
+              font-size: 0.8rem;
+              padding: 0.5rem;
+              border-radius: 8px;
+              outline: none;
+              color: $textColor;
+              font-family: $subText;
+              border: 1px solid rgba(0, 0, 0, 0.3);
+            }
+
+            @keyframes enter {
+              from {
+                width: 0%;
+              }
+              to {
+                width: 100%;
+              }
+            }
+          }
+
+          .exit-sub-task-input {
+            animation: exit 500ms ease-in;
+
+            @keyframes exit {
+              from {
+                width: 100%;
+              }
+              to {
+                width: 0%;
+              }
+            }
+          }
+
+          .button-container {
+            width: 40%;
             display: flex;
             justify-content: space-between;
-            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-block-start: 0.5rem;
 
-            .fa-solid {
-              font-size: 0.6rem;
+            .btn {
+              width: 100%;
+              border-radius: 8px;
+              padding: 0.5rem;
+              outline: none;
+              background: linear-gradient(to right, $mainColor, $shadow);
+              border: 1px solid $mainColor;
+              color: $neutralColor;
+              font-size: 0.8rem;
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+
+              .fa-solid {
+                font-size: 0.6rem;
+              }
+            }
+
+            .add-sub-task {
+              border-radius: 0 8px 8px 0;
             }
           }
         }
@@ -202,6 +236,7 @@
 
         .label,
         label {
+          font-weight: bold;
           font-family: $subText;
           margin-block-end: 0;
           font-size: 0.8rem;
@@ -332,22 +367,14 @@
         }
       }
     }
-  }
 
-  .time-bg {
-    position: absolute;
-    top: 10%;
-    right: 10%;
-    z-index: -1;
-    filter: blur(3rem);
-    transform: rotate(45deg);
-  }
-
-  .person-bg {
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: -1;
-    filter: blur(3rem);
+    .add-class-bg {
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
   }
 }

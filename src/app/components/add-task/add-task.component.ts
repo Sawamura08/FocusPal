@@ -12,11 +12,13 @@ import { SessionService } from '../../service/session.service';
 import { DatabaseService } from '../../database/database.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { UpdateTaskModeService } from '../../service/update-task-mode.service';
+import { slideRight } from '../../animation/slide-right.animate';
 
 @Component({
   selector: 'app-add-task',
   templateUrl: './add-task.component.html',
   styleUrl: './add-task.component.scss',
+  animations: [slideRight],
 })
 export class AddTaskComponent implements OnInit, OnDestroy {
   subscriptionArr: Subscription[] = [];
@@ -95,6 +97,7 @@ export class AddTaskComponent implements OnInit, OnDestroy {
 
   /* SUBSCRIBE ADDTASK MODAL */
   public modalStatus: updateMode | null = null;
+  protected animateModal: boolean = true;
   private addTaskSubscription!: Subscription;
   private addTaskSubscribe = () => {
     this.addTaskSubscription = this.popModal.getAddTaskModalStatus().subscribe({
@@ -131,17 +134,30 @@ export class AddTaskComponent implements OnInit, OnDestroy {
 
   subTaksInput: string = '';
   isSubTaskMode: boolean = false;
-  subTaskList: string[] = [
-    'Lorem ipsum dolor sit amet consectetur adipisicing elit.',
-    'pulsing',
-    'row',
-  ];
+  protected closing: boolean = false;
+  subTaskList: string[] = [];
   public subTasks = () => {
     if (this.isSubTaskMode && this.subTaksInput != '') {
       this.setSubTasks(this.subTaksInput);
+      this.subTaskButtonText = 'Add';
     } else {
-      this.isSubTaskMode = !this.isSubTaskMode;
+      this.isSubTaskMode ? this.closeSubTask() : (this.isSubTaskMode = true);
     }
+  };
+
+  public closeSubTask = () => {
+    this.closing = true;
+
+    setTimeout(() => {
+      this.isSubTaskMode = false;
+      this.closing = false;
+    }, 450);
+  };
+
+  protected subTaskButtonText: string = 'Add';
+  public changeSubTaskText = (event: Event) => {
+    const inputElement = event.target as HTMLInputElement;
+    this.subTaskButtonText = inputElement.value != '' ? 'Save' : 'Add';
   };
 
   public setSubTasks = (value: string) => {
@@ -159,13 +175,17 @@ export class AddTaskComponent implements OnInit, OnDestroy {
   /* CLOSE ADD TASK */
 
   public closeAddTask = () => {
-    /* SET MODE */
-    const mode: updateMode = {
-      mode: false,
-      isOpen: false,
-    };
-    /* CLOSE MODAL */
-    this.popModal.changeAddTaskModalStatus(mode);
+    this.animateModal = false;
+
+    setTimeout(() => {
+      /* SET MODE */
+      const mode: updateMode = {
+        mode: false,
+        isOpen: false,
+      };
+      /* CLOSE MODAL */
+      this.popModal.changeAddTaskModalStatus(mode);
+    }, 500);
   };
   /* NED */
 

@@ -238,7 +238,7 @@ main {
             padding: 1rem;
             width: 100%;
             color: $neutralColor;
-            background-color: $mainColor;
+            background: linear-gradient(to right, $mainColor, $shadow);
             display: flex;
             flex-direction: column;
             align-items: center;

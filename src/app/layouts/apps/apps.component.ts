@@ -49,7 +49,7 @@ export class AppsComponent implements OnInit, OnDestroy {
   private addTaskSubscription!: Subscription;
   private addTaskSubscribe = () => {
     this.addTaskSubscription = this.popModal.getAddTaskModalStatus().subscribe({
-      next: (value) => (this.modalStatus = value),
+      next: (value) => (this.modalStatus = { isOpen: true, mode: false }),
       error: (err) => console.error('Error Subscribe Add Task', err),
     });
   };
