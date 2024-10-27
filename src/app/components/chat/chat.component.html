@@ -20,4 +20,31 @@
       </div>
     </div>
   </header>
+
+  <section class="conversation-container">
+    <div class="conversation-content">
+      <ul
+        class="conversation"
+        *ngFor="let convo of chatBot.conversation; index as i"
+      >
+        <!-- MESSAGE OF USER -->
+        <li class="message chat">
+          <p>{{ convo.message }}</p>
+        </li>
+
+        <!-- RESPONSE OF AI -->
+        <li class="response">
+          <figure>
+            <img
+              src="FocusPal Logo/4.png"
+              alt="Sydney Image"
+              class="sydney-img"
+            />
+          </figure>
+
+          <p class="chat">{{ convo.response }}</p>
+        </li>
+      </ul>
+    </div>
+  </section>
 </section>
