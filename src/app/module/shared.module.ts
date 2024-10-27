@@ -17,6 +17,7 @@ import {
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { ToastrModule } from 'ngx-toastr';
 import { WeeklySchedComponent } from '../components/weekly-sched/weekly-sched.component';
+import { ChatComponent } from '../components/chat/chat.component';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { WeeklySchedComponent } from '../components/weekly-sched/weekly-sched.co
     SchedTypePipe,
     AddSchedComponent,
     WeeklySchedComponent,
+    ChatComponent,
   ],
   imports: [
     CommonModule,
@@ -47,6 +49,7 @@ import { WeeklySchedComponent } from '../components/weekly-sched/weekly-sched.co
     SchedTypePipe,
     AddSchedComponent,
     WeeklySchedComponent,
+    ChatComponent,
   ],
 })
 export class SharedModule {}

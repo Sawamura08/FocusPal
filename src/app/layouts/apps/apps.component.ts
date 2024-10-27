@@ -37,7 +37,6 @@ export class AppsComponent implements OnInit, OnDestroy {
 
     // SET THE URL PATH
     this.valuePath = this.location.path();
-    console.log(this.location.path());
   }
 
   public navigate = (button: { path: string; label: string }) => {
