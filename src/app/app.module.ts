@@ -24,6 +24,7 @@ import {
   MatNativeDateModule,
 } from '@angular/material/core';
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AnimateOnceDirective } from './pipe/animate-once.directive';
 
 @NgModule({
   declarations: [
@@ -32,6 +33,7 @@ import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
     AppComponent,
     StarterComponent,
     AddTaskComponent,
+    AnimateOnceDirective,
   ],
   imports: [
     BrowserModule,

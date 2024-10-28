@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { chatEntry } from '../interfaces/message-model.interface';
+import { chatEntry, histories } from '../interfaces/message-model.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -45,5 +45,31 @@ export class MessageStoreService {
 
       this.conversation$.next(updatedConversation);
     }
+  };
+
+  /* SET THE histories[] to conversation$: chatEntry */
+  public setHistories = (histories: histories[]) => {
+    const currentConversation = this.conversation$.value;
+    let userPrompt: string;
+    let modelReponse: string;
+    let i = 0;
+    histories.map((history) => {
+      history.parts.map((response) => {
+        if (history.role === 'user') {
+          userPrompt = response.text;
+        } else {
+          modelReponse = response.text;
+        }
+
+        const chatEntry: chatEntry = {
+          message: userPrompt,
+          response: modelReponse,
+          isMessageAnimated: true,
+          isResponseAnimated: true,
+        };
+
+        this.conversation$.next([...currentConversation, chatEntry]);
+      });
+    });
   };
 }

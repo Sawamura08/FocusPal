@@ -215,6 +215,11 @@
 
   .message-input-container {
     width: 100%;
+    box-shadow: 0 -2px 3px $textColor;
+    padding-block-start: 0.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
     .input-container {
       width: 100%;

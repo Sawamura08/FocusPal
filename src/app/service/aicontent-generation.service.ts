@@ -20,7 +20,7 @@ export class AicontentGenerationService {
     message: string,
     histories: histories[]
   ): Observable<string> => {
-    // this only creates observable when it's time to send prompt to AI
+    // defer - this only creates observable when it's time to send prompt to AI
     return defer(() => {
       const modelName = geminiConfig.model;
       const apiKey = geminiConfig.apiKey;
@@ -86,4 +86,6 @@ export class AicontentGenerationService {
       })
     );
   };
+
+  /* END */
 }

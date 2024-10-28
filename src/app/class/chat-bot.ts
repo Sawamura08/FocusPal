@@ -15,5 +15,17 @@ export class chatBot {
         },
       ],
     },
+    {
+      role: 'user',
+      parts: [{ text: 'Help me' }],
+    },
+    {
+      role: 'model',
+      parts: [
+        {
+          text: 'What help do you need?',
+        },
+      ],
+    },
   ];
 }

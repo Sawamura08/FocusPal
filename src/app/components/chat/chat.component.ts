@@ -25,6 +25,8 @@ export class ChatComponent implements OnDestroy, OnInit {
   ) {
     this.chatBot = new chatBot();
     this.histories = this.chatBot.histories;
+
+    this.convo.setHistories(this.histories);
   }
 
   ngOnInit(): void {
@@ -85,7 +87,9 @@ export class ChatComponent implements OnDestroy, OnInit {
     }
 
     this.userInput = '';
-    this.overflowTextArea();
+    setTimeout(() => {
+      this.overflowTextArea();
+    }, 100);
   };
 
   /* END */
