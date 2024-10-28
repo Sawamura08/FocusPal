@@ -4,6 +4,8 @@
 .chat-section {
   width: 100%;
   height: 100%;
+  max-height: 100%;
+  overflow-y: auto;
   position: relative;
   z-index: 1;
   background-image: url("/background/background1.png");
@@ -120,6 +122,63 @@
           font-family: $subText;
         }
 
+        .loading {
+          width: 15%;
+          height: 3rem;
+          padding: 0;
+          display: grid;
+          place-content: center;
+          gap: 0.25rem;
+
+          .load {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.25rem;
+
+            i {
+              opacity: 0.8;
+              font-size: 0.4rem;
+            }
+          }
+
+          .load {
+            .fa-sharp-duotone:first-child {
+              animation: loading 1s ease-in-out infinite;
+            }
+
+            .fa-sharp-duotone:nth-child(2) {
+              animation: loading2 1s ease-in-out 0.3s infinite;
+            }
+
+            .fa-sharp-duotone:last-child {
+              animation: loading3 1s ease-in-out 0.6s infinite;
+            }
+
+            @keyframes loading {
+              50% {
+                transform: translateY(-3px);
+                opacity: 0.7;
+              }
+            }
+
+            @keyframes loading2 {
+              50% {
+                transform: translateY(-3px);
+                opacity: 0.7;
+              }
+            }
+
+            @keyframes loading3 {
+              50% {
+                transform: translateY(-3px);
+                opacity: 0.7;
+              }
+            }
+          }
+        }
+
         .message {
           align-self: flex-end;
           border-bottom-right-radius: 0;
@@ -131,14 +190,13 @@
           align-self: flex-start;
           max-width: 90%;
           display: flex;
-          gap: 0.5rem;
 
           figure {
             max-width: 15%;
-            height: 3rem;
-            padding: 3px;
-            background: linear-gradient(to bottom, $mainColor, $shadow);
-            border-radius: 50%;
+            // height: 3rem;
+            // padding: 3px;
+            // background: linear-gradient(to bottom, $mainColor, $shadow);
+            // border-radius: 50%;
 
             .sydney-img {
               width: 100%;
@@ -150,6 +208,59 @@
             background-color: #dee2e6;
             border-top-left-radius: 0;
           }
+        }
+      }
+    }
+  }
+
+  .message-input-container {
+    width: 100%;
+
+    .input-container {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      .inputs {
+        width: 82%;
+        display: flex;
+        justify-content: center;
+
+        textarea {
+          width: 90%;
+          height: 3.5rem;
+          min-height: 3.5rem;
+          max-height: 200px;
+          overflow-y: auto;
+          resize: none;
+          background-color: $neutralColor;
+          font-family: $subText;
+          border-radius: 2rem;
+          outline: none;
+          border: 1px solid $textColor;
+          padding: 1rem;
+          font-size: 1rem;
+          box-sizing: border-box;
+          line-height: 1.5;
+        }
+
+        textarea::-webkit-scrollbar {
+          display: none;
+        }
+      }
+
+      .btn-container {
+        width: 18%;
+
+        .submit {
+          padding: 1rem;
+          outline: none;
+          border-radius: 50%;
+          font-size: 1rem;
+          border: 1px solid $neutralColor;
+          background: linear-gradient(to top, $mainColor, $shadow);
+          color: $neutralColor;
         }
       }
     }

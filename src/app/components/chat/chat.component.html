@@ -21,14 +21,12 @@
     </div>
   </header>
 
+  <!-- CONVERSATION -->
   <section class="conversation-container">
     <div class="conversation-content">
-      <ul
-        class="conversation"
-        *ngFor="let convo of chatBot.conversation; index as i"
-      >
+      <ul class="conversation" *ngFor="let convo of conversation; index as i">
         <!-- MESSAGE OF USER -->
-        <li class="message chat">
+        <li class="message chat animate__animated animate__bounceIn">
           <p>{{ convo.message }}</p>
         </li>
 
@@ -42,9 +40,45 @@
             />
           </figure>
 
-          <p class="chat">{{ convo.response }}</p>
+          <p
+            class="chat animate__animated animate__bounceIn loading"
+            *ngIf="convo.response === ''"
+          >
+            <span class="load"
+              ><i class="fa-sharp-duotone fa-solid fa-circle"></i>
+              <i class="fa-sharp-duotone fa-solid fa-circle"></i>
+              <i class="fa-sharp-duotone fa-solid fa-circle"></i
+            ></span>
+          </p>
+          <p
+            class="chat animate__animated animate__bounceIn"
+            *ngIf="convo.response != ''"
+          >
+            {{ convo.response }}
+          </p>
         </li>
       </ul>
     </div>
+  </section>
+
+  <!-- MESSAGE -->
+  <section class="message-input-container">
+    <form action="" class="input-container">
+      <div class="inputs">
+        <textarea
+          #textarea
+          name="prompt"
+          id="prompt"
+          placeholder="Ask me Anything..."
+          (input)="overflowTextArea()"
+          [(ngModel)]="userInput"
+        ></textarea>
+      </div>
+      <div class="btn-container">
+        <button class="submit" (click)="sendPrompt()">
+          <i class="fa-solid fa-paper-plane"></i>
+        </button>
+      </div>
+    </form>
   </section>
 </section>
