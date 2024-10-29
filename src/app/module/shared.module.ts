@@ -18,6 +18,7 @@ import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { ToastrModule } from 'ngx-toastr';
 import { WeeklySchedComponent } from '../components/weekly-sched/weekly-sched.component';
 import { ChatComponent } from '../components/chat/chat.component';
+import { AnimateOnceDirective } from '../pipe/animate-once.directive';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { ChatComponent } from '../components/chat/chat.component';
     SchedTypePipe,
     AddSchedComponent,
     WeeklySchedComponent,
+    AnimateOnceDirective,
     ChatComponent,
   ],
   imports: [
@@ -49,6 +51,7 @@ import { ChatComponent } from '../components/chat/chat.component';
     SchedTypePipe,
     AddSchedComponent,
     WeeklySchedComponent,
+    AnimateOnceDirective,
     ChatComponent,
   ],
 })

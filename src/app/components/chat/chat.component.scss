@@ -266,6 +266,11 @@
           border: 1px solid $neutralColor;
           background: linear-gradient(to top, $mainColor, $shadow);
           color: $neutralColor;
+          opacity: 0.6;
+        }
+
+        .isActive {
+          opacity: 1;
         }
       }
     }

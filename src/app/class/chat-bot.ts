@@ -27,5 +27,17 @@ export class chatBot {
         },
       ],
     },
+    {
+      role: 'user',
+      parts: [{ text: 'Task Management' }],
+    },
+    {
+      role: 'model',
+      parts: [
+        {
+          text: 'Okay okay',
+        },
+      ],
+    },
   ];
 }

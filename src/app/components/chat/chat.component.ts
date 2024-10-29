@@ -10,6 +10,7 @@ import { combineLatest, Subscription } from 'rxjs';
 import { chatEntry, histories } from '../../interfaces/message-model.interface';
 import { MessageStoreService } from '../../service/message-store.service';
 import { AicontentGenerationService } from '../../service/aicontent-generation.service';
+import { AnimateOnceDirective } from '../../pipe/animate-once.directive';
 declare var AOS: any;
 
 @Component({
@@ -26,6 +27,7 @@ export class ChatComponent implements OnDestroy, OnInit {
     this.chatBot = new chatBot();
     this.histories = this.chatBot.histories;
 
+    /* SET UP THE HISTORY CONVERSATION */
     this.convo.setHistories(this.histories);
   }
 
@@ -33,7 +35,10 @@ export class ChatComponent implements OnDestroy, OnInit {
     /* FETCH CONVO */
     this.fetchConversation();
 
+    /* initialized the AOS LIBRARY */
     AOS.init();
+
+    this.scrollToBottom();
   }
 
   /* INHERIT CHABOT */
@@ -92,6 +97,14 @@ export class ChatComponent implements OnDestroy, OnInit {
     }, 100);
   };
 
+  /* END */
+
+  /* SCROLL THE CHAT BOX TO BOTTOM */
+  @ViewChild('chatBox') chatBox!: ElementRef;
+  public scrollToBottom = () => {
+    /* const height = this.chatBox.nativeElement.scrollHeight;
+    console.log(height); */
+  };
   /* END */
 
   ngOnDestroy(): void {

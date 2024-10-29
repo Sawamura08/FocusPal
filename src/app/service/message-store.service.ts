@@ -16,13 +16,14 @@ export class MessageStoreService {
   };
 
   /* ADD NEW CONVO TO EXISTING CONVO */
-  public insertConversation = (message: string) => {
+  /* messageAnimate was for the existing convo to prevent it to animate */
+  public insertConversation = (message: string, messageAnimate?: boolean) => {
     const currentConversation = this.conversation$.value;
 
     const chatEntry: chatEntry = {
       message: message,
       response: '',
-      isMessageAnimated: false,
+      isMessageAnimated: messageAnimate ?? false,
       isResponseAnimated: false,
     };
 
@@ -31,7 +32,7 @@ export class MessageStoreService {
   };
 
   /* UPDATE THE LATEST CONVO FOR RESPONSE */
-  public updateConversation = (result: string) => {
+  public updateConversation = (result: string, responseAnimate?: boolean) => {
     const currentConversation = this.conversation$.value;
     const latestCoversation = currentConversation.length - 1;
     const updatedConversation = [...currentConversation];
@@ -40,7 +41,7 @@ export class MessageStoreService {
       updatedConversation[latestCoversation] = {
         ...updatedConversation[latestCoversation],
         response: result,
-        isResponseAnimated: true,
+        isResponseAnimated: responseAnimate ?? false,
       };
 
       this.conversation$.next(updatedConversation);
@@ -49,26 +50,19 @@ export class MessageStoreService {
 
   /* SET THE histories[] to conversation$: chatEntry */
   public setHistories = (histories: histories[]) => {
-    const currentConversation = this.conversation$.value;
     let userPrompt: string;
     let modelReponse: string;
-    let i = 0;
+
+    /* MAP ALL THORUGH THE HISTORY[] */
     histories.map((history) => {
       history.parts.map((response) => {
         if (history.role === 'user') {
           userPrompt = response.text;
+          this.insertConversation(userPrompt, true);
         } else {
           modelReponse = response.text;
+          this.updateConversation(modelReponse, true);
         }
-
-        const chatEntry: chatEntry = {
-          message: userPrompt,
-          response: modelReponse,
-          isMessageAnimated: true,
-          isResponseAnimated: true,
-        };
-
-        this.conversation$.next([...currentConversation, chatEntry]);
       });
     });
   };

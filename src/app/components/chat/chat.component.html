@@ -23,10 +23,10 @@
 
   <!-- CONVERSATION -->
   <section class="conversation-container">
-    <div class="conversation-content">
+    <div class="conversation-content" #chatBox>
       <ul class="conversation" *ngFor="let convo of conversation; index as i">
         <!-- MESSAGE OF USER -->
-        <li class="message chat animate__animated animate__bounceIn">
+        <li class="message chat" [appAnimateOnce]="convo.isMessageAnimated">
           <p>{{ convo.message }}</p>
         </li>
 
@@ -51,8 +51,9 @@
             ></span>
           </p>
           <p
-            class="chat animate__animated animate__bounceIn"
+            class="chat"
             *ngIf="convo.response != ''"
+            [appAnimateOnce]="convo.isResponseAnimated"
           >
             {{ convo.response }}
           </p>
@@ -75,7 +76,13 @@
         ></textarea>
       </div>
       <div class="btn-container">
-        <button class="submit" (click)="sendPrompt()">
+        <button
+          class="submit"
+          (click)="sendPrompt()"
+          [ngClass]="{
+            isActive: userInput != ''
+          }"
+        >
           <i class="fa-solid fa-paper-plane"></i>
         </button>
       </div>
