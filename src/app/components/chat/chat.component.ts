@@ -12,18 +12,25 @@ import { chatEntry, histories } from '../../interfaces/message-model.interface';
 import { MessageStoreService } from '../../service/message-store.service';
 import { AicontentGenerationService } from '../../service/aicontent-generation.service';
 import { AnimateOnceDirective } from '../../pipe/animate-once.directive';
+import { confirm, confirmModal } from '../../interfaces/export.object';
+import { PopModalService } from '../../service/pop-modal.service';
+import { slideRight } from '../../animation/slide-right.animate';
+import { NetworkStatusService } from '../../service/network-status.service';
 declare var AOS: any;
 
 @Component({
   selector: 'app-chat',
   templateUrl: './chat.component.html',
   styleUrl: './chat.component.scss',
+  animations: [slideRight],
 })
 export class ChatComponent implements OnDestroy, OnInit, AfterViewInit {
-  private subscriptionArr!: Subscription[];
+  private subscriptionArr: Subscription[] = [];
   constructor(
     private convo: MessageStoreService,
-    private gemini: AicontentGenerationService
+    private gemini: AicontentGenerationService,
+    private popModal: PopModalService,
+    private network: NetworkStatusService
   ) {
     this.chatBot = new chatBot();
     this.histories = this.chatBot.histories;
@@ -33,11 +40,17 @@ export class ChatComponent implements OnDestroy, OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
+    /* CHECK INTERNET CONNECTION */
+    this.getInternetConnection();
+
     /* FETCH CONVO */
     this.fetchConversation();
 
     /* initialized the AOS LIBRARY */
     AOS.init();
+
+    /* SUBSCRIBE TO CONFIRMATION MODAL SUBJECT */
+    this.monitorConfirmationModal();
   }
 
   ngAfterViewInit(): void {
@@ -60,8 +73,9 @@ export class ChatComponent implements OnDestroy, OnInit, AfterViewInit {
       error: (err) => {
         console.error('Error Conversation Subscription', err);
       },
-      complete: () => this.subscriptionArr.push(this.conversationSubscribe),
     });
+
+    this.subscriptionArr.push(this.conversationSubscribe);
   };
 
   /* TO OVERFLOW THE TEXTAREA DEPENDING ON NUMBER OF TEXT */
@@ -120,8 +134,75 @@ export class ChatComponent implements OnDestroy, OnInit, AfterViewInit {
 
   /* CHAT SETTINGS */
   isChatSettingOpen: boolean = false;
+  confirmationData: confirmModal = confirm;
   public toggleChatSetting = (): void => {
     this.isChatSettingOpen = !this.isChatSettingOpen;
+  };
+  /* END */
+
+  /* CONFIRMATION MODAL */
+  isConfirmModalOpen: boolean = false;
+  // FOR SUBSCRIPTION
+  private confirmModalSubscription!: Subscription;
+  public monitorConfirmationModal = (): void => {
+    this.confirmModalSubscription = this.popModal
+      .getConfirmModalStatus()
+      .subscribe({
+        next: (value) => (this.isConfirmModalOpen = value),
+        error: (err) =>
+          console.error('Error on Subscribe for Confirmation', err),
+        complete: () => {
+          this.subscriptionArr.push(this.confirmModalSubscription);
+        },
+      });
+  };
+
+  //CONFIRMATION MODAL TOGGLE
+  public openConfirmModal = async (): Promise<void> => {
+    this.isChatSettingOpen = false;
+    this.popModal.setConfirmaModalStatus(true);
+
+    const response = await this.userConfirmationResponse();
+    console.log(response);
+  };
+
+  public userConfirmationResponse = async (): Promise<boolean> => {
+    return await new Promise((resolve, reject) => {
+      this.popModal.getConfirmationModal().subscribe({
+        next: (value) => resolve(value),
+        error: (err) => {
+          console.log('Error subscribe on Subject', err);
+          reject(false);
+        },
+      });
+    });
+  };
+
+  /* END */
+
+  /* CLOSE AI CHAT MODAL */
+  public animateModal: boolean = true;
+  public closeChatAi = (): void => {
+    this.animateModal = false;
+    setTimeout(() => {
+      this.convo.clearConversation();
+      this.popModal.toggleChatModal(false);
+    }, 400);
+  };
+
+  /* END */
+
+  /* CHECK INTERNET CONNECTION */
+  public isInternetActive: boolean | null = null;
+  private internetSubsription!: Subscription;
+
+  public getInternetConnection = () => {
+    this.internetSubsription = this.network.networkStatus$().subscribe({
+      next: (value) => (this.isInternetActive = value),
+      error: (err) => console.log('Error Subscribe network', err),
+    });
+
+    this.subscriptionArr.push(this.internetSubsription);
   };
 
   ngOnDestroy(): void {

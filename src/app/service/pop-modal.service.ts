@@ -36,6 +36,9 @@ export class PopModalService {
       mode: false,
       isOpen: false,
     });
+
+    /* CHAT MODAL */
+    this.chatModal$ = new BehaviorSubject<boolean>(false);
   }
 
   /* ---------MODAL FOR ERROR ON SIGN IN / SIGN UP------- */
@@ -131,5 +134,18 @@ export class PopModalService {
     this.addTaskModal$.next(status);
   };
 
+  /* --------------- END ---------------------- */
+
+  /* --------------- AI CHAT MODAL ----------------------- */
+
+  private chatModal$: BehaviorSubject<boolean>;
+
+  public getChatModalStatus = () => {
+    return this.chatModal$.asObservable();
+  };
+
+  public toggleChatModal = (isOpen: boolean) => {
+    this.chatModal$.next(isOpen);
+  };
   /* --------------- END ---------------------- */
 }

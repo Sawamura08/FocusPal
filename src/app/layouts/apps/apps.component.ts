@@ -16,6 +16,7 @@ enum buttons {
   styleUrl: './apps.component.scss',
 })
 export class AppsComponent implements OnInit, OnDestroy {
+  private subscriptionArr: Subscription[] = [];
   constructor(
     private route: Router,
     private actRoute: ActivatedRoute,
@@ -33,7 +34,9 @@ export class AppsComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     /* SUBSCRIBE ADDTASK MODAL */
     this.addTaskSubscribe();
-    this.addTaskSubscribe();
+
+    /* SUBSCRIBE FOR CHAT MODAL */
+    this.getChatModalStatus();
 
     // SET THE URL PATH
     this.valuePath = this.location.path();
@@ -49,6 +52,8 @@ export class AppsComponent implements OnInit, OnDestroy {
     return this.valuePath === path ? 'selected' : '';
   };
 
+  /* ---------------- MODALS ----------------- */
+
   /* SUBSCRIBE ADDTASK MODAL */
   public modalStatus: updateMode | null = null;
   private addTaskSubscription!: Subscription;
@@ -57,7 +62,10 @@ export class AppsComponent implements OnInit, OnDestroy {
       next: (value) => (this.modalStatus = value),
       error: (err) => console.error('Error Subscribe Add Task', err),
     });
+
+    this.subscriptionArr.push(this.addTaskSubscription);
   };
+  /* END */
 
   /* OPEN ADD TASK */
   public openModal = () => {
@@ -67,8 +75,26 @@ export class AppsComponent implements OnInit, OnDestroy {
     };
     this.popModal.changeAddTaskModalStatus(mode);
   };
+  /* END */
+
+  /* CHAT WITH SYDNEY MODAL */
+
+  public isAiChatOpen: boolean = false;
+  private chatModalSubscription!: Subscription;
+
+  private getChatModalStatus = () => {
+    this.chatModalSubscription = this.popModal.getChatModalStatus().subscribe({
+      next: (value) => (this.isAiChatOpen = value),
+      error: (err) => console.error('Error on Subscribe chatModal', err),
+    });
+
+    this.subscriptionArr.push(this.chatModalSubscription);
+  };
+
+  /* END */
 
   ngOnDestroy(): void {
-    if (this.addTaskSubscription) this.addTaskSubscription.unsubscribe();
+    if (this.subscriptionArr)
+      this.subscriptionArr.forEach((subs) => subs.unsubscribe());
   }
 }

@@ -20,8 +20,12 @@
   <h6>{{ headerText }}</h6>
 
   <figure>
-    <div class="img-container">
-      <img src="/FocusPal Logo/3.png" alt="Focus Pal Logo" />
+    <div class="img-container" (click)="openChatAi()">
+      <img
+        src="/FocusPal Logo/3.png"
+        alt="Focus Pal Logo"
+        [ngClass]="animationClass"
+      />
     </div>
   </figure>
 </section>

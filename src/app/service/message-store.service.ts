@@ -66,4 +66,13 @@ export class MessageStoreService {
       });
     });
   };
+  /* END */
+
+  /* CLEAR CONVERSATION SUBJECT  */
+  /* IT DUPLICATES WHEN I INTIALIZE AGAIN NEEDS TO CLEAR IT*/
+
+  public clearConversation = () => {
+    this.conversation$.next([]);
+  };
+  /* END */
 }

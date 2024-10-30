@@ -80,6 +80,20 @@
         width: 3rem;
         cursor: pointer;
       }
+
+      .animated {
+        animation: logo 2s cubic-bezier(0.42, 0, 0.58, 1) infinite;
+      }
+
+      @keyframes logo {
+        25% {
+          transform: rotate(30deg);
+          filter: drop-shadow(0 0 5px $shadow);
+        }
+        75% {
+          transform: rotate(-30deg);
+        }
+      }
     }
   }
 
