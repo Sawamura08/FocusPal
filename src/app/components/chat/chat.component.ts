@@ -4,6 +4,7 @@ import {
   ElementRef,
   OnDestroy,
   OnInit,
+  AfterViewInit,
 } from '@angular/core';
 import { chatBot } from '../../class/chat-bot';
 import { combineLatest, Subscription } from 'rxjs';
@@ -18,7 +19,7 @@ declare var AOS: any;
   templateUrl: './chat.component.html',
   styleUrl: './chat.component.scss',
 })
-export class ChatComponent implements OnDestroy, OnInit {
+export class ChatComponent implements OnDestroy, OnInit, AfterViewInit {
   private subscriptionArr!: Subscription[];
   constructor(
     private convo: MessageStoreService,
@@ -37,7 +38,9 @@ export class ChatComponent implements OnDestroy, OnInit {
 
     /* initialized the AOS LIBRARY */
     AOS.init();
+  }
 
+  ngAfterViewInit(): void {
     this.scrollToBottom();
   }
 
@@ -84,10 +87,18 @@ export class ChatComponent implements OnDestroy, OnInit {
   public sendPrompt = () => {
     if (this.userInput != '') {
       this.convo.insertConversation(this.userInput);
+      setTimeout(() => {
+        this.scrollToBottom();
+      }, 100);
       /* SENT PROMPT TO GEMINI */
       this.gemini.sendPromptRequest(this.userInput, this.histories).subscribe({
         next: (value) => {},
         error: (err) => console.error(err),
+        complete: () => {
+          setTimeout(() => {
+            this.scrollToBottom();
+          }, 100);
+        },
       });
     }
 
@@ -101,11 +112,17 @@ export class ChatComponent implements OnDestroy, OnInit {
 
   /* SCROLL THE CHAT BOX TO BOTTOM */
   @ViewChild('chatBox') chatBox!: ElementRef;
-  public scrollToBottom = () => {
-    /* const height = this.chatBox.nativeElement.scrollHeight;
-    console.log(height); */
+  public scrollToBottom = (): void => {
+    this.chatBox.nativeElement.scrollTop =
+      this.chatBox.nativeElement.scrollHeight;
   };
   /* END */
+
+  /* CHAT SETTINGS */
+  isChatSettingOpen: boolean = false;
+  public toggleChatSetting = (): void => {
+    this.isChatSettingOpen = !this.isChatSettingOpen;
+  };
 
   ngOnDestroy(): void {
     if (this.subscriptionArr)

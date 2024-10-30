@@ -22,6 +22,8 @@
     color: $neutralColor;
     background: linear-gradient(to top, $mainColor, $shadow);
     box-shadow: 0 2px 3px $textColor;
+    z-index: 3;
+    position: relative;
 
     .back-container {
       width: 20%;
@@ -91,6 +93,29 @@
         }
       }
     }
+
+    .conversation-setting-container {
+      position: absolute;
+      z-index: 2;
+      padding: 1rem;
+      border-radius: 1rem;
+      color: $neutralColor;
+      border: 1px solid $neutralColor;
+      background: linear-gradient(to right, $mainColor, $shadow);
+      top: 50%;
+      right: 10%;
+      transform: translate(5%, 50%);
+      width: 12rem;
+
+      .container-content {
+        width: 100%;
+
+        .clear-data {
+          display: flex;
+          justify-content: space-between;
+        }
+      }
+    }
   }
 
   .conversation-container {
@@ -105,6 +130,7 @@
       overflow-x: hidden;
       overflow-y: scroll;
       padding: 0.5rem 1rem;
+      scroll-behavior: smooth;
 
       .conversation {
         width: 100%;
@@ -214,6 +240,8 @@
   }
 
   .message-input-container {
+    z-index: 3;
+    position: relative;
     width: 100%;
     box-shadow: 0 -2px 3px $textColor;
     padding-block-start: 0.5rem;

@@ -13,10 +13,19 @@
       </div>
     </div>
     <div class="others-container">
-      <div class="others">
+      <div class="others" (click)="toggleChatSetting()">
         <span class="dots"><i class="fa-solid fa-circle"></i></span
         ><span class="dots"><i class="fa-solid fa-circle"></i></span
         ><span class="dots"><i class="fa-solid fa-circle"></i></span>
+      </div>
+    </div>
+
+    <div class="conversation-setting-container" *ngIf="isChatSettingOpen">
+      <div class="container-content">
+        <div class="clear-data">
+          <h4>Delete Chats</h4>
+          <span class="icon"><i class="fa-sharp fa-solid fa-trash"></i></span>
+        </div>
       </div>
     </div>
   </header>
