@@ -11,9 +11,11 @@
     </div>
     <form action="" class="modal-content" [formGroup]="userInput">
       <section class="form-input select">
-        <span class="icon"><i class="fa-regular fa-clipboard-list"></i></span>
+        <div class="label-container">
+          <span class="icon"><i class="fa-regular fa-clipboard-list"></i></span>
+          <p class="label">Category</p>
+        </div>
         <div class="user-select">
-          <p class="label">Task Category</p>
           <div class="category" id="category">
             <button
               type="button"
@@ -40,32 +42,45 @@
       </section>
 
       <section class="form-input select">
-        <span class="icon"><i class="fa-regular fa-clipboard-list"></i></span>
+        <div class="label-container">
+          <span class="icon"><i class="fa-regular fa-clipboard-list"></i></span>
+          <p class="label">Tags</p>
+        </div>
         <div class="user-select">
-          <p class="label">Task Priority</p>
+          <div class="category tags" id="priority">
+            <button
+              type="button"
+              class="btn-category"
+              *ngFor="let tags of addTaskConfig.taskTags; index as i"
+              (click)="selectTags(i)"
+              [ngClass]="{ selected: tagIndex === i }"
+            >
+              {{ tags }}
+            </button>
+          </div>
+        </div>
+        <div class="error-container">
+          <div class="error-message" *ngIf="!validator('tags')">
+            <p>This field is required</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="form-input select">
+        <div class="label-container">
+          <span class="icon"><i class="fa-regular fa-clipboard-list"></i></span>
+          <p class="label">Priority</p>
+        </div>
+        <div class="user-select">
           <div class="category" id="priority">
             <button
               type="button"
               class="btn-category"
-              (click)="selectPriority(0)"
-              [ngClass]="{ selected: priorityIndex === 0 }"
+              *ngFor="let level of addTaskConfig.taskLevels; index as i"
+              (click)="selectPriority(i)"
+              [ngClass]="{ selected: priorityIndex === i }"
             >
-              Low</button
-            ><button
-              type="button"
-              class="btn-category"
-              (click)="selectPriority(1)"
-              [ngClass]="{ selected: priorityIndex === 1 }"
-            >
-              Medium
-            </button>
-            <button
-              type="button"
-              class="btn-category"
-              (click)="selectPriority(2)"
-              [ngClass]="{ selected: priorityIndex === 2 }"
-            >
-              High
+              {{ level }}
             </button>
           </div>
         </div>

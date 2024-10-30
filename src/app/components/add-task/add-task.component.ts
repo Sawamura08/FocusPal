@@ -40,6 +40,7 @@ export class AddTaskComponent implements OnInit, OnDestroy {
       startDate: ['', Validators.required],
       dueDate: ['', Validators.required],
       taskCategory: ['', Validators.required],
+      tags: ['', Validators.required],
     });
 
     this.addTaskConfig = new AddTaskInput(this.userInput);
@@ -62,7 +63,7 @@ export class AddTaskComponent implements OnInit, OnDestroy {
   };
 
   /* REACTIVE FORMS */
-  private addTaskConfig: AddTaskInput;
+  protected addTaskConfig: AddTaskInput;
   public userInput: FormGroup;
 
   /* VALIDATORS */
@@ -91,6 +92,10 @@ export class AddTaskComponent implements OnInit, OnDestroy {
 
   get dueDate() {
     return this.userInput.get('dueDate');
+  }
+
+  get tags() {
+    return this.userInput.get('tags');
   }
 
   /* END */
@@ -126,6 +131,15 @@ export class AddTaskComponent implements OnInit, OnDestroy {
     // this will set the value for the form TaskPriority
     if (this.priority != null) {
       this.addTaskConfig.setValueOnChange(this.priorityIndex, 'priority');
+    }
+  };
+
+  public tagIndex: number | null = null;
+  public selectTags = (index: number) => {
+    this.tagIndex = index;
+    // this will set the value for the form taskTags
+    if (this.tags != null) {
+      this.addTaskConfig.setValueOnChange(this.tagIndex, 'tags');
     }
   };
   /* END */
@@ -187,7 +201,7 @@ export class AddTaskComponent implements OnInit, OnDestroy {
       this.popModal.changeAddTaskModalStatus(mode);
     }, 500);
   };
-  /* NED */
+  /* END */
 
   /* SUBMIT FORMS */
 

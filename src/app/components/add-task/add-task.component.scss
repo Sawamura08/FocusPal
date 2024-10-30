@@ -54,33 +54,36 @@
 
       .select {
         width: 100%;
-        display: flex;
-        justify-content: space-between;
-        flex-wrap: wrap;
 
-        .icon {
-          display: grid;
-          place-items: center;
-          font-size: 2rem;
-          color: $textColor;
-          width: 15%;
-        }
+        .label-container {
+          width: 100%;
+          display: flex;
+          align-items: center;
+          gap: 0.25rem;
 
-        .user-select {
-          width: 80%;
+          .icon {
+            font-size: 2rem;
+            color: $textColor;
+          }
           .label {
             width: 100%;
             font-weight: bold;
             font-family: $subText;
             margin-block-end: 0;
-            font-size: 0.8rem;
+            font-size: 1rem;
             padding-inline-start: 3px;
           }
+        }
+
+        .user-select {
+          width: 100%;
 
           .category {
             margin-block-start: 0.25rem;
-            width: 100%;
+            margin-inline: auto;
+            width: 90%;
             display: flex;
+            justify-content: center;
             gap: 1rem;
 
             .btn-category {
@@ -102,6 +105,15 @@
               border: 1px solid $shadow;
               opacity: 1;
               color: $neutralColor;
+            }
+          }
+
+          .tags {
+            flex-wrap: wrap;
+            gap: 0.5rem;
+
+            .btn-category {
+              width: 30%;
             }
           }
         }
@@ -239,7 +251,7 @@
           font-weight: bold;
           font-family: $subText;
           margin-block-end: 0;
-          font-size: 0.8rem;
+          font-size: 1rem;
           padding-inline-start: 3px;
         }
 

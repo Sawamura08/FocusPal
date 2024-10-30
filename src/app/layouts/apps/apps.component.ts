@@ -3,6 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { PopModalService, updateMode } from '../../service/pop-modal.service';
 import { Subscription } from 'rxjs';
 import { Location } from '@angular/common';
+import { buttonValues, navigation } from '../../class/navigation';
 
 enum buttons {
   HOME,
@@ -15,21 +16,16 @@ enum buttons {
   templateUrl: './apps.component.html',
   styleUrl: './apps.component.scss',
 })
-export class AppsComponent implements OnInit, OnDestroy {
+export class AppsComponent extends navigation implements OnInit, OnDestroy {
   private subscriptionArr: Subscription[] = [];
   constructor(
-    private route: Router,
-    private actRoute: ActivatedRoute,
+    route: Router,
+    actRoute: ActivatedRoute,
     private popModal: PopModalService,
-    private location: Location
-  ) {}
-  buttonStatus = [
-    { status: buttons.HOME, label: 'apps', path: '/apps/apps' },
-    { status: buttons.CALENDAR, label: 'calendar', path: '/apps/calendar' },
-    { status: buttons.CHECK_LIST, label: 'task', path: '/apps/task' },
-    { status: buttons.CLOCK, label: 'clock', path: '/apps/clock' },
-  ];
-  valuePath: string | null = '/apps/apps';
+    location: Location
+  ) {
+    super(location, route, actRoute);
+  }
 
   ngOnInit(): void {
     /* SUBSCRIBE ADDTASK MODAL */
@@ -42,10 +38,8 @@ export class AppsComponent implements OnInit, OnDestroy {
     this.valuePath = this.location.path();
   }
 
-  public navigate = (button: { path: string; label: string }) => {
-    this.valuePath = button.path;
-
-    this.route.navigate([button.label], { relativeTo: this.actRoute });
+  public navigate = (button: buttonValues) => {
+    super.navigateRoute(button);
   };
 
   public buttonStyle = (path: string) => {
@@ -59,7 +53,11 @@ export class AppsComponent implements OnInit, OnDestroy {
   private addTaskSubscription!: Subscription;
   private addTaskSubscribe = () => {
     this.addTaskSubscription = this.popModal.getAddTaskModalStatus().subscribe({
-      next: (value) => (this.modalStatus = value),
+      next: (value) =>
+        (this.modalStatus = {
+          mode: false,
+          isOpen: true,
+        }),
       error: (err) => console.error('Error Subscribe Add Task', err),
     });
 
