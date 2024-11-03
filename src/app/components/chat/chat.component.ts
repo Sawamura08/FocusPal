@@ -139,8 +139,12 @@ export class ChatComponent implements OnDestroy, OnInit, AfterViewInit {
   /* SCROLL THE CHAT BOX TO BOTTOM */
   @ViewChild('chatBox') chatBox!: ElementRef;
   public scrollToBottom = (): void => {
-    this.chatBox.nativeElement.scrollTop =
-      this.chatBox.nativeElement.scrollHeight;
+    try {
+      this.chatBox.nativeElement.scrollTop =
+        this.chatBox.nativeElement.scrollHeight;
+    } catch (err) {
+      console.error('Error! Fetching Scroll unsucessful', err);
+    }
   };
   /* END */
 
@@ -214,7 +218,7 @@ export class ChatComponent implements OnDestroy, OnInit, AfterViewInit {
 
   public getInternetConnection = () => {
     this.internetSubsription = this.network.networkStatus$().subscribe({
-      next: (value) => (this.isInternetActive = value),
+      next: (value) => (this.isInternetActive = false),
       error: (err) => console.log('Error Subscribe network', err),
     });
 

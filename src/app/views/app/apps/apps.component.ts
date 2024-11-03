@@ -7,6 +7,7 @@ import {
   SimpleChanges,
   OnDestroy,
   inject,
+  WritableSignal,
 } from '@angular/core';
 import { headerType } from '../../../components/header/header.component';
 import { greetings } from '../../../JSON/greetings';
@@ -14,7 +15,7 @@ import { fetchResponse } from '../../../interfaces/fetch-response';
 import { FetchHomeDataService } from '../../../service/fetch-home-data.service';
 import { SetProgressBar } from '../../../class/set-progress-bar';
 import { FilterTaskService } from '../../../database/filter-task.service';
-import { Schedule, Task } from '../../../database/db';
+import { Schedule, Task, User } from '../../../database/db';
 import { combineLatest, Subscription, interval } from 'rxjs';
 import { FilterScheduleService } from '../../../database/filter-schedule.service';
 import { WeeklyScheduleService } from '../../../database/weekly-schedule.service';
@@ -87,11 +88,9 @@ export class AppsComponent implements OnInit, OnChanges, OnDestroy {
 
   /* FETCH USERNAME */
   public username: string | null = null;
-  public getUser = async () => {
-    this.session.fetchUserData().subscribe({
-      next: (value) => (this.username = value.userName),
-      error: (err) => console.error(err),
-    });
+  public userInfo!: User;
+  public getUser = () => {
+    this.username = this.session.getUser()().userName;
   };
 
   /* END */

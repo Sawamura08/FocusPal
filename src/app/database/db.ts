@@ -11,6 +11,7 @@ export interface Task {
   dueDate: Date;
   createdAt: Date;
   taskCategory: number; // 0 - personal; 1- academic
+  tags: number; // the tags is depends on the task category
 
   isSync: number;
   isUpdated: number;
@@ -43,9 +44,9 @@ export class localDB extends Dexie {
 
   constructor() {
     super('myDB');
-    this.version(24).stores({
+    this.version(25).stores({
       taskList:
-        '++taskId, userId, title,description,subTask, status, priority, dueDate, createdAt, taskCategory, isSync, isUpdated,isQueued',
+        '++taskId, userId, title,description,subTask, status, priority, dueDate, createdAt, taskCategory, tags ,isSync, isUpdated,isQueued',
       userList: 'userId,userName',
       schedList:
         '++schedId,userId,title,date,startTime,endTime,repeat,type,isActive,daysOfWeek,location',

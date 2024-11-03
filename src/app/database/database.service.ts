@@ -44,6 +44,7 @@ export class DatabaseService {
       dueDate: userInputs.dueDate,
       createdAt: new Date(currentDate!),
       taskCategory: userInputs.taskCategory,
+      tags: userInputs.tags,
 
       isSync: 0,
       isUpdated: 0,
@@ -60,22 +61,13 @@ export class DatabaseService {
 
   /* UPDATE SPECIFIC TASK */
   public updateTask = async (update: Task) => {
-    await db.taskList
-      .update(1, {
-        description: update.description,
-        subTask: update.subTask,
-        status: update.status,
-        priority: update.priority,
-        dueDate: update.dueDate,
-        createdAt: update.createdAt,
-      })
-      .then((udpated) => {
-        if (udpated) {
-          console.log('Success');
-        } else {
-          console.log('Error');
-        }
-      });
+    await db.taskList.update(1, update).then((udpated) => {
+      if (udpated) {
+        console.log('Success');
+      } else {
+        console.log('Error');
+      }
+    });
   };
 
   /* DELETE TASK */

@@ -29,7 +29,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { UpdateTaskModeService } from '../../service/update-task-mode.service';
 import { slideRight } from '../../animation/slide-right.animate';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { confirm } from '../../interfaces/export.object';
+import { categories, confirm } from '../../interfaces/export.object';
 
 @Component({
   selector: 'app-add-task',
@@ -62,6 +62,7 @@ export class AddTaskComponent implements OnInit, OnDestroy {
     });
 
     this.addTaskConfig = new AddTaskInput(this.userInput);
+    this.tagList = this.addTaskConfig.taskTagsPersonal;
   }
   ngOnInit(): void {
     /* SUBSCRIBE ADDTASK MODAL */
@@ -77,7 +78,7 @@ export class AddTaskComponent implements OnInit, OnDestroy {
   /* GET SESSION */
   private userId: number | null = null;
   private getSession = async () => {
-    this.userId = await this.session.getUser();
+    this.userId = this.session.getUser()().userId;
   };
 
   /* REACTIVE FORMS */
@@ -133,11 +134,16 @@ export class AddTaskComponent implements OnInit, OnDestroy {
 
   /* SETTING UP BUTTON ON-CLICKS ON FORMS */
   categoryIndex: number | null = null;
+  public personalCategory: number = categories.PERSONAL;
   public selectCategory = (index: number) => {
     this.categoryIndex = index;
 
     // this will set the value for the form TaskCategory
     if (this.categoryIndex != null) {
+      this.tagList =
+        this.categoryIndex === this.personalCategory
+          ? this.addTaskConfig.taskTagsPersonal
+          : this.addTaskConfig.taskTagsAcademic;
       this.addTaskConfig.setValueOnChange(this.categoryIndex, 'taskCategory');
     }
   };
@@ -153,6 +159,7 @@ export class AddTaskComponent implements OnInit, OnDestroy {
   };
 
   public tagIndex: number | null = null;
+  public tagList: string[] = [];
   public selectTags = (index: number) => {
     this.tagIndex = index;
     // this will set the value for the form taskTags
@@ -167,7 +174,7 @@ export class AddTaskComponent implements OnInit, OnDestroy {
   subTaksInput: string = '';
   isSubTaskMode: boolean = false;
   protected closing: boolean = false;
-  subTaskList: string[] = ['hello'];
+  subTaskList: string[] = [];
   public subTasks = () => {
     if (this.isSubTaskMode && this.subTaksInput != '') {
       this.setSubTasks(this.subTaksInput);
@@ -224,11 +231,7 @@ export class AddTaskComponent implements OnInit, OnDestroy {
   /* SUBMIT FORMS */
 
   public submit = async () => {
-    this.addTaskConfig.setCategoryValue(
-      this.categoryIndex!,
-      this.priorityIndex!,
-      this.subTaskList
-    );
+    this.addTaskConfig.setCategoryValue(this.subTaskList);
 
     this.userInput.markAllAsTouched();
 

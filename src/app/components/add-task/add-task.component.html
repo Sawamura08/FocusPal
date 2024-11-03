@@ -56,7 +56,7 @@
             <button
               type="button"
               class="btn-category"
-              *ngFor="let tags of addTaskConfig.taskTags; index as i"
+              *ngFor="let tags of tagList; index as i"
               (click)="selectTags(i)"
               [ngClass]="{ selected: tagIndex === i }"
             >

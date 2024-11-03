@@ -1,112 +1,123 @@
 <section class="chat-section" [@slide] *ngIf="animateModal">
-  <div class="chat-container" *ngIf="isInternetActive; else elseBlock">
-    <header>
-      <div class="back-container">
-        <span class="arrow" (click)="closeChatAi()"
-          ><i class="fa-sharp fa-light fa-arrow-left"></i
-        ></span>
+  <!-- SHOW CHAT BOX -->
+  @if (isInternetActive) {
+  <header>
+    <div class="back-container">
+      <span class="arrow" (click)="closeChatAi()"
+        ><i class="fa-sharp fa-light fa-arrow-left"></i
+      ></span>
+    </div>
+    <div class="header-content">
+      <figure class="img-container">
+        <img src="FocusPal Logo/4.png" alt="" />
+      </figure>
+      <div class="content-info">
+        <h5 class="bot-name">Sydney</h5>
+        <p class="sub-text">Chabot Assistant</p>
       </div>
-      <div class="header-content">
-        <figure class="img-container">
-          <img src="FocusPal Logo/4.png" alt="" />
-        </figure>
-        <div class="content-info">
-          <h5 class="bot-name">Sydney</h5>
-          <p class="sub-text">Chabot Assistant</p>
+    </div>
+    <div class="others-container">
+      <div class="others" (click)="toggleChatSetting()">
+        <span class="dots"><i class="fa-solid fa-circle"></i></span
+        ><span class="dots"><i class="fa-solid fa-circle"></i></span
+        ><span class="dots"><i class="fa-solid fa-circle"></i></span>
+      </div>
+    </div>
+
+    <div class="conversation-setting-container" *ngIf="isChatSettingOpen">
+      <div class="container-content">
+        <div class="clear-data" (click)="openConfirmModal()">
+          <h4>Delete Chats</h4>
+          <span class="icon"><i class="fa-sharp fa-solid fa-trash"></i></span>
         </div>
       </div>
-      <div class="others-container">
-        <div class="others" (click)="toggleChatSetting()">
-          <span class="dots"><i class="fa-solid fa-circle"></i></span
-          ><span class="dots"><i class="fa-solid fa-circle"></i></span
-          ><span class="dots"><i class="fa-solid fa-circle"></i></span>
-        </div>
-      </div>
+    </div>
+  </header>
 
-      <div class="conversation-setting-container" *ngIf="isChatSettingOpen">
-        <div class="container-content">
-          <div class="clear-data" (click)="openConfirmModal()">
-            <h4>Delete Chats</h4>
-            <span class="icon"><i class="fa-sharp fa-solid fa-trash"></i></span>
-          </div>
-        </div>
-      </div>
-    </header>
+  <!-- CONVERSATION -->
+  <section class="conversation-container">
+    <div class="conversation-content" #chatBox>
+      <ul class="conversation" *ngFor="let convo of conversation; index as i">
+        <!-- MESSAGE OF USER -->
+        <li class="message chat" [appAnimateOnce]="convo.isMessageAnimated">
+          <p>{{ convo.message }}</p>
+        </li>
 
-    <!-- CONVERSATION -->
-    <section class="conversation-container">
-      <div class="conversation-content" #chatBox>
-        <ul class="conversation" *ngFor="let convo of conversation; index as i">
-          <!-- MESSAGE OF USER -->
-          <li class="message chat" [appAnimateOnce]="convo.isMessageAnimated">
-            <p>{{ convo.message }}</p>
-          </li>
+        <!-- RESPONSE OF AI -->
+        <li class="response">
+          <figure>
+            <img
+              src="FocusPal Logo/4.png"
+              alt="Sydney Image"
+              class="sydney-img"
+            />
+          </figure>
 
-          <!-- RESPONSE OF AI -->
-          <li class="response">
-            <figure>
-              <img
-                src="FocusPal Logo/4.png"
-                alt="Sydney Image"
-                class="sydney-img"
-              />
-            </figure>
-
-            <p
-              class="chat animate__animated animate__bounceIn loading"
-              *ngIf="convo.response === ''"
-            >
-              <span class="load"
-                ><i class="fa-sharp-duotone fa-solid fa-circle"></i>
-                <i class="fa-sharp-duotone fa-solid fa-circle"></i>
-                <i class="fa-sharp-duotone fa-solid fa-circle"></i
-              ></span>
-            </p>
-            <p
-              class="chat"
-              *ngIf="convo.response != ''"
-              [appAnimateOnce]="convo.isResponseAnimated"
-            >
-              {{ convo.response }}
-            </p>
-          </li>
-        </ul>
-      </div>
-    </section>
-
-    <!-- MESSAGE -->
-    <section class="message-input-container">
-      <form action="" class="input-container">
-        <div class="inputs">
-          <textarea
-            #textarea
-            name="prompt"
-            id="prompt"
-            placeholder="Ask me Anything..."
-            (input)="overflowTextArea()"
-            [(ngModel)]="userInput"
-          ></textarea>
-        </div>
-        <div class="btn-container">
-          <button
-            class="submit"
-            (click)="sendPrompt()"
-            [ngClass]="{
-              isActive: userInput != ''
-            }"
+          <p
+            class="chat animate__animated animate__bounceIn loading"
+            *ngIf="convo.response === ''"
           >
-            <i class="fa-solid fa-paper-plane"></i>
-          </button>
-        </div>
-      </form>
-    </section>
-  </div>
+            <span class="load"
+              ><i class="fa-sharp-duotone fa-solid fa-circle"></i>
+              <i class="fa-sharp-duotone fa-solid fa-circle"></i>
+              <i class="fa-sharp-duotone fa-solid fa-circle"></i
+            ></span>
+          </p>
+          <p
+            class="chat"
+            *ngIf="convo.response != ''"
+            [appAnimateOnce]="convo.isResponseAnimated"
+          >
+            {{ convo.response }}
+          </p>
+        </li>
+      </ul>
+    </div>
+  </section>
 
-  <ng-template #elseBlock>
-    <section class="no-internet">
-      <h1>No internet</h1>
-    </section>
-  </ng-template>
+  <!-- MESSAGE -->
+  <section class="message-input-container">
+    <form action="" class="input-container">
+      <div class="inputs">
+        <textarea
+          #textarea
+          name="prompt"
+          id="prompt"
+          placeholder="Ask me Anything..."
+          (input)="overflowTextArea()"
+          [(ngModel)]="userInput"
+        ></textarea>
+      </div>
+      <div class="btn-container">
+        <button
+          class="submit"
+          (click)="sendPrompt()"
+          [ngClass]="{
+            isActive: userInput != ''
+          }"
+        >
+          <i class="fa-solid fa-paper-plane"></i>
+        </button>
+      </div>
+    </form>
+  </section>
+  } @else {
+  <section class="no-internet-container">
+    <div class="no-internet-content">
+      <figure>
+        <img src="FocusPal Logo/no-internet.png" alt="" />
+      </figure>
+      <h3>Opps!</h3>
+      <p>
+        It seems there is something wrong with your internet connection, Please
+        connect to you internet and try again
+      </p>
+      <div class="btn-container">
+        <button class="btn">Try Again</button>
+      </div>
+    </div>
+  </section>
+  }
 </section>
 
 <div class="confirm-modal" *ngIf="isConfirmModalOpen">

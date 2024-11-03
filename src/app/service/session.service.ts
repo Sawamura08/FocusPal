@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { db, User } from '../database/db';
 import { BehaviorSubject } from 'rxjs';
 
@@ -7,11 +7,9 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class SessionService {
   constructor() {
-    this.session$ = new BehaviorSubject<User>({ userId: 0, userName: '' });
-    this.getUser();
+    this.fetchUserInfo();
   }
-
-  protected session$!: BehaviorSubject<User>;
+  private session = signal<User>({ userId: 0, userName: '' });
 
   /* CREATE A SESSION FOR THE USER */
   public addUser = async (user: User) => {
@@ -21,26 +19,19 @@ export class SessionService {
         userName: user.userName,
       };
       await db.userList.add(newUser);
-      this.session$.next(newUser);
+      this.session.set(newUser);
     } catch (err) {
       console.error('Error creating User', err);
     }
   };
 
-  /* GET THE ID OF THE LOGGED USER */
-  public getUser = async () => {
+  public fetchUserInfo = async () => {
     const list = await db.userList.toArray();
-    const userData = {
-      userId: list[0].userId,
-      userName: list[0].userName,
-    };
-    if (list) {
-      this.session$.next(userData);
-    }
-    return list[0].userId;
+    this.session.set(list[0]);
   };
 
-  public fetchUserData = () => {
-    return this.session$.asObservable();
+  /* GET THE ID OF THE LOGGED USER */
+  public getUser = () => {
+    return this.session;
   };
 }

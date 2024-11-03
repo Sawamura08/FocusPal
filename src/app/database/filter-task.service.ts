@@ -20,18 +20,9 @@ export class FilterTaskService {
       liveQuery(() => this.getTaskByDueDate())
     );
 
-    this.allTaskByPriorities$ = this.level
-      .priorityLevel$()
-      .pipe(
-        switchMap((level: number) =>
-          from(liveQuery(() => this.getTaskByPriority(level)))
-        )
-      );
+    this.allTaskByPriorities$ = this.observePriorityLevelTasks();
   }
 
-  private stringToDate(dateString: string): Date {
-    return new Date(dateString);
-  }
   /*  FETCHING ALL TASK BASED ON STATUS */
   public getTaskByStatus = async (): Promise<Task[]> => {
     return await db.taskList.where('status').equals(0).sortBy('dueDate');
@@ -51,6 +42,15 @@ export class FilterTaskService {
   };
 
   /* FETCHING ALL TASK BASED ON PRIORITY AND STATUS */
+  public observePriorityLevelTasks = () => {
+    return this.level
+      .priorityLevel$()
+      .pipe(
+        switchMap((level: number) =>
+          from(liveQuery(() => this.getTaskByPriority(level)))
+        )
+      );
+  };
   public getTaskByPriority = async (level: number): Promise<Task[]> => {
     return await db.taskList
       .where('status')

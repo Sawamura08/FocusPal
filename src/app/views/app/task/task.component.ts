@@ -54,8 +54,8 @@ export class TaskComponent {
     });
   }
   /* GET SESSION FOR USER */
-  public getId = async () => {
-    const id = await this.session.getUser();
+  public getId = () => {
+    const id = this.session.getUser()().userId;
 
     this.userId = id;
   };
@@ -70,6 +70,7 @@ export class TaskComponent {
     });
   };
 
+  /* FILTER WHETHER ON GOING OR FINISH */
   public filterTaskByStatus = () => {
     this.filterDB.allTaskByStatus$.subscribe(
       (value) => (this.taskList = value)

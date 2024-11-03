@@ -26,13 +26,7 @@ export class AddTaskInput {
 
   /* SET VALUES */
 
-  public setCategoryValue = (
-    categoryValue: number,
-    priority: number,
-    subTask: string[]
-  ) => {
-    /* this.userInput.get('taskCategory')?.setValue(categoryValue);
-    this.userInput.get('priority')?.setValue(priority); */
+  public setCategoryValue = (subTask: string[]) => {
     this.userInput.get('subTask')?.setValue(subTask);
   };
 
@@ -50,12 +44,22 @@ export class AddTaskInput {
   public taskLevels: string[] = ['Low', 'Medium', 'High'];
 
   /* TASK TAGS */
-  public taskTags: string[] = [
+  public taskTagsPersonal: string[] = [
     'Health',
     'Finance',
     'Errands',
     'Fitness',
     'Social',
+    'Organization',
+    'Others',
+  ];
+
+  public taskTagsAcademic: string[] = [
+    'Homework',
+    'Exams',
+    'Projects',
+    'Reading',
+    'Research',
     'Organization',
     'Others',
   ];

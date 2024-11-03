@@ -13,6 +13,12 @@ export const confirm: confirmModal = {
   isConfirm: true,
 };
 
+/* CATEGORY CHOICES */
+export const categories = {
+  PERSONAL: 0,
+  ACADEMIC: 1,
+};
+
 /* TOAST MODAL */
 export interface toastModal {
   type: string;

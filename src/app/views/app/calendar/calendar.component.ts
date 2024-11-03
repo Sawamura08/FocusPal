@@ -138,7 +138,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
   /* GET SESSION OF THE USER */
   userId: number | null = null;
   private getSession = async () => {
-    this.userId = await this.session.getUser();
+    this.userId = this.session.getUser()().userId;
   };
 
   /* END OF GET SESSION OF THE USER */

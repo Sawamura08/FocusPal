@@ -56,7 +56,7 @@ export class AddSchedComponent implements OnInit, OnDestroy {
   /* FETCH SESSION */
   private userId?: number;
   public getSession = async () => {
-    this.userId = await this.session.getUser();
+    this.userId = this.session.getUser()().userId;
   };
 
   /* FOR TYPE OF REPEAT = ONE-TIME DAILY CUSTOM */

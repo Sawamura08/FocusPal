@@ -78,11 +78,7 @@ export class AppsComponent extends navigation implements OnInit, OnDestroy {
 
   private getChatModalStatus = () => {
     this.chatModalSubscription = this.popModal.getChatModalStatus().subscribe({
-      next: (value) =>
-        (this.modalStatus = {
-          mode: false,
-          isOpen: true,
-        }),
+      next: (value) => (this.isAiChatOpen = value),
       error: (err) => console.error('Error on Subscribe chatModal', err),
     });
 
