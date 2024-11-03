@@ -6,6 +6,7 @@ import {
   Renderer2,
   SimpleChanges,
   OnDestroy,
+  inject,
 } from '@angular/core';
 import { headerType } from '../../../components/header/header.component';
 import { greetings } from '../../../JSON/greetings';
@@ -14,10 +15,13 @@ import { FetchHomeDataService } from '../../../service/fetch-home-data.service';
 import { SetProgressBar } from '../../../class/set-progress-bar';
 import { FilterTaskService } from '../../../database/filter-task.service';
 import { Schedule, Task } from '../../../database/db';
-import { combineLatest, Subscription } from 'rxjs';
+import { combineLatest, Subscription, interval } from 'rxjs';
 import { FilterScheduleService } from '../../../database/filter-schedule.service';
 import { WeeklyScheduleService } from '../../../database/weekly-schedule.service';
 import { SessionService } from '../../../service/session.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { DestroyRef } from '@angular/core';
+
 @Component({
   selector: 'app-apps',
   templateUrl: './apps.component.html',

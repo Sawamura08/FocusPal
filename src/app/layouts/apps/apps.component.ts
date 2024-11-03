@@ -53,11 +53,7 @@ export class AppsComponent extends navigation implements OnInit, OnDestroy {
   private addTaskSubscription!: Subscription;
   private addTaskSubscribe = () => {
     this.addTaskSubscription = this.popModal.getAddTaskModalStatus().subscribe({
-      next: (value) =>
-        (this.modalStatus = {
-          mode: false,
-          isOpen: true,
-        }),
+      next: (value) => (this.modalStatus = value),
       error: (err) => console.error('Error Subscribe Add Task', err),
     });
 
@@ -82,7 +78,11 @@ export class AppsComponent extends navigation implements OnInit, OnDestroy {
 
   private getChatModalStatus = () => {
     this.chatModalSubscription = this.popModal.getChatModalStatus().subscribe({
-      next: (value) => (this.isAiChatOpen = value),
+      next: (value) =>
+        (this.modalStatus = {
+          mode: false,
+          isOpen: true,
+        }),
       error: (err) => console.error('Error on Subscribe chatModal', err),
     });
 

@@ -5,9 +5,19 @@ import {
   OnDestroy,
   OnInit,
   AfterViewInit,
+  inject,
+  DestroyRef,
 } from '@angular/core';
 import { chatBot } from '../../class/chat-bot';
-import { combineLatest, Subscription } from 'rxjs';
+import {
+  catchError,
+  combineLatest,
+  firstValueFrom,
+  interval,
+  Observable,
+  of,
+  Subscription,
+} from 'rxjs';
 import { chatEntry, histories } from '../../interfaces/message-model.interface';
 import { MessageStoreService } from '../../service/message-store.service';
 import { AicontentGenerationService } from '../../service/aicontent-generation.service';
@@ -16,6 +26,7 @@ import { confirm, confirmModal } from '../../interfaces/export.object';
 import { PopModalService } from '../../service/pop-modal.service';
 import { slideRight } from '../../animation/slide-right.animate';
 import { NetworkStatusService } from '../../service/network-status.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 declare var AOS: any;
 
 @Component({
@@ -26,6 +37,7 @@ declare var AOS: any;
 })
 export class ChatComponent implements OnDestroy, OnInit, AfterViewInit {
   private subscriptionArr: Subscription[] = [];
+  public destroyRef = inject(DestroyRef);
   constructor(
     private convo: MessageStoreService,
     private gemini: AicontentGenerationService,
@@ -163,19 +175,23 @@ export class ChatComponent implements OnDestroy, OnInit, AfterViewInit {
     this.popModal.setConfirmaModalStatus(true);
 
     const response = await this.userConfirmationResponse();
-    console.log(response);
+
+    if (response) {
+      console.log('Delete', response);
+      this.popModal.setConfirmaModalStatus(false);
+    }
   };
 
   public userConfirmationResponse = async (): Promise<boolean> => {
-    return await new Promise((resolve, reject) => {
-      this.popModal.getConfirmationModal().subscribe({
-        next: (value) => resolve(value),
-        error: (err) => {
-          console.log('Error subscribe on Subject', err);
-          reject(false);
-        },
-      });
-    });
+    return firstValueFrom(
+      this.popModal.getConfirmationModal().pipe(
+        takeUntilDestroyed(this.destroyRef),
+        catchError((err) => {
+          console.error('Error in confirmation modal subscription', err);
+          return of(false);
+        })
+      )
+    );
   };
 
   /* END */

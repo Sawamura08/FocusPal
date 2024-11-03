@@ -219,28 +219,29 @@
           gap: 0.5rem;
 
           .list {
-            border-radius: 8px;
-            padding: 0.5rem;
             width: 100%;
-            outline: none;
             background: transparent;
-            text-align: center;
-            border: 1px solid $textColor;
             color: rgba(0, 0, 0, 0.7);
-            font-size: 0.8rem;
 
             display: flex;
-            justify-content: center;
+            justify-content: space-around;
             align-items: center;
 
             p {
+              border-radius: 8px;
+              padding: 0.5rem;
               width: 85%;
+              font-size: 1rem;
+              text-align: center;
+              box-shadow: 0 2px 3px $textColor;
             }
 
             span {
               width: 15%;
+              font-size: 1.25rem;
+              text-align: center;
               .fa-sharp {
-                color: $deleteColor;
+                color: $shadow;
               }
             }
           }
@@ -389,4 +390,18 @@
       left: 0;
     }
   }
+
+  .confirmModal {
+    width: 100%;
+    height: 100dvh;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 4;
+  }
+}
+
+.editMode {
+  height: 100dvh;
+  overflow-y: none;
 }

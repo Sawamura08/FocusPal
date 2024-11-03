@@ -1,6 +1,21 @@
-import { Component, OnDestroy, OnInit, Input } from '@angular/core';
+import {
+  Component,
+  OnDestroy,
+  OnInit,
+  Input,
+  inject,
+  DestroyRef,
+} from '@angular/core';
 import { PopModalService, updateMode } from '../../service/pop-modal.service';
-import { Subscription } from 'rxjs';
+import {
+  catchError,
+  combineLatest,
+  EMPTY,
+  firstValueFrom,
+  interval,
+  of,
+  Subscription,
+} from 'rxjs';
 import {
   FormBuilder,
   FormGroup,
@@ -13,6 +28,8 @@ import { DatabaseService } from '../../database/database.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { UpdateTaskModeService } from '../../service/update-task-mode.service';
 import { slideRight } from '../../animation/slide-right.animate';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { confirm } from '../../interfaces/export.object';
 
 @Component({
   selector: 'app-add-task',
@@ -22,6 +39,7 @@ import { slideRight } from '../../animation/slide-right.animate';
 })
 export class AddTaskComponent implements OnInit, OnDestroy {
   subscriptionArr: Subscription[] = [];
+  private destroyRef = inject(DestroyRef);
   @Input() isUpdateMode: updateMode | null = null;
   constructor(
     private popModal: PopModalService,
@@ -149,7 +167,7 @@ export class AddTaskComponent implements OnInit, OnDestroy {
   subTaksInput: string = '';
   isSubTaskMode: boolean = false;
   protected closing: boolean = false;
-  subTaskList: string[] = [];
+  subTaskList: string[] = ['hello'];
   public subTasks = () => {
     if (this.isSubTaskMode && this.subTaksInput != '') {
       this.setSubTasks(this.subTaksInput);
@@ -236,20 +254,63 @@ export class AddTaskComponent implements OnInit, OnDestroy {
   //
   //
   //
-  public modalModeSubscription!: Subscription;
 
+  /* HANDLES OBSERBABLES FOR UPDATE AND CONFIRMATION MODAL */
   public modalModeObservable = () => {
-    this.modalModeSubscription = this.popModal
-      .getAddTaskModalStatus()
+    const updateMode = this.popModal.getAddTaskModalStatus();
+    const confirmModal = this.popModal.getConfirmModalStatus();
+
+    combineLatest([updateMode, confirmModal])
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        catchError((err) => {
+          console.error('Error On Subscribing on Modals', err);
+          return EMPTY;
+        })
+      )
       .subscribe({
-        next: (value) => (this.isUpdateMode = value),
-        error: (err) => console.log('Error Subscribe on Update Mode', err),
+        next: ([mode, isConfirmModalOpen]) => {
+          this.isUpdateMode = mode;
+          this.isConfirmModalOpen = isConfirmModalOpen;
+        },
       });
   };
+
+  /* CONFIRMATION MODAL */
+
+  public isConfirmModalOpen: boolean | null = null;
+  public confirm = confirm;
+  /* OPEN THE MODAL AND RECIEVE THE USER RESPONSE */
+  public openConfirmationModal = async (subTaskIndex: number) => {
+    this.popModal.setConfirmaModalStatus(true);
+
+    const response = await this.getUserConfirmResponse();
+
+    if (response) {
+      this.popModal.setConfirmaModalStatus(false);
+      this.deleteSubTask(subTaskIndex);
+    }
+  };
+
+  public getUserConfirmResponse = async (): Promise<boolean> => {
+    return firstValueFrom(
+      this.popModal.getConfirmationModal().pipe(
+        takeUntilDestroyed(this.destroyRef),
+        catchError((err) => {
+          console.error('Error on Getting Reponse', err);
+          return of(false);
+        })
+      )
+    );
+  };
+
+  /* END */
 
   /* NG ON DESTORY */
   ngOnDestroy(): void {
     if (this.subscriptionArr)
       this.subscriptionArr.forEach((subs) => subs.unsubscribe());
+
+    //console.log('Component destroyed');
   }
 }

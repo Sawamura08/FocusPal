@@ -15,7 +15,7 @@ export class ModalComponent implements OnInit {
   text: boolean = false;
 
   ngOnInit(): void {
-    this.confirmationModal();
+    this.text = this.confirmationModal();
   }
 
   /* NORMAL MODAL */
@@ -25,9 +25,13 @@ export class ModalComponent implements OnInit {
   /* -------------- UPDATE SECTION --------------- */
 
   /* CONFIRMATION MODAL MODE*/
-
-  public confirmationModal = () => {
-    this.text = this.confirmation ? true : false;
+  // text is used to determined to display the confirmattion text
+  public confirmationModal = (): boolean => {
+    if (this.data.isConfirm || this.confirmation) {
+      this.confirmation = true;
+      return true;
+    }
+    return false;
   };
 
   /* END */

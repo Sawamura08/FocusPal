@@ -1,4 +1,9 @@
-<div class="add-task-background" [@slide] *ngIf="animateModal">
+<div
+  class="add-task-background"
+  [@slide]
+  *ngIf="animateModal"
+  [ngClass]="{ editMode: isConfirmModalOpen }"
+>
   <div class="add-task-container">
     <div class="modal-header">
       <h3 class="title">Add Task</h3>
@@ -123,9 +128,10 @@
       <section class="form-input text-input">
         <p class="label">SubTasks</p>
         <div class="sub-task-header">
+          <!-- *ngIf="isSubTaskMode" -->
+          @if (isSubTaskMode) {
           <div
             class="sub-task-input"
-            *ngIf="isSubTaskMode"
             [ngClass]="{ 'exit-sub-task-input': closing }"
           >
             <input
@@ -139,6 +145,7 @@
               (input)="changeSubTaskText($event)"
             />
           </div>
+          }
           <div class="button-container">
             <button
               class="btn"
@@ -154,11 +161,11 @@
           <li class="list" *ngFor="let list of subTaskList; index as i">
             <p>{{ list }}</p>
             <span
-              ><i
-                class="fa-sharp fa-solid fa-trash"
-                (click)="deleteSubTask(i)"
-              ></i
-            ></span>
+              ><img
+                src="extra/trash.png"
+                alt=""
+                (click)="openConfirmationModal(i)"
+            /></span>
           </li>
         </ul>
       </section>
@@ -374,4 +381,10 @@
       </defs>
     </svg>
   </div>
+
+  @if (isConfirmModalOpen) {
+  <div class="confirmModal">
+    <app-modal [data]="confirm"></app-modal>
+  </div>
+  }
 </div>
