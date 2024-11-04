@@ -1,8 +1,15 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  DestroyRef,
+  inject,
+  Input,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { PopModalService } from '../../service/pop-modal.service';
 import { SessionService } from '../../service/session.service';
-import { Subscription } from 'rxjs';
+import { catchError, of, Subscription } from 'rxjs';
 import { ScheduleService } from '../../database/schedule.service';
 import { termsAnimate } from '../terms-conditions/terms-animate';
 import { Schedule } from '../../database/db';
@@ -10,6 +17,7 @@ import { DatePipe } from '@angular/common';
 import { confirmModal, toastModal } from '../../interfaces/export.object';
 import { DateTimeService } from '../../service/date-time.service';
 import { ToastModalService } from '../../service/toast-modal.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-add-sched',
@@ -19,6 +27,7 @@ import { ToastModalService } from '../../service/toast-modal.service';
 })
 export class AddSchedComponent implements OnInit, OnDestroy {
   userInput: FormGroup;
+  public destroyRef = inject(DestroyRef);
   constructor(
     private fb: FormBuilder,
     private popModal: PopModalService,
@@ -56,7 +65,20 @@ export class AddSchedComponent implements OnInit, OnDestroy {
   /* FETCH SESSION */
   private userId?: number;
   public getSession = async () => {
-    this.userId = this.session.getUser()().userId;
+    this.session
+      .getUser()
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        catchError((err) => {
+          console.error('Error on fetching userInfo', err);
+          return of(undefined);
+        })
+      )
+      .subscribe({
+        next: (value) => {
+          this.userId = value?.userId;
+        },
+      });
   };
 
   /* FOR TYPE OF REPEAT = ONE-TIME DAILY CUSTOM */

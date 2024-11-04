@@ -76,9 +76,22 @@ export class AddTaskComponent implements OnInit, OnDestroy {
   }
 
   /* GET SESSION */
-  private userId: number | null = null;
+  private userId: number | undefined = undefined;
   private getSession = async () => {
-    this.userId = this.session.getUser()().userId;
+    this.session
+      .getUser()
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        catchError((err) => {
+          console.error('Error on fetching userInfo', err);
+          return of(undefined);
+        })
+      )
+      .subscribe({
+        next: (value) => {
+          this.userId = value?.userId;
+        },
+      });
   };
 
   /* REACTIVE FORMS */

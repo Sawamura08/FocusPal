@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, DestroyRef, inject } from '@angular/core';
 import { DatabaseService } from '../../../database/database.service';
 import { Task } from '../../../database/db';
 import { FilterTaskService } from '../../../database/filter-task.service';
@@ -17,6 +17,8 @@ import {
   updateMode,
 } from '../../../service/pop-modal.service';
 import { UpdateTaskModeService } from '../../../service/update-task-mode.service';
+import { catchError, of } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-task',
@@ -36,7 +38,8 @@ export class TaskComponent {
     private updateMode: UpdateTaskModeService
   ) {}
   taskList: Task[] = [];
-  userId!: number;
+  userId!: number | undefined;
+  public destroyRef = inject(DestroyRef);
   ngOnInit(): void {
     /* get the session ID */
     this.getId();
@@ -55,9 +58,20 @@ export class TaskComponent {
   }
   /* GET SESSION FOR USER */
   public getId = () => {
-    const id = this.session.getUser()().userId;
-
-    this.userId = id;
+    this.session
+      .getUser()
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        catchError((err) => {
+          console.error('Error on fetching userInfo', err);
+          return of(undefined);
+        })
+      )
+      .subscribe({
+        next: (value) => {
+          this.userId = value?.userId;
+        },
+      });
   };
   /* END */
 

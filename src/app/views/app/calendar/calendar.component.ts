@@ -1,7 +1,20 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  DestroyRef,
+  inject,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import { Calendar, CalendarDate } from '../../../class/calendar';
 import { SessionService } from '../../../service/session.service';
-import { Subscription, Subject, takeUntil, combineLatest } from 'rxjs';
+import {
+  Subscription,
+  Subject,
+  takeUntil,
+  combineLatest,
+  catchError,
+  of,
+} from 'rxjs';
 import { Schedule } from '../../../database/db';
 import { ScheduleService } from '../../../database/schedule.service';
 import { DatePipe } from '@angular/common';
@@ -10,6 +23,7 @@ import { ToastrService } from 'ngx-toastr';
 import { ToastModalService } from '../../../service/toast-modal.service';
 import { toastModal } from '../../../interfaces/export.object';
 import { WeeklyScheduleService } from '../../../database/weekly-schedule.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-calendar',
@@ -22,6 +36,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
   public today: Date = new Date();
   private currentStartDate: Date;
   private subscriptionArr: Subscription[] = [];
+  private destroyRef = inject(DestroyRef);
 
   constructor(
     private session: SessionService,
@@ -136,9 +151,22 @@ export class CalendarComponent implements OnInit, OnDestroy {
   /* END */
 
   /* GET SESSION OF THE USER */
-  userId: number | null = null;
+  userId: number | undefined = undefined;
   private getSession = async () => {
-    this.userId = this.session.getUser()().userId;
+    this.session
+      .getUser()
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        catchError((err) => {
+          console.error('Error on fetching userInfo', err);
+          return of(undefined);
+        })
+      )
+      .subscribe({
+        next: (value) => {
+          this.userId = value?.userId;
+        },
+      });
   };
 
   /* END OF GET SESSION OF THE USER */

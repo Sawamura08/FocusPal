@@ -33,7 +33,7 @@ export class ScheduleService implements OnInit {
   /* GET SESSION */
   protected userId?: number;
   protected getSession = async () => {
-    this.userId = this.session.getUser()().userId;
+    this.userId = await this.session.fetchUserId();
     this.userId$.next(this.userId);
   };
 

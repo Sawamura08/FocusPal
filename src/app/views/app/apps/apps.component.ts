@@ -16,7 +16,7 @@ import { FetchHomeDataService } from '../../../service/fetch-home-data.service';
 import { SetProgressBar } from '../../../class/set-progress-bar';
 import { FilterTaskService } from '../../../database/filter-task.service';
 import { Schedule, Task, User } from '../../../database/db';
-import { combineLatest, Subscription, interval } from 'rxjs';
+import { combineLatest, Subscription, interval, catchError, of } from 'rxjs';
 import { FilterScheduleService } from '../../../database/filter-schedule.service';
 import { WeeklyScheduleService } from '../../../database/weekly-schedule.service';
 import { SessionService } from '../../../service/session.service';
@@ -32,6 +32,9 @@ export class AppsComponent implements OnInit, OnChanges, OnDestroy {
   /* class */
   Progress: SetProgressBar;
   /* end */
+
+  /* INITIALIZED */
+  public destroyRef = inject(DestroyRef);
   constructor(
     private fetchHomeData: FetchHomeDataService,
     private el: ElementRef,
@@ -87,10 +90,23 @@ export class AppsComponent implements OnInit, OnChanges, OnDestroy {
   /* end */
 
   /* FETCH USERNAME */
-  public username: string | null = null;
+  public username: string | undefined = undefined;
   public userInfo!: User;
   public getUser = () => {
-    this.username = this.session.getUser()().userName;
+    this.session
+      .getUser()
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        catchError((err) => {
+          console.error('Error on fetching userInfo', err);
+          return of(undefined);
+        })
+      )
+      .subscribe({
+        next: (value) => {
+          this.username = value?.userName;
+        },
+      });
   };
 
   /* END */

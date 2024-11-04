@@ -9,7 +9,8 @@ export class SessionService {
   constructor() {
     this.fetchUserInfo();
   }
-  private session = signal<User>({ userId: 0, userName: '' });
+
+  private session$ = new BehaviorSubject<User | undefined>(undefined);
 
   /* CREATE A SESSION FOR THE USER */
   public addUser = async (user: User) => {
@@ -19,7 +20,7 @@ export class SessionService {
         userName: user.userName,
       };
       await db.userList.add(newUser);
-      this.session.set(newUser);
+      this.session$.next(newUser);
     } catch (err) {
       console.error('Error creating User', err);
     }
@@ -27,11 +28,23 @@ export class SessionService {
 
   public fetchUserInfo = async () => {
     const list = await db.userList.toArray();
-    this.session.set(list[0]);
+    if (list && list[0]) {
+      this.session$.next(list[0]);
+    }
   };
 
+  public fetchUserId = async (): Promise<number | undefined> => {
+    try {
+      const id = await db.userList.toArray();
+      const userId = id != null ? id[0].userId : undefined;
+      return userId;
+    } catch (err) {
+      console.error('Error on Fetching userId', err);
+      return undefined;
+    }
+  };
   /* GET THE ID OF THE LOGGED USER */
   public getUser = () => {
-    return this.session;
+    return this.session$.asObservable();
   };
 }
