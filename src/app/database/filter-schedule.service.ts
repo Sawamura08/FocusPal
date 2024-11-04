@@ -53,7 +53,6 @@ export class FilterScheduleService extends ScheduleService {
   ): Promise<Schedule[]> {
     try {
       let schedules = await super.getAllTaskDefault(id, date);
-      // Additional logic can go here
 
       schedules = schedules.filter((sched) => {
         return sched.type === 0 ? true : false;

@@ -5,7 +5,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class PriorityService {
-  private priorityLevel = new BehaviorSubject<number>(1);
+  private priorityLevel = new BehaviorSubject<number>(0);
   constructor() {}
 
   public changePriority = (level: number) => {

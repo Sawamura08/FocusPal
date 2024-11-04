@@ -6,28 +6,28 @@ import { DatePipe } from '@angular/common';
 import { PriorityService } from '../service/priority.service';
 import { taskService } from './task.service';
 import { ScheduleService } from './schedule.service';
+import { TaskObservableService } from '../service/task-observable.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FilterTaskService extends taskService {
   allTaskByStatus$: Observable<Task[]>;
-  allTaskByDueDateToday$: Observable<Task[]>;
-  /* allTaskByPriorities$: Observable<Task[]>; */
+  allTaskByDueDate$: Observable<Task[]>;
+  allTaskByPriorities$: Observable<Task[]>;
 
   constructor(
     datePipe: DatePipe,
     sortDate: ScheduleService,
+    task$: TaskObservableService,
     private level: PriorityService
   ) {
-    super(datePipe, sortDate);
+    super(datePipe, sortDate, task$);
     /* ----------- QUERY FETCH data from DB REACTIVELY/ ON LIVE */
     this.allTaskByStatus$ = from(liveQuery(() => this.getTaskByStatus()));
-    this.allTaskByDueDateToday$ = from(
-      liveQuery(() => this.getTaskByDueDate())
-    );
+    this.allTaskByDueDate$ = from(liveQuery(() => this.getTaskByDueDate()));
 
-    /* this.allTaskByPriorities$ = this.getTaskbyPriorityStatus(); */
+    this.allTaskByPriorities$ = this.observableTaskPriority();
   }
 
   /*  FETCHING ALL TASK BASED ON STATUS */
@@ -49,9 +49,12 @@ export class FilterTaskService extends taskService {
     );
   };
 
+  /* FILTER PRIORITY */
+
   /* FETCHING ALL TASK BASED ON PRIORITY AND STATUS */
-  public getTaskbyPriorityStatus = () => {
-    this.taskList$ = this.level
+  /* SWITCHMAP IS OBSERVABLE */
+  public observableTaskPriority = (): Observable<Task[]> => {
+    return this.level
       .priorityLevel$()
       .pipe(
         switchMap((level: number) =>
@@ -67,8 +70,9 @@ export class FilterTaskService extends taskService {
       .equals(0)
       .and((task) => task.priority === level)
       .toArray();
-    console.log(result);
 
     return result;
   };
+
+  /* END */
 }

@@ -19,6 +19,7 @@ import { ToastrModule } from 'ngx-toastr';
 import { WeeklySchedComponent } from '../components/weekly-sched/weekly-sched.component';
 import { ChatComponent } from '../components/chat/chat.component';
 import { AnimateOnceDirective } from '../pipe/animate-once.directive';
+import { FilterTaskModalComponent } from '../components/filter-task-modal/filter-task-modal.component';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import { AnimateOnceDirective } from '../pipe/animate-once.directive';
     WeeklySchedComponent,
     AnimateOnceDirective,
     ChatComponent,
+    FilterTaskModalComponent,
   ],
   imports: [
     CommonModule,
@@ -53,6 +55,7 @@ import { AnimateOnceDirective } from '../pipe/animate-once.directive';
     WeeklySchedComponent,
     AnimateOnceDirective,
     ChatComponent,
+    FilterTaskModalComponent,
   ],
 })
 export class SharedModule {}

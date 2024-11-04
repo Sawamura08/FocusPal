@@ -29,6 +29,6 @@ export class WelcomeComponent implements OnInit {
 
   private checkSession = (id: number) => {
     if (id)
-      this.route.navigate(['../../apps/apps'], { relativeTo: this.actRoute });
+      this.route.navigate(['../../apps/home'], { relativeTo: this.actRoute });
   };
 }

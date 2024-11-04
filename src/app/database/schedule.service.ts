@@ -138,6 +138,7 @@ export class ScheduleService implements OnInit {
         })
         .toArray();
 
+      /* THIS SORT ALL OF THE TASK FIRST UNTIL ALL OF THEM IS SORTED BEFORE RETURNING THE SCHED */
       // SORT BY TIME ONLY REGARDING OF THE DATE
       sched.sort((a, b) => {
         const converted: number[] = this.getTimeBySched(

@@ -33,9 +33,9 @@ const routes: Routes = [
     component: AppsComponent,
     children: [
       {
-        path: 'apps',
+        path: 'home',
         loadChildren: () =>
-          import('./views/app/apps/apps.module').then((m) => m.AppsModule),
+          import('./views/app/home/home.module').then((m) => m.HomeModule),
       },
       {
         path: 'calendar',

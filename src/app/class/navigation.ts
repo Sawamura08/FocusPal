@@ -15,13 +15,13 @@ export class navigation {
 
   /* BUTTON NAVIGATION VALUES */
   buttonStatus = [
-    { label: 'apps', path: '/apps/apps' },
+    { label: 'home', path: '/apps/home' },
     { label: 'calendar', path: '/apps/calendar' },
     { label: 'task', path: '/apps/task' },
     { label: 'clock', path: '/apps/clock' },
   ];
 
-  public valuePath: string | null = '/apps/apps';
+  public valuePath: string | null = '/apps/home';
 
   /* CHANGE ROUTE */
   public navigateRoute(button: buttonValues) {

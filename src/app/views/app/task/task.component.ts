@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject } from '@angular/core';
+import { Component, DestroyRef, inject, OnDestroy } from '@angular/core';
 import { taskService } from '../../../database/task.service';
 import { Task } from '../../../database/db';
 import { FilterTaskService } from '../../../database/filter-task.service';
@@ -25,7 +25,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   templateUrl: './task.component.html',
   styleUrl: './task.component.scss',
 })
-export class TaskComponent {
+export class TaskComponent implements OnDestroy {
   constructor(
     private db: taskService,
     private filterDB: FilterTaskService,
@@ -40,7 +40,7 @@ export class TaskComponent {
   taskList: Task[] = [];
   userId!: number | undefined;
   public destroyRef = inject(DestroyRef);
-  public destorySubscription$: Subject<boolean> = new Subject<boolean>();
+  public destroySubs$: Subject<boolean> = new Subject<boolean>();
   ngOnInit(): void {
     /* get the session ID */
     this.getId();
@@ -73,7 +73,7 @@ export class TaskComponent {
 
   /* FETCH USER TASK */
   public fetchAllTask = () => {
-    this.db.taskList$.pipe(takeUntil(this.destorySubscription$)).subscribe({
+    this.db.taskList$.pipe(takeUntil(this.destroySubs$)).subscribe({
       next: (value) => {
         /* console.log(JSON.stringify(value, null, 2)); */
         this.taskList = value;
@@ -108,17 +108,6 @@ export class TaskComponent {
   /* UPDATE THE TASK */
   public updateTasks = () => {};
 
-  public getTaskToday = () => {
-    this.filterDB.allTaskByDueDateToday$.subscribe({
-      next: (value) => {
-        this.taskList = value;
-      },
-      error: (err) => {
-        console.error('Failed to Fetch Task', err);
-      },
-    });
-  };
-
   /* -------------- END  ----------------- */
 
   /* get network status*/
@@ -133,26 +122,12 @@ export class TaskComponent {
       });
   };
 
-  /* FILTER WHETHER ON GOING OR FINISH */
-  /*  public filterTaskByStatus = () => {
-    this.filterDB.allTaskByStatus$.subscribe(
-      (value) => (this.taskList = value)
-    );
-  }; */
-
-  /* FETCH TASK DEPENDING ON PRIORITIES */
-  public getByPriorities = () => {
-    this.destorySubscription$.next(true);
-    this.level.changePriority(2);
-
-    /* this.filterDB.allTaskByPriorities$.subscribe({
-      next: (value) => {
-        this.taskList = value;
-      },
-      error: (err) => {
-        console.error('Failed to Fetch Task', err);
-      },
-    }); */
-    this.filterDB.getTaskbyPriorityStatus();
+  public allTask = () => {
+    this.fetchAllTask();
   };
+
+  ngOnDestroy(): void {
+    this.destroySubs$.next(true);
+    this.destroySubs$.complete();
+  }
 }

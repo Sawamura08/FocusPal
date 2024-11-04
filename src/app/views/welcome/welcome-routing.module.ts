@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { WelcomeComponent } from './welcome.component';
 import { LoginComponent } from '../auth/login/login.component';
-import { AppsComponent } from '../app/apps/apps.component';
+import { HomeComponent } from '../app/home/home.component';
 
 const routes: Routes = [
   {
@@ -14,8 +14,8 @@ const routes: Routes = [
     component: LoginComponent,
   },
   {
-    path: '../../apps/apps',
-    component: AppsComponent,
+    path: '../../apps/home',
+    component: HomeComponent,
   },
 ];
 

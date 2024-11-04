@@ -5,6 +5,7 @@ import { Observable, from } from 'rxjs';
 import Dexie, { Table } from 'dexie';
 import { DatePipe } from '@angular/common';
 import { ScheduleService } from './schedule.service';
+import { TaskObservableService } from '../service/task-observable.service';
 
 @Injectable({
   providedIn: 'root',
@@ -15,7 +16,8 @@ export class taskService {
 
   constructor(
     protected datePipe: DatePipe,
-    protected sortDate: ScheduleService
+    protected sortDate: ScheduleService,
+    protected task$: TaskObservableService
   ) {
     /* ----------- QUERY FETCH data from DB REACTIVELY/ ON LIVE */
     this.taskList$ = from(liveQuery(() => this.getTaskList()));
@@ -25,7 +27,7 @@ export class taskService {
   /* GET ALL TASK */
   public getTaskList = async (): Promise<Task[]> => {
     const sched = await db.taskList.where('status').equals(0).sortBy('dueDate');
-
+    this.task$.setNewTaskList(sched);
     return sched;
   };
 

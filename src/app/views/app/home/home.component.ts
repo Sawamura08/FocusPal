@@ -24,11 +24,11 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DestroyRef } from '@angular/core';
 
 @Component({
-  selector: 'app-apps',
-  templateUrl: './apps.component.html',
-  styleUrl: './apps.component.scss',
+  selector: 'app-home',
+  templateUrl: './home.component.html',
+  styleUrl: './home.component.scss',
 })
-export class AppsComponent implements OnInit, OnChanges, OnDestroy {
+export class HomeComponent implements OnInit, OnChanges, OnDestroy {
   /* class */
   Progress: SetProgressBar;
   /* end */

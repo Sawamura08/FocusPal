@@ -174,17 +174,11 @@ export class CalendarComponent implements OnInit, OnDestroy {
   /* GET SCHEDULE BY DATE | REPEAT */
 
   schedList: Schedule[] = [];
-  schedDayRepeatSubs!: Subscription;
   public getSchedByDayRepeat = () => {
-    this.schedDayRepeatSubs = this.sched.schedList$
-      .pipe(takeUntil(this.destroySubscription$))
-      .subscribe({
-        next: (value) => (this.schedList = value),
-        error: (err) => console.error('Error Subscribe', err),
-      });
-
-    /* put the subscription to array subs */
-    this.subscriptionArr.push(this.schedDayRepeatSubs);
+    this.sched.schedList$.pipe(takeUntil(this.destroySubscription$)).subscribe({
+      next: (value) => (this.schedList = value),
+      error: (err) => console.error('Error Subscribe', err),
+    });
   };
 
   /* END OF GET SCHEDULE BY DATE | REPEAT */
@@ -284,6 +278,9 @@ export class CalendarComponent implements OnInit, OnDestroy {
 
   /* NG ON DESTROY */
   ngOnDestroy(): void {
+    /* DESTROY THE TAKE UNTIL */
+    this.destroySubscription$.next(true);
+    this.destroySubscription$.complete();
     if (this.subscriptionArr)
       this.subscriptionArr.forEach((subs) => subs.unsubscribe());
   }
