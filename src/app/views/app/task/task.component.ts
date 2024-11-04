@@ -1,5 +1,5 @@
 import { Component, DestroyRef, inject } from '@angular/core';
-import { DatabaseService } from '../../../database/database.service';
+import { taskService } from '../../../database/task.service';
 import { Task } from '../../../database/db';
 import { FilterTaskService } from '../../../database/filter-task.service';
 import { DatePipe } from '@angular/common';
@@ -17,7 +17,7 @@ import {
   updateMode,
 } from '../../../service/pop-modal.service';
 import { UpdateTaskModeService } from '../../../service/update-task-mode.service';
-import { catchError, of } from 'rxjs';
+import { catchError, of, Subject, takeUntil } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
@@ -27,7 +27,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 })
 export class TaskComponent {
   constructor(
-    private db: DatabaseService,
+    private db: taskService,
     private filterDB: FilterTaskService,
     private datePipe: DatePipe,
     private session: SessionService,
@@ -40,22 +40,18 @@ export class TaskComponent {
   taskList: Task[] = [];
   userId!: number | undefined;
   public destroyRef = inject(DestroyRef);
+  public destorySubscription$: Subject<boolean> = new Subject<boolean>();
   ngOnInit(): void {
     /* get the session ID */
     this.getId();
 
     /* SUBSCRIBE TO THE NETWORK SUBJECT */
     this.getNetworkStatus();
-    this.db.getTastList().subscribe({
-      next: (value) => {
-        console.log(JSON.stringify(value, null, 2));
-        this.taskList = value;
-      },
-      error: (err) => {
-        console.error('Error', err);
-      },
-    });
+
+    /* GET ALL TASK */
+    this.fetchAllTask();
   }
+
   /* GET SESSION FOR USER */
   public getId = () => {
     this.session
@@ -75,22 +71,22 @@ export class TaskComponent {
   };
   /* END */
 
-  /* get network status*/
-  public networkStatus: boolean = false;
-  private getNetworkStatus = () => {
-    this.network.networkStatus$().subscribe({
-      next: (value) => (this.networkStatus = value),
-      error: (err) => console.error('Error Subscribe network', err),
+  /* FETCH USER TASK */
+  public fetchAllTask = () => {
+    this.db.taskList$.pipe(takeUntil(this.destorySubscription$)).subscribe({
+      next: (value) => {
+        /* console.log(JSON.stringify(value, null, 2)); */
+        this.taskList = value;
+      },
+      error: (err) => {
+        console.error('Error', err);
+      },
     });
   };
 
-  /* FILTER WHETHER ON GOING OR FINISH */
-  public filterTaskByStatus = () => {
-    this.filterDB.allTaskByStatus$.subscribe(
-      (value) => (this.taskList = value)
-    );
-  };
+  /* END */
 
+  /* ----------- TASK EDIT ----------------- */
   public deleteTask = (taskId: number) => {
     this.db.deleteTask(taskId);
   };
@@ -123,16 +119,40 @@ export class TaskComponent {
     });
   };
 
+  /* -------------- END  ----------------- */
+
+  /* get network status*/
+  public networkStatus: boolean = false;
+  private getNetworkStatus = () => {
+    this.network
+      .networkStatus$()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (value) => (this.networkStatus = value),
+        error: (err) => console.error('Error Subscribe network', err),
+      });
+  };
+
+  /* FILTER WHETHER ON GOING OR FINISH */
+  /*  public filterTaskByStatus = () => {
+    this.filterDB.allTaskByStatus$.subscribe(
+      (value) => (this.taskList = value)
+    );
+  }; */
+
   /* FETCH TASK DEPENDING ON PRIORITIES */
   public getByPriorities = () => {
-    this.level.changePriority(3);
-    this.filterDB.allTaskByPriorities$.subscribe({
+    this.destorySubscription$.next(true);
+    this.level.changePriority(2);
+
+    /* this.filterDB.allTaskByPriorities$.subscribe({
       next: (value) => {
         this.taskList = value;
       },
       error: (err) => {
         console.error('Failed to Fetch Task', err);
       },
-    });
+    }); */
+    this.filterDB.getTaskbyPriorityStatus();
   };
 }

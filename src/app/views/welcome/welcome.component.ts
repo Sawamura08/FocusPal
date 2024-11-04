@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Task, User, db } from '../../database/db';
-import { DatabaseService } from '../../database/database.service';
+import { taskService } from '../../database/task.service';
 import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -10,7 +10,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 })
 export class WelcomeComponent implements OnInit {
   constructor(
-    private db: DatabaseService,
+    private db: taskService,
     private route: Router,
     private actRoute: ActivatedRoute
   ) {}

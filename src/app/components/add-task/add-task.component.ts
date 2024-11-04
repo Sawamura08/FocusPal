@@ -24,7 +24,7 @@ import {
 } from '@angular/forms';
 import { AddTaskInput } from '../../class/add-task-input';
 import { SessionService } from '../../service/session.service';
-import { DatabaseService } from '../../database/database.service';
+import { taskService } from '../../database/task.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { UpdateTaskModeService } from '../../service/update-task-mode.service';
 import { slideRight } from '../../animation/slide-right.animate';
@@ -45,7 +45,7 @@ export class AddTaskComponent implements OnInit, OnDestroy {
     private popModal: PopModalService,
     private fb: FormBuilder,
     private session: SessionService,
-    private task: DatabaseService,
+    private task: taskService,
     private route: Router,
     private actRoute: ActivatedRoute,
     private updateMode: UpdateTaskModeService

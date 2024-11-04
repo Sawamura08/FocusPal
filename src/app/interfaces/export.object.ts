@@ -6,6 +6,12 @@ export interface confirmModal {
   isConfirm?: boolean;
 }
 
+/* TOAST MODAL */
+export interface toastModal {
+  type: string;
+  status: boolean;
+}
+
 export const confirm: confirmModal = {
   imgPath: '/extra/warning.png',
   title: 'Are you sure?',
@@ -19,8 +25,28 @@ export const categories = {
   ACADEMIC: 1,
 };
 
-/* TOAST MODAL */
-export interface toastModal {
-  type: string;
-  status: boolean;
+export enum TASK_TAGS_PERSONAL {
+  HEALTH = 0,
+  FINANCE = 1,
+  ERRANDS = 2,
+  FITNESS = 3,
+  SOCIAL = 4,
+  ORGANIZATION = 5,
+  OTHERS = 6,
+}
+
+export enum TASK_TAGS_ACADEMIC {
+  HOMEWORK = 0,
+  EXAMS = 1,
+  PROJECTS = 2,
+  READING = 3,
+  RESEARCH = 4,
+  ORGANIZATION = 5,
+  OTHERS = 6,
+}
+
+export enum TASK_STATUS {
+  COMPLETED = 0,
+  PENDING = 1,
+  PAST_DUE = 2,
 }

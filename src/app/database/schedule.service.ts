@@ -116,6 +116,7 @@ export class ScheduleService implements OnInit {
     const dayToday = new Date(dateSelected).getDay();
     const Repeat = Repition;
 
+    // THIS WILL CHECK IF THE SCHEDULE WILL BE DISPLAYED ACCORDING TO DATE SELECTED
     try {
       const sched = await db.schedList
         .where('userId')
@@ -163,7 +164,7 @@ export class ScheduleService implements OnInit {
 
   /* CONVERT DATE TIME TO TIME ONLY AND CHECK THE DIFFERENCE */
 
-  private getTimeBySched = (firstDate: Date, secondDate: Date) => {
+  public getTimeBySched = (firstDate: Date, secondDate: Date) => {
     const firstHour = firstDate.getHours();
     const firstMinutes = firstDate.getMinutes();
     const first: number = firstHour * 60 + firstMinutes;
@@ -178,21 +179,10 @@ export class ScheduleService implements OnInit {
   /* GET THE DAY OF THE WEEK IF THE VALUE IS CUSTOM */
   public getSchedByDay = (
     days: number[] | undefined,
-    dayToday: number
+    dateSelected: number // the date selected in the form of Day
   ): boolean => {
     if (!days) return false;
 
-    return days.some((day) => day === dayToday);
+    return days.some((day) => day === dateSelected);
   };
-
-  /* -----------GET THE SCHED BY WEEK ------------ */
-
-  public getSchedByWeek = () => {
-    const dateToday = new Date();
-  };
-
-  // public schedByWeek = (): Observable<Schedule[]> =>
-  // {
-
-  // }
 }

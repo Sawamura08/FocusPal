@@ -4,23 +4,29 @@ import { db, Task, User } from './db';
 import { Observable, from } from 'rxjs';
 import Dexie, { Table } from 'dexie';
 import { DatePipe } from '@angular/common';
+import { ScheduleService } from './schedule.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class DatabaseService {
-  taskList$: Observable<Task[]>;
+export class taskService {
+  public taskList$: Observable<Task[]>;
   userList$: Observable<User[]>;
 
-  constructor(private datePipe: DatePipe) {
+  constructor(
+    protected datePipe: DatePipe,
+    protected sortDate: ScheduleService
+  ) {
     /* ----------- QUERY FETCH data from DB REACTIVELY/ ON LIVE */
-    this.taskList$ = from(liveQuery(() => db.taskList.toArray()));
+    this.taskList$ = from(liveQuery(() => this.getTaskList()));
     this.userList$ = from(liveQuery(() => db.userList.toArray()));
   }
 
   /* GET ALL TASK */
-  public getTastList = (): Observable<Task[]> => {
-    return this.taskList$;
+  public getTaskList = async (): Promise<Task[]> => {
+    const sched = await db.taskList.where('status').equals(0).sortBy('dueDate');
+
+    return sched;
   };
 
   /* GET USER SESSION */
