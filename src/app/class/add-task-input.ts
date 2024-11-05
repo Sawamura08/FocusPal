@@ -1,5 +1,9 @@
 import { FormGroup } from '@angular/forms';
+import { Injectable } from '@angular/core';
 
+@Injectable({
+  providedIn: 'root',
+})
 export class AddTaskInput {
   public userInput: FormGroup;
   constructor(group: FormGroup) {
@@ -63,4 +67,8 @@ export class AddTaskInput {
     'Organization',
     'Others',
   ];
+
+  public taskCategory: string[] = ['Personal', 'Academic'];
+
+  public taskStatus: string[] = ['In Progress', 'Completed', 'Past Due'];
 }

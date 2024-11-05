@@ -1,9 +1,44 @@
 <section class="modal-background">
   <div class="modal-container">
     <div class="modal-content">
-      <button class="btn" (click)="getTaskByDueDate()">By Due Date</button>
-      <button class="btn" (click)="getTaskByPriorities()">Get Priority</button>
-      <button class="btn" (click)="closeTaskFilter()">Close Modal</button>
+      <header>
+        <h3>Filter</h3>
+        <span class="close-modal" (click)="closeTaskFilter()"
+          ><i class="fa-sharp fa-regular fa-xmark"></i
+        ></span>
+      </header>
+      <section class="content">
+        <div class="filter-section">
+          <h4 class="filter-title">Category</h4>
+
+          <ul class="choice-list">
+            <li class="choice" *ngFor="let choice of taskCategory; index as i">
+              {{ choice }}
+            </li>
+          </ul>
+        </div>
+
+        <div class="filter-section">
+          <h4 class="filter-title">Tags</h4>
+          <ul class="choice-list">
+            @if (choiceCategoryIndex === categoryChoices.ACADEMIC) {
+            <li
+              class="choice"
+              *ngFor="let choice of taskTagsAcademic; index as i"
+            >
+              {{ choice }}
+            </li>
+            } @else {
+            <li
+              class="choice"
+              *ngFor="let choice of taskTagsPersonal; index as i"
+            >
+              {{ choice }}
+            </li>
+            }
+          </ul>
+        </div>
+      </section>
     </div>
   </div>
 </section>
