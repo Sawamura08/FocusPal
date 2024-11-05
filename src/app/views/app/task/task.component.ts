@@ -11,7 +11,7 @@ import {
   syncType,
 } from '../../../service/background-sync.service';
 import { NetworkStatusService } from '../../../service/network-status.service';
-import { taskRequest } from '../../../interfaces/Request';
+
 import {
   PopModalService,
   updateMode,
@@ -28,10 +28,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 export class TaskComponent implements OnDestroy {
   constructor(
     private db: taskService,
-    private filterDB: FilterTaskService,
-    private datePipe: DatePipe,
     private session: SessionService,
-    private level: PriorityService,
     private sync: BackgroundSyncService,
     private network: NetworkStatusService,
     private popModal: PopModalService,
@@ -122,8 +119,11 @@ export class TaskComponent implements OnDestroy {
       });
   };
 
-  public allTask = () => {
-    this.fetchAllTask();
+  /* MODAL TASK FILTER MODAL */
+
+  public openTaskFilterModal = () => {
+    this.popModal.setTaskFilterSignal(true);
+    const value = this.popModal.getTaskFilterSignal()();
   };
 
   ngOnDestroy(): void {

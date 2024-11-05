@@ -218,7 +218,7 @@ export class ChatComponent implements OnDestroy, OnInit, AfterViewInit {
 
   public getInternetConnection = () => {
     this.internetSubsription = this.network.networkStatus$().subscribe({
-      next: (value) => (this.isInternetActive = false),
+      next: (value) => (this.isInternetActive = value),
       error: (err) => console.log('Error Subscribe network', err),
     });
 

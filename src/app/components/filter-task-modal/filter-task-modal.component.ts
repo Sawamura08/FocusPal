@@ -4,6 +4,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { FilterTaskService } from '../../database/filter-task.service';
 import { TaskObservableService } from '../../service/task-observable.service';
 import { PriorityService } from '../../service/priority.service';
+import { PopModalService } from '../../service/pop-modal.service';
 
 @Component({
   selector: 'app-filter-task-modal',
@@ -14,11 +15,12 @@ export class FilterTaskModalComponent implements OnDestroy {
   constructor(
     private filterTask: FilterTaskService,
     private task$: TaskObservableService,
-    private level: PriorityService
+    private level: PriorityService,
+    private popModal: PopModalService
   ) {}
   public destroySubs$: Subject<boolean> = new Subject<boolean>();
 
-  public getTaskToday = () => {
+  public getTaskByDueDate = () => {
     this.filterTask.allTaskByDueDate$
       .pipe(takeUntil(this.destroySubs$))
       .subscribe({
@@ -32,7 +34,7 @@ export class FilterTaskModalComponent implements OnDestroy {
   };
 
   /* FETCH TASK DEPENDING ON PRIORITIES */
-  public getByPriorities = () => {
+  public getTaskByPriorities = () => {
     this.destroySubs$.next(true);
     this.level.changePriority(0);
 
@@ -46,6 +48,10 @@ export class FilterTaskModalComponent implements OnDestroy {
           console.error('Failed to Fetch Task', err);
         },
       });
+  };
+
+  public closeTaskFilter = () => {
+    this.popModal.setTaskFilterSignal(false);
   };
 
   ngOnDestroy(): void {

@@ -1,11 +1,7 @@
-export interface taskRequest {
-  taskId?: number;
+export interface taskFilter {
   userId: number;
-  description: string;
-  subTask?: string;
-  status: number;
-  priority: number;
-  dueDate: Date;
-  createdAt: Date;
-  isUpdated: number;
+  status?: number; // pending OR completed OR PAST DUE
+  priority?: number;
+  taskCategory?: number; // 0 - personal; 1- academic
+  tags?: number; // the tags is depends on the task category
 }

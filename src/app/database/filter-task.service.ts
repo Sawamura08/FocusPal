@@ -7,6 +7,7 @@ import { PriorityService } from '../service/priority.service';
 import { taskService } from './task.service';
 import { ScheduleService } from './schedule.service';
 import { TaskObservableService } from '../service/task-observable.service';
+import { taskFilter } from '../interfaces/Request';
 
 @Injectable({
   providedIn: 'root',
@@ -15,12 +16,14 @@ export class FilterTaskService extends taskService {
   allTaskByStatus$: Observable<Task[]>;
   allTaskByDueDate$: Observable<Task[]>;
   allTaskByPriorities$: Observable<Task[]>;
+  public filteredTask: Observable<Task[]>;
 
   constructor(
     datePipe: DatePipe,
     sortDate: ScheduleService,
     task$: TaskObservableService,
-    private level: PriorityService
+    private level: PriorityService,
+    private userFilter: TaskObservableService
   ) {
     super(datePipe, sortDate, task$);
     /* ----------- QUERY FETCH data from DB REACTIVELY/ ON LIVE */
@@ -28,6 +31,8 @@ export class FilterTaskService extends taskService {
     this.allTaskByDueDate$ = from(liveQuery(() => this.getTaskByDueDate()));
 
     this.allTaskByPriorities$ = this.observableTaskPriority();
+
+    this.filteredTask = this.observableFilterTask();
   }
 
   /*  FETCHING ALL TASK BASED ON STATUS */
@@ -72,6 +77,48 @@ export class FilterTaskService extends taskService {
       .toArray();
 
     return result;
+  };
+
+  /* END */
+
+  /* OBSERVABLE FOR FILTERING ALL task DATA */
+
+  public observableFilterTask = (): Observable<Task[]> => {
+    return this.userFilter
+      .getUserTaskFilter()
+      .pipe(
+        switchMap((task) =>
+          from(liveQuery(() => this.fetchTaskFiltered(task!)))
+        )
+      );
+  };
+
+  /* END */
+
+  /* GET TASK BASED ON THE USER FILTER CHOICES*/
+
+  public fetchTaskFiltered = async (data: taskFilter): Promise<Task[]> => {
+    let query = db.taskList.where('userId').equals(data.userId);
+
+    if (typeof data.taskCategory !== undefined) {
+      query = query.and((task) => task.taskCategory === data.taskCategory);
+    }
+
+    if (typeof data.priority !== undefined) {
+      query = query.and((task) => task.priority === data.priority);
+    }
+
+    if (typeof data.status !== undefined) {
+      query = query.and((task) => task.status === data.status);
+    }
+
+    if (typeof data.tags !== undefined) {
+      query = query.and((task) => task.tags === data.tags);
+    }
+
+    const filteredTask = await query.toArray();
+
+    return filteredTask;
   };
 
   /* END */

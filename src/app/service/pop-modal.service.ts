@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { computed, Injectable, signal } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
 
 export enum ModalType {
@@ -148,4 +148,15 @@ export class PopModalService {
     this.chatModal$.next(isOpen);
   };
   /* --------------- END ---------------------- */
+
+  public taskFilterStateSignal = signal(false);
+  public isTaskFilterModalOpen = computed(() => this.taskFilterStateSignal());
+
+  public setTaskFilterSignal = (value: boolean) => {
+    this.taskFilterStateSignal.set(value);
+  };
+
+  public getTaskFilterSignal = () => {
+    return this.isTaskFilterModalOpen;
+  };
 }

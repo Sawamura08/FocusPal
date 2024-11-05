@@ -1,4 +1,8 @@
-<button (click)="allTask()">All Task</button>
+<button (click)="fetchAllTask()">All Task</button>
+<br />
+<br />
+<button (click)="openTaskFilterModal()">Open Modal</button>
+
 <div *ngFor="let task of taskList">
   <br />
   <p>TASK LIST</p>

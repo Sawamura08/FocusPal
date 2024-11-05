@@ -1,9 +1,15 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  DestroyRef,
+  inject,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { PopModalService, updateMode } from '../../service/pop-modal.service';
-import { Subscription } from 'rxjs';
 import { Location } from '@angular/common';
 import { buttonValues, navigation } from '../../class/navigation';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 enum buttons {
   HOME,
@@ -17,7 +23,7 @@ enum buttons {
   styleUrl: './apps.component.scss',
 })
 export class AppsComponent extends navigation implements OnInit, OnDestroy {
-  private subscriptionArr: Subscription[] = [];
+  private destroyRef = inject(DestroyRef);
   constructor(
     route: Router,
     actRoute: ActivatedRoute,
@@ -50,14 +56,14 @@ export class AppsComponent extends navigation implements OnInit, OnDestroy {
 
   /* SUBSCRIBE ADDTASK MODAL */
   public modalStatus: updateMode | null = null;
-  private addTaskSubscription!: Subscription;
   private addTaskSubscribe = () => {
-    this.addTaskSubscription = this.popModal.getAddTaskModalStatus().subscribe({
-      next: (value) => (this.modalStatus = value),
-      error: (err) => console.error('Error Subscribe Add Task', err),
-    });
-
-    this.subscriptionArr.push(this.addTaskSubscription);
+    this.popModal
+      .getAddTaskModalStatus()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (value) => (this.modalStatus = value),
+        error: (err) => console.error('Error Subscribe Add Task', err),
+      });
   };
   /* END */
 
@@ -74,21 +80,25 @@ export class AppsComponent extends navigation implements OnInit, OnDestroy {
   /* CHAT WITH SYDNEY MODAL */
 
   public isAiChatOpen: boolean = false;
-  private chatModalSubscription!: Subscription;
 
   private getChatModalStatus = () => {
-    this.chatModalSubscription = this.popModal.getChatModalStatus().subscribe({
-      next: (value) => (this.isAiChatOpen = value),
-      error: (err) => console.error('Error on Subscribe chatModal', err),
-    });
-
-    this.subscriptionArr.push(this.chatModalSubscription);
+    this.popModal
+      .getChatModalStatus()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (value) => (this.isAiChatOpen = value),
+        error: (err) => console.error('Error on Subscribe chatModal', err),
+      });
   };
 
   /* END */
 
-  ngOnDestroy(): void {
-    if (this.subscriptionArr)
-      this.subscriptionArr.forEach((subs) => subs.unsubscribe());
-  }
+  /* FILTE TASK MODAL */
+  public fetchTaskFilterSignal = () => {
+    return this.popModal.getTaskFilterSignal()();
+  };
+
+  /* END */
+
+  ngOnDestroy(): void {}
 }

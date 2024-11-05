@@ -43,14 +43,21 @@
   </nav>
 </main>
 
-<section class="add-task-modal" *ngIf="modalStatus?.isOpen">
+<!-- ADD TASK MODAL -->
+@if (modalStatus?.isOpen) {
+<section class="add-task-modal">
   <app-add-task></app-add-task>
 </section>
+}
 
-<div class="chat-container" *ngIf="isAiChatOpen">
+<!-- CHAT AI -->
+@if (isAiChatOpen) {
+<div class="chat-container">
   <app-chat></app-chat>
 </div>
+}
 
-<div class="filter-task-modal">
+<!-- TASK FILTER MODAL -->
+<div class="filter-task-modal" *ngIf="fetchTaskFilterSignal()">
   <app-filter-task-modal></app-filter-task-modal>
 </div>
