@@ -5,11 +5,13 @@
   @include blurBackground();
 
   .modal-container {
+    border-radius: 1rem;
     width: 70%;
     height: 100%;
-    background-color: $neutralColor;
+    background: url("/background/background-modal.png");
     color: $textColor;
     padding: 1rem;
+    box-shadow: 2px 1px 3px $textColor;
 
     .modal-content {
       margin-block: 1rem;
@@ -34,6 +36,69 @@
 
       .content {
         width: 100%;
+
+        .filter-section {
+          margin-block: 1rem;
+
+          .filter-title {
+            font-size: 1rem;
+          }
+
+          .choice-list {
+            margin-block: 1rem;
+            list-style-type: none;
+            width: 100%;
+            display: flex;
+            gap: 0.25rem;
+            flex-wrap: wrap;
+            justify-content: center;
+
+            .choice {
+              padding: 0.25rem;
+              width: 45%;
+              border: 1px solid $textColor;
+              font-family: $subText;
+              border-radius: 8px;
+              background-color: $neutralColor;
+              text-align: center;
+
+              transition: 0.3s all ease-in;
+            }
+
+            li:not(.flex-wrap) {
+              width: 45%;
+            }
+
+            .selected {
+              background: linear-gradient(to top, $mainColor, $shadow);
+              color: $neutralColor;
+            }
+          }
+        }
+
+        .button-container {
+          width: 100%;
+          display: flex;
+          justify-content: space-between;
+          gap: 0.5rem;
+
+          .btn {
+            @include buttonTheme($mainColor, $neutralColor, $shadow);
+            width: 100%;
+
+            &:active {
+              @include buttonOnClick($shadow);
+            }
+          }
+
+          .reset {
+            @include buttonTheme($neutralColor, $textColor, $grayColor);
+
+            &:active {
+              @include buttonOnClick($textColor);
+            }
+          }
+        }
       }
     }
   }

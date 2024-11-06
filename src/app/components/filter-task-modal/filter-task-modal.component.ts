@@ -1,13 +1,22 @@
-import { Component, OnDestroy } from '@angular/core';
-
-import { Subject, takeUntil } from 'rxjs';
+import {
+  Component,
+  DestroyRef,
+  inject,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
+import { catchError, EMPTY, of, Subject, takeUntil } from 'rxjs';
 import { FilterTaskService } from '../../database/filter-task.service';
 import { TaskObservableService } from '../../service/task-observable.service';
 import { PriorityService } from '../../service/priority.service';
 import { PopModalService } from '../../service/pop-modal.service';
 import { AddTaskInput } from '../../class/add-task-input';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, Validators } from '@angular/forms';
 import { categories } from '../../interfaces/export.object';
+import { FormBuilder } from '@angular/forms';
+import { taskFilter } from '../../interfaces/Request';
+import { SessionService } from '../../service/session.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-filter-task-modal',
@@ -16,18 +25,74 @@ import { categories } from '../../interfaces/export.object';
 })
 export class FilterTaskModalComponent
   extends AddTaskInput
-  implements OnDestroy
+  implements OnDestroy, OnInit
 {
   constructor(
     private filterTask: FilterTaskService,
     private task$: TaskObservableService,
     private level: PriorityService,
-    private popModal: PopModalService
+    private popModal: PopModalService,
+    private session: SessionService
   ) {
-    const formGroup = new FormGroup([]);
-    super(formGroup);
+    /* needs to call the component itself before the status method */
+    super(FilterTaskModalComponent.createFormGroup());
+
+    /* put the method result into the filter to access the formGroup */
+    /* I didn't use this just a note how to call a static method/variables */
+    this.filterInput = FilterTaskModalComponent.createFormGroup();
   }
+
+  ngOnInit(): void {
+    /* FETCH USER ID */
+    this.getId();
+  }
+  public destroyRef = inject(DestroyRef);
   public destroySubs$: Subject<boolean> = new Subject<boolean>();
+  public filterInput!: FormGroup;
+  public taskFilter: taskFilter | undefined = undefined;
+
+  /* ----------------- FORMS ----------------- */
+  /* created a status method to call this function without 'this' */
+  public static createFormGroup = (): FormGroup => {
+    const fb = new FormBuilder();
+    const filterInput = fb.group({
+      userId: ['', Validators.required],
+      category: [''],
+      tags: [''],
+      status: [''],
+      priority: [''],
+    });
+
+    return filterInput;
+  };
+
+  public apply = () => {
+    const filter = this.userInput;
+
+    if (filter.valid) {
+      this.task$.setUserTaskFilter(filter.value);
+      this.filterTask.filteredTask$
+        .pipe(
+          takeUntil(this.task$.destroySubs$),
+          catchError((err) => {
+            console.error('Error, Fetching Filtered Task', err);
+            return of([]);
+          })
+        )
+        .subscribe({
+          next: (value) => {
+            this.task$.setNewTaskList(value);
+          },
+          complete: () => this.closeTaskFilter(),
+        });
+    }
+  };
+
+  public resetFilter = () => {
+    this.task$.setNewTaskList([]);
+  };
+
+  /* ----------------- END ----------------- */
 
   public getTaskByDueDate = () => {
     this.filterTask.allTaskByDueDate$
@@ -63,8 +128,69 @@ export class FilterTaskModalComponent
     this.popModal.setTaskFilterSignal(false);
   };
 
+  /* ----------- SETTING FORM VALUES ----------- */
+
+  // CATEGORY
   public categoryChoices = categories;
-  public choiceCategoryIndex: number | undefined = undefined;
+  public categoryChoiceIndex: number | undefined = undefined;
+
+  public setCategoryChoice = (choice: number) => {
+    this.categoryChoiceIndex = choice;
+
+    this.setValueOnChange(choice, 'category');
+  };
+
+  // TAGS
+  public tagChoiceIndex: number | undefined = undefined;
+
+  public setTagIndex = (choice: number) => {
+    this.tagChoiceIndex = choice;
+
+    this.setValueOnChange(choice, 'tags');
+  };
+
+  // STATUS
+
+  public statusChoiceIndex: number | undefined = undefined;
+
+  public setStatusIndex = (choice: number) => {
+    this.statusChoiceIndex = choice;
+
+    this.setValueOnChange(choice, 'status');
+  };
+
+  // PRIORITY
+
+  public priorityChoiceIndex: number | undefined = undefined;
+
+  public setPriorityIndex = (choice: number) => {
+    this.priorityChoiceIndex = choice;
+
+    this.setValueOnChange(choice, 'priority');
+  };
+
+  /* GET SESSION FOR USER */
+  public static userId: number | undefined = undefined;
+  public getId = () => {
+    this.session
+      .getUser()
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        catchError((err) => {
+          console.error('Error on fetching userInfo', err);
+          return of(undefined);
+        })
+      )
+      .subscribe({
+        next: (value) => {
+          FilterTaskModalComponent.userId = value?.userId;
+          this.setValueOnChange(FilterTaskModalComponent.userId!, 'userId');
+        },
+      });
+  };
+  /* END */
+
+  /* ----------- END ----------- */
 
   ngOnDestroy(): void {
     this.destroySubs$.next(true);

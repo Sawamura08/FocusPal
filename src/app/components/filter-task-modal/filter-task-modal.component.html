@@ -12,7 +12,12 @@
           <h4 class="filter-title">Category</h4>
 
           <ul class="choice-list">
-            <li class="choice" *ngFor="let choice of taskCategory; index as i">
+            <li
+              class="choice"
+              *ngFor="let choice of taskCategory; index as i"
+              (click)="setCategoryChoice(i)"
+              [ngClass]="{ selected: categoryChoiceIndex === i }"
+            >
               {{ choice }}
             </li>
           </ul>
@@ -21,22 +26,61 @@
         <div class="filter-section">
           <h4 class="filter-title">Tags</h4>
           <ul class="choice-list">
-            @if (choiceCategoryIndex === categoryChoices.ACADEMIC) {
+            @if (categoryChoiceIndex === categoryChoices.ACADEMIC) {
             <li
-              class="choice"
+              class="choice flex-wrap"
               *ngFor="let choice of taskTagsAcademic; index as i"
+              (click)="setTagIndex(i)"
+              [ngClass]="{ selected: tagChoiceIndex === i }"
             >
               {{ choice }}
             </li>
             } @else {
             <li
-              class="choice"
+              class="choice flex-wrap"
               *ngFor="let choice of taskTagsPersonal; index as i"
+              (click)="setTagIndex(i)"
+              [ngClass]="{ selected: tagChoiceIndex === i }"
             >
               {{ choice }}
             </li>
             }
           </ul>
+        </div>
+
+        <div class="filter-section">
+          <h4 class="filter-title">Status</h4>
+
+          <ul class="choice-list">
+            <li
+              class="choice"
+              *ngFor="let choice of taskStatus; index as i"
+              (click)="setStatusIndex(i)"
+              [ngClass]="{ selected: statusChoiceIndex === i }"
+            >
+              {{ choice }}
+            </li>
+          </ul>
+        </div>
+
+        <div class="filter-section">
+          <h4 class="filter-title">Priority</h4>
+
+          <ul class="choice-list">
+            <li
+              class="choice"
+              *ngFor="let choice of taskLevels; index as i"
+              (click)="setPriorityIndex(i)"
+              [ngClass]="{ selected: priorityChoiceIndex === i }"
+            >
+              {{ choice }}
+            </li>
+          </ul>
+        </div>
+
+        <div class="button-container">
+          <button class="btn reset">Reset</button
+          ><button class="btn apply" (click)="apply()">Apply</button>
         </div>
       </section>
     </div>

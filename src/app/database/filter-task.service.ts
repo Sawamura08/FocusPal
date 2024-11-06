@@ -13,10 +13,10 @@ import { taskFilter } from '../interfaces/Request';
   providedIn: 'root',
 })
 export class FilterTaskService extends taskService {
-  allTaskByStatus$: Observable<Task[]>;
-  allTaskByDueDate$: Observable<Task[]>;
-  allTaskByPriorities$: Observable<Task[]>;
-  public filteredTask: Observable<Task[]>;
+  public allTaskByStatus$: Observable<Task[]>;
+  public allTaskByDueDate$: Observable<Task[]>;
+  public allTaskByPriorities$: Observable<Task[]>;
+  public filteredTask$: Observable<Task[]>;
 
   constructor(
     datePipe: DatePipe,
@@ -32,7 +32,7 @@ export class FilterTaskService extends taskService {
 
     this.allTaskByPriorities$ = this.observableTaskPriority();
 
-    this.filteredTask = this.observableFilterTask();
+    this.filteredTask$ = this.observableFilterTask();
   }
 
   /*  FETCHING ALL TASK BASED ON STATUS */
@@ -100,23 +100,25 @@ export class FilterTaskService extends taskService {
   public fetchTaskFiltered = async (data: taskFilter): Promise<Task[]> => {
     let query = db.taskList.where('userId').equals(data.userId);
 
-    if (typeof data.taskCategory !== undefined) {
+    /* if (data.taskCategory !== undefined) {
       query = query.and((task) => task.taskCategory === data.taskCategory);
     }
 
-    if (typeof data.priority !== undefined) {
+    if (data.priority !== undefined) {
       query = query.and((task) => task.priority === data.priority);
     }
 
-    if (typeof data.status !== undefined) {
+    if (data.status !== undefined) {
       query = query.and((task) => task.status === data.status);
     }
 
-    if (typeof data.tags !== undefined) {
+    if (data.tags !== undefined) {
       query = query.and((task) => task.tags === data.tags);
-    }
+    } */
 
     const filteredTask = await query.toArray();
+
+    console.log(filteredTask);
 
     return filteredTask;
   };

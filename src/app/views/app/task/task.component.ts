@@ -19,6 +19,7 @@ import {
 import { UpdateTaskModeService } from '../../../service/update-task-mode.service';
 import { catchError, of, Subject, takeUntil } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { TaskObservableService } from '../../../service/task-observable.service';
 
 @Component({
   selector: 'app-task',
@@ -32,7 +33,8 @@ export class TaskComponent implements OnDestroy {
     private sync: BackgroundSyncService,
     private network: NetworkStatusService,
     private popModal: PopModalService,
-    private updateMode: UpdateTaskModeService
+    private updateMode: UpdateTaskModeService,
+    private task$: TaskObservableService
   ) {}
   taskList: Task[] = [];
   userId!: number | undefined;
@@ -72,8 +74,8 @@ export class TaskComponent implements OnDestroy {
   public fetchAllTask = () => {
     this.db.taskList$.pipe(takeUntil(this.destroySubs$)).subscribe({
       next: (value) => {
-        /* console.log(JSON.stringify(value, null, 2)); */
         this.taskList = value;
+        this.task$.setNewTaskList(value);
       },
       error: (err) => {
         console.error('Error', err);

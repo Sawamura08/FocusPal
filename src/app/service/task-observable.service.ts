@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { Task } from '../database/db';
 import { taskFilter } from '../interfaces/Request';
 
@@ -34,4 +34,8 @@ export class TaskObservableService {
   public getUserTaskFilter = (): Observable<taskFilter | undefined> => {
     return this.userTaskFilter$.asObservable();
   };
+
+  /* SUBJECT FOR PREVENTING MULTIPLE SUBSCRIPTION */
+
+  public destroySubs$: Subject<boolean> = new Subject<boolean>();
 }
