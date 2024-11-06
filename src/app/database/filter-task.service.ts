@@ -99,22 +99,23 @@ export class FilterTaskService extends taskService {
 
   public fetchTaskFiltered = async (data: taskFilter): Promise<Task[]> => {
     let query = db.taskList.where('userId').equals(data.userId);
+    console.log(data);
 
-    /* if (data.taskCategory !== undefined) {
-      query = query.and((task) => task.taskCategory === data.taskCategory);
+    if (data.category !== null) {
+      query = query.and((task) => task.taskCategory === data.category);
     }
 
-    if (data.priority !== undefined) {
+    if (data.priority !== null) {
       query = query.and((task) => task.priority === data.priority);
     }
 
-    if (data.status !== undefined) {
+    if (data.status !== null) {
       query = query.and((task) => task.status === data.status);
     }
 
-    if (data.tags !== undefined) {
+    if (data.tags !== null) {
       query = query.and((task) => task.tags === data.tags);
-    } */
+    }
 
     const filteredTask = await query.toArray();
 

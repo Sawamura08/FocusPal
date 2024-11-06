@@ -57,10 +57,10 @@ export class FilterTaskModalComponent
     const fb = new FormBuilder();
     const filterInput = fb.group({
       userId: ['', Validators.required],
-      category: [''],
-      tags: [''],
-      status: [''],
-      priority: [''],
+      category: [null],
+      tags: [null],
+      status: [null],
+      priority: [null],
     });
 
     return filterInput;
@@ -68,6 +68,9 @@ export class FilterTaskModalComponent
 
   public apply = () => {
     const filter = this.userInput;
+
+    /* REMOVE THE PREVIOUS SUBSCRIPTION */
+    this.task$.destroySubs$.next(true);
 
     if (filter.valid) {
       this.task$.setUserTaskFilter(filter.value);
@@ -82,8 +85,8 @@ export class FilterTaskModalComponent
         .subscribe({
           next: (value) => {
             this.task$.setNewTaskList(value);
+            //this.closeTaskFilter();
           },
-          complete: () => this.closeTaskFilter(),
         });
     }
   };
@@ -132,12 +135,39 @@ export class FilterTaskModalComponent
 
   // CATEGORY
   public categoryChoices = categories;
+  public formNameList: { [key: string]: number } = {
+    category: 0,
+    tags: 0,
+    status: 0,
+    priority: 0,
+  };
   public categoryChoiceIndex: number | undefined = undefined;
 
   public setCategoryChoice = (choice: number) => {
-    this.categoryChoiceIndex = choice;
+    if (this.categoryChoiceIndex === choice) {
+      this.categoryChoiceIndex = undefined;
+      this.setValueOnChange(null, 'category');
+    } else {
+      this.categoryChoiceIndex = choice;
 
-    this.setValueOnChange(choice, 'category');
+      this.setValueOnChange(choice, 'category');
+    }
+  };
+
+  public setFormValues = (
+    choice: number,
+    formName: string,
+    choiceIndex: string
+  ) => {
+    console.log(this.formNameList[choiceIndex]);
+    /* if (this.formNameList[choiceIndex] === choice) {
+      choiceIndex = undefined;
+      this.setValueOnChange(null, formName);
+    } else {
+      choiceIndex = choice;
+
+      this.setValueOnChange(choice, formName);
+    } */
   };
 
   // TAGS

@@ -15,7 +15,7 @@
             <li
               class="choice"
               *ngFor="let choice of taskCategory; index as i"
-              (click)="setCategoryChoice(i)"
+              (click)="setFormValues(i, 'category', 'category')"
               [ngClass]="{ selected: categoryChoiceIndex === i }"
             >
               {{ choice }}

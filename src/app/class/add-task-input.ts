@@ -38,7 +38,10 @@ export class AddTaskInput {
 
   /* SET VALUES ON CHANGE UI */
 
-  public setValueOnChange = (value: number | string[], fieldName: string) => {
+  public setValueOnChange = (
+    value: number | string[] | null,
+    fieldName: string
+  ) => {
     this.userInput.get(fieldName)?.setValue(value);
   };
 
