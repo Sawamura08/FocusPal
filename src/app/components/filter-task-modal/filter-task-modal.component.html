@@ -15,8 +15,8 @@
             <li
               class="choice"
               *ngFor="let choice of taskCategory; index as i"
-              (click)="setFormValues(i, 'category', 'category')"
-              [ngClass]="{ selected: categoryChoiceIndex === i }"
+              (click)="setFormValues(i, 'category')"
+              [ngClass]="{ selected: formNameList['category'] === i }"
             >
               {{ choice }}
             </li>
@@ -26,12 +26,12 @@
         <div class="filter-section">
           <h4 class="filter-title">Tags</h4>
           <ul class="choice-list">
-            @if (categoryChoiceIndex === categoryChoices.ACADEMIC) {
+            @if (formNameList['category'] === categoryChoices.ACADEMIC) {
             <li
               class="choice flex-wrap"
               *ngFor="let choice of taskTagsAcademic; index as i"
-              (click)="setTagIndex(i)"
-              [ngClass]="{ selected: tagChoiceIndex === i }"
+              (click)="setFormValues(i, 'tags')"
+              [ngClass]="{ selected: formNameList['tags'] === i }"
             >
               {{ choice }}
             </li>
@@ -39,8 +39,8 @@
             <li
               class="choice flex-wrap"
               *ngFor="let choice of taskTagsPersonal; index as i"
-              (click)="setTagIndex(i)"
-              [ngClass]="{ selected: tagChoiceIndex === i }"
+              (click)="setFormValues(i, 'tags')"
+              [ngClass]="{ selected: formNameList['tags'] === i }"
             >
               {{ choice }}
             </li>
@@ -55,8 +55,8 @@
             <li
               class="choice"
               *ngFor="let choice of taskStatus; index as i"
-              (click)="setStatusIndex(i)"
-              [ngClass]="{ selected: statusChoiceIndex === i }"
+              (click)="setFormValues(i, 'status')"
+              [ngClass]="{ selected: formNameList['status'] === i }"
             >
               {{ choice }}
             </li>
@@ -70,8 +70,8 @@
             <li
               class="choice"
               *ngFor="let choice of taskLevels; index as i"
-              (click)="setPriorityIndex(i)"
-              [ngClass]="{ selected: priorityChoiceIndex === i }"
+              (click)="setFormValues(i, 'priority')"
+              [ngClass]="{ selected: formNameList['priority'] === i }"
             >
               {{ choice }}
             </li>
@@ -79,7 +79,7 @@
         </div>
 
         <div class="button-container">
-          <button class="btn reset">Reset</button
+          <button class="btn reset" (click)="resetFilter()">Reset</button
           ><button class="btn apply" (click)="apply()">Apply</button>
         </div>
       </section>

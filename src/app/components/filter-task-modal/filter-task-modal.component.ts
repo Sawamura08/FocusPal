@@ -45,6 +45,9 @@ export class FilterTaskModalComponent
   ngOnInit(): void {
     /* FETCH USER ID */
     this.getId();
+
+    /* FETCH TASK FILTER VALUES */
+    this.setTaskFilterOnInit();
   }
   public destroyRef = inject(DestroyRef);
   public destroySubs$: Subject<boolean> = new Subject<boolean>();
@@ -68,6 +71,7 @@ export class FilterTaskModalComponent
 
   public apply = () => {
     const filter = this.userInput;
+    console.log(filter.value);
 
     /* REMOVE THE PREVIOUS SUBSCRIPTION */
     this.task$.destroySubs$.next(true);
@@ -92,112 +96,101 @@ export class FilterTaskModalComponent
   };
 
   public resetFilter = () => {
-    this.task$.setNewTaskList([]);
+    /* STOP THE SUBSCRIBE ON THE FILTER */
+    this.task$.destroySubs$.next(true);
+
+    /* SET THE USER CHOICE FILTER INTO UNDEFINED */
+    this.task$.setUserTaskFilter(undefined);
+
+    /* PUT A REST VALUE FOR UI HERE */
   };
 
   /* ----------------- END ----------------- */
 
-  public getTaskByDueDate = () => {
-    this.filterTask.allTaskByDueDate$
-      .pipe(takeUntil(this.destroySubs$))
-      .subscribe({
-        next: (value: any) => {
-          this.task$.setNewTaskList(value);
-        },
-        error: (err) => {
-          console.error('Failed to Fetch Task', err);
-        },
-      });
-  };
+  // public getTaskByDueDate = () => {
+  //   this.filterTask.allTaskByDueDate$
+  //     .pipe(takeUntil(this.destroySubs$))
+  //     .subscribe({
+  //       next: (value: any) => {
+  //         this.task$.setNewTaskList(value);
+  //       },
+  //       error: (err) => {
+  //         console.error('Failed to Fetch Task', err);
+  //       },
+  //     });
+  // };
 
-  /* FETCH TASK DEPENDING ON PRIORITIES */
-  public getTaskByPriorities = () => {
-    this.destroySubs$.next(true);
-    this.level.changePriority(0);
+  // /* FETCH TASK DEPENDING ON PRIORITIES */
+  // public getTaskByPriorities = () => {
+  //   this.destroySubs$.next(true);
+  //   this.level.changePriority(0);
 
-    this.filterTask.allTaskByPriorities$
-      .pipe(takeUntil(this.destroySubs$))
-      .subscribe({
-        next: (value: any) => {
-          this.task$.setNewTaskList(value);
-        },
-        error: (err) => {
-          console.error('Failed to Fetch Task', err);
-        },
-      });
-  };
+  //   this.filterTask.allTaskByPriorities$
+  //     .pipe(takeUntil(this.destroySubs$))
+  //     .subscribe({
+  //       next: (value: any) => {
+  //         this.task$.setNewTaskList(value);
+  //       },
+  //       error: (err) => {
+  //         console.error('Failed to Fetch Task', err);
+  //       },
+  //     });
+  // };
 
   public closeTaskFilter = () => {
     this.popModal.setTaskFilterSignal(false);
   };
 
-  /* ----------- SETTING FORM VALUES ----------- */
-
-  // CATEGORY
-  public categoryChoices = categories;
-  public formNameList: { [key: string]: number } = {
-    category: 0,
-    tags: 0,
-    status: 0,
-    priority: 0,
+  public setTaskFilterOnInit = () => {
+    this.task$
+      .getUserTaskFilter()
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        catchError((err) => {
+          console.error('Error on Subscribe Task Observable', err);
+          return of([]);
+        })
+      )
+      .subscribe({
+        next: (value) => {
+          this.userInput.patchValue(value!);
+          this.syncFiltertoUI(value);
+        },
+      });
   };
-  public categoryChoiceIndex: number | undefined = undefined;
 
-  public setCategoryChoice = (choice: number) => {
-    if (this.categoryChoiceIndex === choice) {
-      this.categoryChoiceIndex = undefined;
-      this.setValueOnChange(null, 'category');
-    } else {
-      this.categoryChoiceIndex = choice;
-
-      this.setValueOnChange(choice, 'category');
+  public syncFiltertoUI = (value: any) => {
+    if (value) {
+      this.formNameList['category'] = value.category;
+      this.formNameList['tags'] = value.tags;
+      this.formNameList['status'] = value.status;
+      this.formNameList['priority'] = value.priority;
     }
   };
 
-  public setFormValues = (
-    choice: number,
-    formName: string,
-    choiceIndex: string
-  ) => {
-    console.log(this.formNameList[choiceIndex]);
-    /* if (this.formNameList[choiceIndex] === choice) {
-      choiceIndex = undefined;
-      this.setValueOnChange(null, formName);
+  /* ----------- END ----------- */
+
+  /* ------------SETTING FORM VALUE ---------------- */
+  public categoryChoices = categories;
+  public formNameList: { [key: string]: number | undefined } = {
+    category: undefined,
+    tags: undefined,
+    status: undefined,
+    priority: undefined,
+  };
+  // all field use one method for setting values
+  public setFormValues = (choice: number, fieldName: string | undefined) => {
+    if (this.formNameList[fieldName!] === choice) {
+      fieldName = undefined;
+      this.setValueOnChange(null, fieldName!);
     } else {
-      choiceIndex = choice;
+      this.formNameList[fieldName!] = choice;
 
-      this.setValueOnChange(choice, formName);
-    } */
+      this.setValueOnChange(choice, fieldName!);
+    }
   };
 
-  // TAGS
-  public tagChoiceIndex: number | undefined = undefined;
-
-  public setTagIndex = (choice: number) => {
-    this.tagChoiceIndex = choice;
-
-    this.setValueOnChange(choice, 'tags');
-  };
-
-  // STATUS
-
-  public statusChoiceIndex: number | undefined = undefined;
-
-  public setStatusIndex = (choice: number) => {
-    this.statusChoiceIndex = choice;
-
-    this.setValueOnChange(choice, 'status');
-  };
-
-  // PRIORITY
-
-  public priorityChoiceIndex: number | undefined = undefined;
-
-  public setPriorityIndex = (choice: number) => {
-    this.priorityChoiceIndex = choice;
-
-    this.setValueOnChange(choice, 'priority');
-  };
+  /* ----------- END ----------- */
 
   /* GET SESSION FOR USER */
   public static userId: number | undefined = undefined;

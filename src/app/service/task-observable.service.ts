@@ -27,7 +27,7 @@ export class TaskObservableService {
   };
 
   /* ------------------------------------------------------- */
-  public setUserTaskFilter = (filter: taskFilter) => {
+  public setUserTaskFilter = (filter: taskFilter | undefined) => {
     this.userTaskFilter$.next(filter);
   };
 

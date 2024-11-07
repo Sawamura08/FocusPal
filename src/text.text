@@ -24,7 +24,10 @@
 [x] : validators for fields tasks 
 [] : UI for tasks;
 
-[]: CREATE NO INTERNET CONNECTION UI
+[x]: CREATE NO INTERNET CONNECTION UI
+
+[]: PUT A REST FUNCTION ON UI FILTER choice
+[]: FIX THE UI FILTER (REMOVE CHOICE PER FORMNAME)
 
 
 
