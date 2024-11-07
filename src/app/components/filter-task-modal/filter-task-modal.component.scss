@@ -5,6 +5,7 @@
   @include blurBackground();
 
   .modal-container {
+    display: none;
     border-radius: 1rem;
     width: 70%;
     height: 100%;

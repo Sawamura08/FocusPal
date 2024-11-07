@@ -118,8 +118,6 @@ export class FilterTaskService extends taskService {
 
     const filteredTask = await query.toArray();
 
-    console.log(filteredTask);
-
     return filteredTask;
   };
 

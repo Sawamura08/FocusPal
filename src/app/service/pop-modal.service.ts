@@ -149,7 +149,7 @@ export class PopModalService {
   };
   /* --------------- END ---------------------- */
 
-  public taskFilterStateSignal = signal(true);
+  public taskFilterStateSignal = signal(false);
   public isTaskFilterModalOpen = computed(() => this.taskFilterStateSignal());
 
   public setTaskFilterSignal = (value: boolean) => {

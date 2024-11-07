@@ -48,7 +48,7 @@ export class TaskComponent implements OnDestroy {
     this.getNetworkStatus();
 
     /* GET ALL TASK */
-    this.fetchAllTask();
+    this.setTaskList();
   }
 
   /* GET SESSION FOR USER */
@@ -74,13 +74,34 @@ export class TaskComponent implements OnDestroy {
   public fetchAllTask = () => {
     this.db.taskList$.pipe(takeUntil(this.destroySubs$)).subscribe({
       next: (value) => {
-        this.taskList = value;
         this.task$.setNewTaskList(value);
+        this.getFilterDataObservable();
       },
       error: (err) => {
         console.error('Error', err);
       },
     });
+  };
+
+  public getFilterDataObservable = () => {
+    this.task$
+      .getTaskList()
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        catchError((err) => {
+          console.error('Error subscribe on Task List Observable', err);
+          return of([]);
+        })
+      )
+      .subscribe({
+        next: (value) => (this.taskList = value),
+      });
+  };
+
+  public setTaskList = () => {
+    if ((this.taskList = [])) {
+      this.fetchAllTask();
+    }
   };
 
   /* END */
@@ -130,6 +151,5 @@ export class TaskComponent implements OnDestroy {
 
   ngOnDestroy(): void {
     this.destroySubs$.next(true);
-    this.destroySubs$.complete();
   }
 }

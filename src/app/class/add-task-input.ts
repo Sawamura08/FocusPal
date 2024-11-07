@@ -1,5 +1,6 @@
 import { FormGroup } from '@angular/forms';
 import { Injectable } from '@angular/core';
+import { taskFilter } from '../interfaces/Request';
 
 @Injectable({
   providedIn: 'root',
@@ -47,10 +48,10 @@ export class AddTaskInput {
 
   /* END */
 
-  /* TASK PRIORITY LEVEL */
+  /* FORM FILTER CHOICES */
+
   public taskLevels: string[] = ['Low', 'Medium', 'High'];
 
-  /* TASK TAGS */
   public taskTagsPersonal: string[] = [
     'Health',
     'Finance',
@@ -74,4 +75,21 @@ export class AddTaskInput {
   public taskCategory: string[] = ['Personal', 'Academic'];
 
   public taskStatus: string[] = ['In Progress', 'Completed', 'Past Due'];
+
+  /* END */
+
+  public formList: string[] = ['category', 'tags', 'status', 'priority'];
+
+  public formNameList: { [key: string]: number | undefined } = {
+    category: undefined,
+    tags: undefined,
+    status: undefined,
+    priority: undefined,
+  };
+
+  public resetUserForm = (formList: string[]) => {
+    formList.forEach((form) => {
+      this.userInput?.get(form)?.setValue(null);
+    });
+  };
 }

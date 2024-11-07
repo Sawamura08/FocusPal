@@ -5,7 +5,7 @@ import {
   OnDestroy,
   OnInit,
 } from '@angular/core';
-import { catchError, EMPTY, of, Subject, takeUntil } from 'rxjs';
+import { catchError, EMPTY, from, of, Subject, takeUntil } from 'rxjs';
 import { FilterTaskService } from '../../database/filter-task.service';
 import { TaskObservableService } from '../../service/task-observable.service';
 import { PriorityService } from '../../service/priority.service';
@@ -17,11 +17,14 @@ import { FormBuilder } from '@angular/forms';
 import { taskFilter } from '../../interfaces/Request';
 import { SessionService } from '../../service/session.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { slideRight } from '../../animation/slide-right.animate';
+import { slideLeft } from '../../animation/slide-left.animate';
 
 @Component({
   selector: 'app-filter-task-modal',
   templateUrl: './filter-task-modal.component.html',
   styleUrl: './filter-task-modal.component.scss',
+  animations: [slideRight, slideLeft],
 })
 export class FilterTaskModalComponent
   extends AddTaskInput
@@ -55,7 +58,8 @@ export class FilterTaskModalComponent
   public taskFilter: taskFilter | undefined = undefined;
 
   /* ----------------- FORMS ----------------- */
-  /* created a status method to call this function without 'this' */
+
+  /* created a static method to call this function without 'this' */
   public static createFormGroup = (): FormGroup => {
     const fb = new FormBuilder();
     const filterInput = fb.group({
@@ -69,10 +73,9 @@ export class FilterTaskModalComponent
     return filterInput;
   };
 
+  /* APPLY FILTER  */
   public apply = () => {
     const filter = this.userInput;
-    console.log(filter.value);
-
     /* REMOVE THE PREVIOUS SUBSCRIPTION */
     this.task$.destroySubs$.next(true);
 
@@ -89,7 +92,7 @@ export class FilterTaskModalComponent
         .subscribe({
           next: (value) => {
             this.task$.setNewTaskList(value);
-            //this.closeTaskFilter();
+            this.closeTaskFilter();
           },
         });
     }
@@ -102,44 +105,22 @@ export class FilterTaskModalComponent
     /* SET THE USER CHOICE FILTER INTO UNDEFINED */
     this.task$.setUserTaskFilter(undefined);
 
-    /* PUT A REST VALUE FOR UI HERE */
+    /* RESET THE FORM GROUP */
+    this.resetUserForm(this.formList);
+
+    /* PUT A RESET VALUE FOR UI HERE */
+    this.syncFiltertoUI(this.formList, this.userInput.value);
+  };
+
+  public animateModal: boolean = true;
+  public closeTaskFilter = () => {
+    this.animateModal = false;
+    setTimeout(() => {
+      this.popModal.setTaskFilterSignal(false);
+    }, 200);
   };
 
   /* ----------------- END ----------------- */
-
-  // public getTaskByDueDate = () => {
-  //   this.filterTask.allTaskByDueDate$
-  //     .pipe(takeUntil(this.destroySubs$))
-  //     .subscribe({
-  //       next: (value: any) => {
-  //         this.task$.setNewTaskList(value);
-  //       },
-  //       error: (err) => {
-  //         console.error('Failed to Fetch Task', err);
-  //       },
-  //     });
-  // };
-
-  // /* FETCH TASK DEPENDING ON PRIORITIES */
-  // public getTaskByPriorities = () => {
-  //   this.destroySubs$.next(true);
-  //   this.level.changePriority(0);
-
-  //   this.filterTask.allTaskByPriorities$
-  //     .pipe(takeUntil(this.destroySubs$))
-  //     .subscribe({
-  //       next: (value: any) => {
-  //         this.task$.setNewTaskList(value);
-  //       },
-  //       error: (err) => {
-  //         console.error('Failed to Fetch Task', err);
-  //       },
-  //     });
-  // };
-
-  public closeTaskFilter = () => {
-    this.popModal.setTaskFilterSignal(false);
-  };
 
   public setTaskFilterOnInit = () => {
     this.task$
@@ -154,17 +135,16 @@ export class FilterTaskModalComponent
       .subscribe({
         next: (value) => {
           this.userInput.patchValue(value!);
-          this.syncFiltertoUI(value);
+          this.syncFiltertoUI(this.formList, value);
         },
       });
   };
 
-  public syncFiltertoUI = (value: any) => {
+  public syncFiltertoUI = (formList: string[], value?: any) => {
     if (value) {
-      this.formNameList['category'] = value.category;
-      this.formNameList['tags'] = value.tags;
-      this.formNameList['status'] = value.status;
-      this.formNameList['priority'] = value.priority;
+      formList.forEach((form) => {
+        this.formNameList[form] = value[`${form}`];
+      });
     }
   };
 
@@ -172,16 +152,11 @@ export class FilterTaskModalComponent
 
   /* ------------SETTING FORM VALUE ---------------- */
   public categoryChoices = categories;
-  public formNameList: { [key: string]: number | undefined } = {
-    category: undefined,
-    tags: undefined,
-    status: undefined,
-    priority: undefined,
-  };
+
   // all field use one method for setting values
   public setFormValues = (choice: number, fieldName: string | undefined) => {
     if (this.formNameList[fieldName!] === choice) {
-      fieldName = undefined;
+      this.formNameList[fieldName!] = undefined;
       this.setValueOnChange(null, fieldName!);
     } else {
       this.formNameList[fieldName!] = choice;
@@ -189,6 +164,12 @@ export class FilterTaskModalComponent
       this.setValueOnChange(choice, fieldName!);
     }
   };
+
+  /* GETTERS */
+
+  get category() {
+    return this.userInput?.get('category');
+  }
 
   /* ----------- END ----------- */
 
