@@ -40,7 +40,6 @@ import { categories, confirm } from '../../interfaces/export.object';
 export class AddTaskComponent implements OnInit, OnDestroy {
   subscriptionArr: Subscription[] = [];
   private destroyRef = inject(DestroyRef);
-  @Input() isUpdateMode: updateMode | null = null;
   constructor(
     private popModal: PopModalService,
     private fb: FormBuilder,
@@ -66,7 +65,7 @@ export class AddTaskComponent implements OnInit, OnDestroy {
   }
   ngOnInit(): void {
     /* SUBSCRIBE ADDTASK MODAL */
-    this.addTaskSubscribe();
+    this.modalTaskSubsribe();
 
     /* FETCH SESSION */
     this.getSession();
@@ -132,11 +131,11 @@ export class AddTaskComponent implements OnInit, OnDestroy {
 
   /* END */
 
-  /* SUBSCRIBE ADDTASK MODAL */
+  /* SUBSCRIBE TASK MODAL */
   public modalStatus: updateMode | null = null;
   protected animateModal: boolean = true;
   private addTaskSubscription!: Subscription;
-  private addTaskSubscribe = () => {
+  private modalTaskSubsribe = () => {
     this.addTaskSubscription = this.popModal.getAddTaskModalStatus().subscribe({
       next: (value) => (this.modalStatus = value),
       error: (err) => console.error('Error Subscribe Add Task', err),
@@ -179,6 +178,12 @@ export class AddTaskComponent implements OnInit, OnDestroy {
     if (this.tags != null) {
       this.addTaskConfig.setValueOnChange(this.tagIndex, 'tags');
     }
+  };
+
+  // COMPLETE THE TASK
+  public isTaskComplete: boolean = false;
+  public setTaskCompletion = () => {
+    this.isTaskComplete = !this.isTaskComplete;
   };
   /* END */
 
@@ -271,12 +276,13 @@ export class AddTaskComponent implements OnInit, OnDestroy {
   //
   //
 
-  /* HANDLES OBSERBABLES FOR UPDATE AND CONFIRMATION MODAL */
+  @Input() taskData: any;
+
+  /* HANDLES OBSERBABLES CONFIRMATION MODAL */
   public modalModeObservable = () => {
-    const updateMode = this.popModal.getAddTaskModalStatus();
     const confirmModal = this.popModal.getConfirmModalStatus();
 
-    combineLatest([updateMode, confirmModal])
+    combineLatest([confirmModal])
       .pipe(
         takeUntilDestroyed(this.destroyRef),
         catchError((err) => {
@@ -285,8 +291,7 @@ export class AddTaskComponent implements OnInit, OnDestroy {
         })
       )
       .subscribe({
-        next: ([mode, isConfirmModalOpen]) => {
-          this.isUpdateMode = mode;
+        next: ([isConfirmModalOpen]) => {
           this.isConfirmModalOpen = isConfirmModalOpen;
         },
       });
@@ -327,6 +332,6 @@ export class AddTaskComponent implements OnInit, OnDestroy {
     if (this.subscriptionArr)
       this.subscriptionArr.forEach((subs) => subs.unsubscribe());
 
-    //console.log('Component destroyed');
+    /* console.log('Component destroyed'); */
   }
 }

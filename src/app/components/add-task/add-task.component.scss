@@ -50,6 +50,25 @@
         border-radius: 1rem;
         box-shadow: 0 3px 5px $textColor;
         background-color: $neutralColor;
+
+        .complete-container {
+          width: 100%;
+          display: flex;
+          justify-content: space-around;
+          align-items: center;
+
+          h4 {
+            font-family: $fontFamily;
+            font-size: 1rem;
+          }
+          .icon > i {
+            font-size: 1.5rem;
+            opacity: 0.6;
+          }
+          .complete {
+            color: $updateShadow;
+          }
+        }
       }
 
       .select {

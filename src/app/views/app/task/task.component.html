@@ -3,7 +3,7 @@
 <br />
 <button (click)="openTaskFilterModal()">Open Modal</button>
 
-<div *ngFor="let task of taskList">
+<div *ngFor="let task of taskList; index as i">
   <br />
   <p>TASK LIST</p>
   <p>taskId - {{ task.taskId }}</p>
@@ -15,5 +15,5 @@
   <p>dueDate - {{ task.dueDate | date : "medium" }}</p>
   <p>createdAt - {{ task.createdAt | date : "medium" }}</p>
   <button (click)="deleteTask(task.taskId!)">Delete</button>
-  <button (click)="openUpdateModal()">Update</button>
+  <button (click)="openUpdateModal(taskList[i])">Update</button>
 </div>

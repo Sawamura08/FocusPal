@@ -6,7 +6,11 @@
 >
   <div class="add-task-container">
     <div class="modal-header">
+      @if (!modalStatus?.mode) {
       <h3 class="title">Add Task</h3>
+      } @else {
+      <h3 class="title">Update Task</h3>
+      }
       <span class="icon"
         ><i
           class="fa-sharp fa-regular fa-arrow-left"
@@ -15,6 +19,19 @@
       ></span>
     </div>
     <form action="" class="modal-content" [formGroup]="userInput">
+      @if (modalStatus?.mode) {
+      <section class="form-input select">
+        <div class="complete-container">
+          <h4>Complete Task</h4>
+          <span
+            class="icon"
+            [ngClass]="{ complete: isTaskComplete }"
+            (click)="setTaskCompletion()"
+            ><i class="fa-sharp fa-regular fa-circle-check"></i
+          ></span>
+        </div>
+      </section>
+      }
       <section class="form-input select">
         <div class="label-container">
           <span class="icon"><i class="fa-regular fa-clipboard-list"></i></span>
@@ -220,11 +237,11 @@
       </section>
 
       <section class="button-container">
-        <div class="submit-btn" *ngIf="!isUpdateMode?.mode">
+        <div class="submit-btn" *ngIf="!modalStatus?.mode">
           <button class="btn" (click)="submit()">Submit</button>
         </div>
 
-        <div class="edit-btn" *ngIf="isUpdateMode?.mode">
+        <div class="edit-btn" *ngIf="modalStatus?.mode">
           <button class="btn delete">Delete</button>
           <button class="btn update">Update</button>
         </div>

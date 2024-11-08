@@ -44,11 +44,17 @@
 </main>
 
 <!-- ADD TASK MODAL -->
-@if (modalStatus?.isOpen) {
+@if (modalStatus?.isOpen && !modalStatus?.mode) {
 <section class="add-task-modal">
   <app-add-task></app-add-task>
 </section>
 }
+
+<!-- @if (modalStatus?.isOpen && !modalStatus?.mode) {
+<section class="add-task-modal">
+  <app-add-task [taskData]="taskData"></app-add-task>
+</section>
+} -->
 
 <!-- CHAT AI -->
 @if (isAiChatOpen) {

@@ -6,6 +6,7 @@ import Dexie, { Table } from 'dexie';
 import { DatePipe } from '@angular/common';
 import { ScheduleService } from './schedule.service';
 import { TaskObservableService } from '../service/task-observable.service';
+import { taskCompletion } from '../interfaces/export.object';
 
 @Injectable({
   providedIn: 'root',
@@ -82,5 +83,13 @@ export class taskService {
 
   public deleteTask = async (del: number) => {
     await db.taskList.delete(del);
+  };
+
+  /* SET TASK COMPLETION */
+
+  public setTaskCompletetionStatus = (isComplete: boolean) => {
+    const value = isComplete ? taskCompletion.COMPLETE : taskCompletion.PENDING;
+
+    /*  db.taskList.update() */
   };
 }

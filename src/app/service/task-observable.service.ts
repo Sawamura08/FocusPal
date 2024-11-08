@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { Task } from '../database/db';
 import { taskFilter } from '../interfaces/Request';
@@ -38,4 +38,9 @@ export class TaskObservableService {
   /* SUBJECT FOR PREVENTING MULTIPLE SUBSCRIPTION */
 
   public destroySubs$: Subject<boolean> = new Subject<boolean>();
+
+  /* SIGNAL FOR SETTING DATA FOR UPDATE AND DELETE*/
+  public taskDataSignal = signal(undefined);
+
+  public setTaskDataValue = () => {};
 }

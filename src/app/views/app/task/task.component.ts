@@ -94,7 +94,10 @@ export class TaskComponent implements OnDestroy {
         })
       )
       .subscribe({
-        next: (value) => (this.taskList = value),
+        next: (value) => {
+          this.taskList = value;
+          console.log(value);
+        },
       });
   };
 
@@ -115,7 +118,8 @@ export class TaskComponent implements OnDestroy {
 
   /* OPEN THE UPDATE MODAL */
 
-  public openUpdateModal = () => {
+  public taskData: Task | undefined = undefined;
+  public openUpdateModal = (data: Task) => {
     // make the modal update mode
     const mode: updateMode = {
       mode: true,
@@ -123,6 +127,9 @@ export class TaskComponent implements OnDestroy {
     };
 
     this.popModal.changeAddTaskModalStatus(mode);
+
+    /* SET TASK DATA */
+    this.taskData = data;
   };
 
   /* UPDATE THE TASK */

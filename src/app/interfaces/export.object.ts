@@ -12,6 +12,12 @@ export interface toastModal {
   status: boolean;
 }
 
+export enum taskCompletion {
+  PENDING = 0,
+  COMPLETE = 1,
+  PAST_DUE = 2,
+}
+
 export const confirm: confirmModal = {
   imgPath: '/extra/warning.png',
   title: 'Are you sure?',
