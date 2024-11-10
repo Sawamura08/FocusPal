@@ -30,6 +30,7 @@ import { UpdateTaskModeService } from '../../service/update-task-mode.service';
 import { slideRight } from '../../animation/slide-right.animate';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { categories, confirm } from '../../interfaces/export.object';
+import { TaskObservableService } from '../../service/task-observable.service';
 
 @Component({
   selector: 'app-add-task',
@@ -47,7 +48,8 @@ export class AddTaskComponent implements OnInit, OnDestroy {
     private task: taskService,
     private route: Router,
     private actRoute: ActivatedRoute,
-    private updateMode: UpdateTaskModeService
+    private updateMode: UpdateTaskModeService,
+    private task$: TaskObservableService
   ) {
     this.userInput = this.fb.group({
       title: ['', Validators.required],
@@ -62,6 +64,8 @@ export class AddTaskComponent implements OnInit, OnDestroy {
 
     this.addTaskConfig = new AddTaskInput(this.userInput);
     this.tagList = this.addTaskConfig.taskTagsPersonal;
+
+    this.fetchTaskData();
   }
   ngOnInit(): void {
     /* SUBSCRIBE ADDTASK MODAL */
@@ -276,7 +280,12 @@ export class AddTaskComponent implements OnInit, OnDestroy {
   //
   //
 
+  /* SET THE DATA */
   @Input() taskData: any;
+  public fetchTaskData = () => {
+    this.taskData = this.task$.getTaskDataSignal()();
+    console.log(this.taskData);
+  };
 
   /* HANDLES OBSERBABLES CONFIRMATION MODAL */
   public modalModeObservable = () => {

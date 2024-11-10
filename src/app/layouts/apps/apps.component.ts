@@ -10,6 +10,7 @@ import { PopModalService, updateMode } from '../../service/pop-modal.service';
 import { Location } from '@angular/common';
 import { buttonValues, navigation } from '../../class/navigation';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { TaskObservableService } from '../../service/task-observable.service';
 
 enum buttons {
   HOME,
@@ -28,7 +29,8 @@ export class AppsComponent extends navigation implements OnInit, OnDestroy {
     route: Router,
     actRoute: ActivatedRoute,
     private popModal: PopModalService,
-    location: Location
+    location: Location,
+    private task$: TaskObservableService
   ) {
     super(location, route, actRoute);
   }
@@ -75,6 +77,7 @@ export class AppsComponent extends navigation implements OnInit, OnDestroy {
     };
     this.popModal.changeAddTaskModalStatus(mode);
   };
+
   /* END */
 
   /* CHAT WITH SYDNEY MODAL */

@@ -130,6 +130,7 @@ export class TaskComponent implements OnDestroy {
 
     /* SET TASK DATA */
     this.taskData = data;
+    this.task$.setTaskDataValue(this.taskData);
   };
 
   /* UPDATE THE TASK */

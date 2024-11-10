@@ -48,13 +48,15 @@
 <section class="add-task-modal">
   <app-add-task></app-add-task>
 </section>
+
 }
 
-<!-- @if (modalStatus?.isOpen && !modalStatus?.mode) {
+<!-- UPDATE TASK MODAL -->
+@if (modalStatus?.isOpen && modalStatus?.mode) {
 <section class="add-task-modal">
-  <app-add-task [taskData]="taskData"></app-add-task>
+  <app-add-task></app-add-task>
 </section>
-} -->
+}
 
 <!-- CHAT AI -->
 @if (isAiChatOpen) {
