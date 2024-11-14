@@ -6,7 +6,11 @@ import {
   inject,
   DestroyRef,
 } from '@angular/core';
-import { PopModalService, updateMode } from '../../service/pop-modal.service';
+import {
+  ModalType,
+  PopModalService,
+  updateMode,
+} from '../../service/pop-modal.service';
 import {
   catchError,
   combineLatest,
@@ -38,6 +42,7 @@ import { TaskObservableService } from '../../service/task-observable.service';
 import { taskFilter } from '../../interfaces/Request';
 import { Task } from '../../database/db';
 import { ToastModalService } from '../../service/toast-modal.service';
+import { unsuccessful } from '../../Objects/modal.details';
 
 @Component({
   selector: 'app-add-task',
@@ -331,16 +336,20 @@ export class AddTaskComponent implements OnInit, OnDestroy {
     const response = await this.openConfirmationModal();
 
     if (response) {
-      const result = await this.task.updateTask(
-        this.userInput.value,
-        this.taskId!
-      );
+      try {
+        const result = await this.task.updateTask(
+          this.userInput.value,
+          this.taskId!
+        );
 
-      if (result) {
-        this.toastNotif.switchToastModal(toastConfig);
+        if (!result) {
+          this.toastNotif.switchToastModal(toastConfig);
+        } else {
+          this.popModal.openModal(ModalType.UNSUCCESSFUL);
+        }
+      } finally {
+        this.closeTaskModal();
       }
-      // CODE THAT WILL HANDLES THE RESULT
-      this.closeTaskModal();
     }
   };
 

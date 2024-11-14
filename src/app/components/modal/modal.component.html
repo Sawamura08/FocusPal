@@ -21,7 +21,7 @@
     </section>
   </div>
   } @else {
-  <div class="loader-container" [@slide]="true">
+  <div class="loader-container" [@slide] *ngIf="animateModal">
     <img [src]="data?.imgPath" alt="" />
     <div class="title">
       <h4>{{ data?.title }}</h4>

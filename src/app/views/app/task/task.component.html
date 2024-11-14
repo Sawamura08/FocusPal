@@ -1,19 +1,28 @@
-<button (click)="fetchAllTask()">All Task</button>
-<br />
-<br />
-<button (click)="openTaskFilterModal()">Open Modal</button>
-
-<div *ngFor="let task of taskList; index as i">
+<main>
+  <button (click)="fetchAllTask()">All Task</button>
   <br />
-  <p>TASK LIST</p>
-  <p>taskId - {{ task.taskId }}</p>
-  <p>userId - {{ task.userId }}</p>
-  <p>description - {{ task.description }}</p>
-  <p>Priority - {{ task.priority | textPipe }}</p>
-  <p>subTask - {{ task.subTask }}</p>
-  <p>status - {{ task.status }}</p>
-  <p>dueDate - {{ task.dueDate | date : "medium" }}</p>
-  <p>createdAt - {{ task.createdAt | date : "medium" }}</p>
-  <button (click)="deleteTask(task.taskId!)">Delete</button>
-  <button (click)="openUpdateModal(taskList[i])">Update</button>
+  <br />
+  <button (click)="openTaskFilterModal()">Open Modal</button>
+
+  <div *ngFor="let task of taskList; index as i">
+    <br />
+    <p>TASK LIST</p>
+    <p>taskId - {{ task.taskId }}</p>
+    <p>userId - {{ task.userId }}</p>
+    <p>description - {{ task.description }}</p>
+    <p>Priority - {{ task.priority | textPipe }}</p>
+    <p>subTask - {{ task.subTask }}</p>
+    <p>status - {{ task.status }}</p>
+    <p>dueDate - {{ task.dueDate | date : "medium" }}</p>
+    <p>createdAt - {{ task.createdAt | date : "medium" }}</p>
+    <button (click)="deleteTask(task.taskId!)">Delete</button>
+    <button (click)="openUpdateModal(taskList[i])">Update</button>
+  </div>
+</main>
+
+<!-- ERROR RESULT UDPATE OR DELETE MODAL -->
+@if (isResultModalOpen === 4) {
+<div class="modal">
+  <app-modal [data]="resultModalDetail"></app-modal>
 </div>
+}

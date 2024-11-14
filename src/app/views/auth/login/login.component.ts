@@ -1,14 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import { AuthService } from '../services/auth.service';
-import { Subscription } from 'rxjs';
+import { catchError, EMPTY, of, Subscription } from 'rxjs';
 import { OnDestroy } from '@angular/core';
 import { NetworkStatusService } from '../../../service/network-status.service';
 import { ModalType } from '../../../service/pop-modal.service';
 import { PopModalService } from '../../../service/pop-modal.service';
 import { SessionService } from '../../../service/session.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-login',
@@ -18,6 +19,7 @@ import { SessionService } from '../../../service/session.service';
 export class LoginComponent implements OnInit, OnDestroy {
   public passStatus: boolean = false;
   public isPassVisible: boolean = false;
+  private destroyRef = inject(DestroyRef);
 
   constructor(
     private router: Router,
@@ -77,17 +79,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     return this.userInput.get('password');
   }
 
-  // public invalidEmail = (): string => {
-  //   if (
-  //     (this.email?.errors?.['email'] || this.email?.errors?.['required']) &&
-  //     (this.email?.touched || this.email?.dirty)
-  //   ) {
-  //     return 'errors';
-  //   } else {
-  //     return '';
-  //   }
-  // };
-
   /* END OF FORM GROUP */
 
   public disableBtn = () => {
@@ -111,9 +102,18 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   private networkStatus: boolean = false;
   private checkNetworkStatus = (): void => {
-    this.networkService.networkStatus$().subscribe((value) => {
-      this.networkStatus = value;
-    });
+    this.networkService
+      .networkStatus$()
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        catchError((err) => {
+          console.error('Error on network Subscribe', err);
+          return of(false);
+        })
+      )
+      .subscribe((value) => {
+        this.networkStatus = value;
+      });
   };
 
   /* ------------- END CHECKING THE NETWORK IF ONLINE OR OFFLINE -------------*/
@@ -135,7 +135,16 @@ export class LoginComponent implements OnInit, OnDestroy {
   modal: ModalType = ModalType.NONE;
 
   private modalSubscribe = () => {
-    this.popModal.getModalStatus().subscribe((data) => (this.modal = data));
+    this.popModal
+      .getModalStatus()
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        catchError((err) => {
+          console.error('Error ON Subsribe for modal', err);
+          return EMPTY;
+        })
+      )
+      .subscribe((modalValue) => (this.modal = modalValue));
   };
 
   /* ------ END modal data --------- */

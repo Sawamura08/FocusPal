@@ -13,16 +13,18 @@ import {
 import { NetworkStatusService } from '../../../service/network-status.service';
 
 import {
+  ModalType,
   PopModalService,
   updateMode,
 } from '../../../service/pop-modal.service';
 import { UpdateTaskModeService } from '../../../service/update-task-mode.service';
-import { catchError, of, Subject, takeUntil } from 'rxjs';
+import { catchError, EMPTY, of, Subject, takeUntil } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { TaskObservableService } from '../../../service/task-observable.service';
 import { ToastrService } from 'ngx-toastr';
 import { ToastModalService } from '../../../service/toast-modal.service';
 import { toastModal } from '../../../interfaces/export.object';
+import { unsuccessful } from '../../../Objects/modal.details';
 
 @Component({
   selector: 'app-task',
@@ -57,6 +59,9 @@ export class TaskComponent implements OnDestroy {
 
     /* SUBSRIBE TO TOASTR */
     this.getToastr();
+
+    /* FETCH MODAL FOR ACTION(UPDATE OR DELETE) RESULT */
+    this.getActionResultModal();
   }
 
   /* GET SESSION FOR USER */
@@ -192,6 +197,25 @@ export class TaskComponent implements OnDestroy {
       .subscribe({
         next: (value) => (this.networkStatus = value),
         error: (err) => console.error('Error Subscribe network', err),
+      });
+  };
+
+  /* ERROR RESULT ON UPDATE OR DELETE */
+  public isResultModalOpen: ModalType = ModalType.NONE;
+  public resultModalDetail = unsuccessful;
+  public getActionResultModal = () => {
+    this.popModal
+      .getModalStatus()
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        catchError((err) => {
+          console.error('Error On Modal Subsribe ', err);
+          return EMPTY;
+        })
+      )
+      .subscribe((result) => {
+        this.isResultModalOpen = result;
+        console.log(result);
       });
   };
 

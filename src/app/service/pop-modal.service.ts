@@ -6,6 +6,7 @@ export enum ModalType {
   EMAIL_USED,
   NO_INTERNET,
   INCORRECT,
+  UNSUCCESSFUL,
 }
 
 export interface updateMode {
