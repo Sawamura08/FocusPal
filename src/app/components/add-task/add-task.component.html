@@ -242,7 +242,7 @@
         </div>
 
         <div class="edit-btn" *ngIf="modalStatus?.mode">
-          <button class="btn delete">Delete</button>
+          <button class="btn delete" (click)="deleteTask()">Delete</button>
           <button class="btn update" (click)="updateTask()">Update</button>
         </div>
       </section>

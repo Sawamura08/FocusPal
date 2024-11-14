@@ -147,7 +147,7 @@ export class TaskComponent implements OnDestroy {
 
   /* -------------- END  ----------------- */
 
-  /* SUBSRIBE TO TOASTER MODAL AND CONFIGURE */
+  /* SUBSCRIBE TO TOASTER MODAL AND CONFIGURE */
 
   public getToastr = () => {
     this.toastNotif
@@ -215,7 +215,6 @@ export class TaskComponent implements OnDestroy {
       )
       .subscribe((result) => {
         this.isResultModalOpen = result;
-        console.log(result);
       });
   };
 

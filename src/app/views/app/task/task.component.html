@@ -15,13 +15,12 @@
     <p>status - {{ task.status }}</p>
     <p>dueDate - {{ task.dueDate | date : "medium" }}</p>
     <p>createdAt - {{ task.createdAt | date : "medium" }}</p>
-    <button (click)="deleteTask(task.taskId!)">Delete</button>
     <button (click)="openUpdateModal(taskList[i])">Update</button>
   </div>
 </main>
 
 <!-- ERROR RESULT UDPATE OR DELETE MODAL -->
-@if (isResultModalOpen === 4) {
+@if (isResultModalOpen) {
 <div class="modal">
   <app-modal [data]="resultModalDetail"></app-modal>
 </div>

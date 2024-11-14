@@ -342,11 +342,28 @@ export class AddTaskComponent implements OnInit, OnDestroy {
           this.taskId!
         );
 
-        if (!result) {
+        if (result) {
           this.toastNotif.switchToastModal(toastConfig);
         } else {
           this.popModal.openModal(ModalType.UNSUCCESSFUL);
         }
+      } finally {
+        this.closeTaskModal();
+      }
+    }
+  };
+
+  /* DELETE SPECIFIC TASK */
+  public deleteTask = async () => {
+    const toastConfig: toastModal = { type: 'Delete', status: true };
+
+    const response = await this.openConfirmationModal();
+
+    if (response) {
+      try {
+        this.task.deleteTask(this.taskId!);
+
+        this.toastNotif.switchToastModal(toastConfig);
       } finally {
         this.closeTaskModal();
       }
