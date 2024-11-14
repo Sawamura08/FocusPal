@@ -8,6 +8,7 @@ export interface Task {
   subTask?: Array<string>; // it should be array string
   status: number; // pending OR completed
   priority: number;
+  startDate: Date;
   dueDate: Date;
   createdAt: Date;
   taskCategory: number; // 0 - personal; 1- academic
@@ -44,9 +45,9 @@ export class localDB extends Dexie {
 
   constructor() {
     super('myDB');
-    this.version(25).stores({
+    this.version(26).stores({
       taskList:
-        '++taskId, userId, title,description,subTask, status, priority, dueDate, createdAt, taskCategory, tags ,isSync, isUpdated,isQueued',
+        '++taskId, userId, title,description,subTask, status, priority, startDate, dueDate, createdAt, taskCategory, tags ,isSync, isUpdated,isQueued',
       userList: 'userId,userName',
       schedList:
         '++schedId,userId,title,date,startTime,endTime,repeat,type,isActive,daysOfWeek,location',

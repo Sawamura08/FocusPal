@@ -29,8 +29,15 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { UpdateTaskModeService } from '../../service/update-task-mode.service';
 import { slideRight } from '../../animation/slide-right.animate';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { categories, confirm } from '../../interfaces/export.object';
+import {
+  categories,
+  confirm,
+  toastModal,
+} from '../../interfaces/export.object';
 import { TaskObservableService } from '../../service/task-observable.service';
+import { taskFilter } from '../../interfaces/Request';
+import { Task } from '../../database/db';
+import { ToastModalService } from '../../service/toast-modal.service';
 
 @Component({
   selector: 'app-add-task',
@@ -49,7 +56,8 @@ export class AddTaskComponent implements OnInit, OnDestroy {
     private route: Router,
     private actRoute: ActivatedRoute,
     private updateMode: UpdateTaskModeService,
-    private task$: TaskObservableService
+    private task$: TaskObservableService,
+    private toastNotif: ToastModalService
   ) {
     this.userInput = this.fb.group({
       title: ['', Validators.required],
@@ -64,8 +72,6 @@ export class AddTaskComponent implements OnInit, OnDestroy {
 
     this.addTaskConfig = new AddTaskInput(this.userInput);
     this.tagList = this.addTaskConfig.taskTagsPersonal;
-
-    this.fetchTaskData();
   }
   ngOnInit(): void {
     /* SUBSCRIBE ADDTASK MODAL */
@@ -141,7 +147,13 @@ export class AddTaskComponent implements OnInit, OnDestroy {
   private addTaskSubscription!: Subscription;
   private modalTaskSubsribe = () => {
     this.addTaskSubscription = this.popModal.getAddTaskModalStatus().subscribe({
-      next: (value) => (this.modalStatus = value),
+      next: (value) => {
+        this.modalStatus = value;
+
+        if (this.modalStatus.mode) {
+          this.fetchTaskData();
+        }
+      },
       error: (err) => console.error('Error Subscribe Add Task', err),
     });
 
@@ -156,12 +168,18 @@ export class AddTaskComponent implements OnInit, OnDestroy {
 
     // this will set the value for the form TaskCategory
     if (this.categoryIndex != null) {
-      this.tagList =
-        this.categoryIndex === this.personalCategory
-          ? this.addTaskConfig.taskTagsPersonal
-          : this.addTaskConfig.taskTagsAcademic;
+      this.tagList = this.setTagListValue();
+
       this.addTaskConfig.setValueOnChange(this.categoryIndex, 'taskCategory');
     }
+  };
+
+  /* SET THE TAG LIST TO DISPLAY */
+
+  public setTagListValue = (): string[] => {
+    return this.categoryIndex === this.personalCategory
+      ? this.addTaskConfig.taskTagsPersonal
+      : this.addTaskConfig.taskTagsAcademic;
   };
 
   priorityIndex: number | null = null;
@@ -235,7 +253,7 @@ export class AddTaskComponent implements OnInit, OnDestroy {
 
   /* CLOSE ADD TASK */
 
-  public closeAddTask = () => {
+  public closeTaskModal = () => {
     this.animateModal = false;
 
     setTimeout(() => {
@@ -264,7 +282,7 @@ export class AddTaskComponent implements OnInit, OnDestroy {
       );
 
       if (taskId) {
-        this.closeAddTask();
+        this.closeTaskModal();
         this.route.navigate(['task'], { relativeTo: this.actRoute });
       }
     }
@@ -284,7 +302,46 @@ export class AddTaskComponent implements OnInit, OnDestroy {
   @Input() taskData: any;
   public fetchTaskData = () => {
     this.taskData = this.task$.getTaskDataSignal()();
-    console.log(this.taskData);
+
+    this.syncDataToUI(this.taskData);
+    // SET THE DATA TO REACTIVE FORMS
+    this.userInput.patchValue(this.taskData);
+  };
+
+  /* SET TASK DATA IN THE UI UDPATE | DELETE */
+  public syncDataToUI = (data: Task) => {
+    // SET UI
+    this.categoryIndex = data.taskCategory;
+    this.tagIndex = data.tags;
+    this.priorityIndex = data.priority;
+    this.taskId = data.taskId;
+    // SET WHICH TAG TO DISPLAY
+    this.tagList = this.setTagListValue();
+
+    if (data.subTask) {
+      this.subTaskList = data.subTask;
+    }
+  };
+
+  /* UPDATE SPECIFIC TASK */
+
+  public taskId: number | undefined = undefined;
+  public updateTask = async () => {
+    const toastConfig: toastModal = { type: 'Update', status: true };
+    const response = await this.openConfirmationModal();
+
+    if (response) {
+      const result = await this.task.updateTask(
+        this.userInput.value,
+        this.taskId!
+      );
+
+      if (result) {
+        this.toastNotif.switchToastModal(toastConfig);
+      }
+      // CODE THAT WILL HANDLES THE RESULT
+      this.closeTaskModal();
+    }
   };
 
   /* HANDLES OBSERBABLES CONFIRMATION MODAL */
@@ -306,17 +363,29 @@ export class AddTaskComponent implements OnInit, OnDestroy {
       });
   };
 
-  /* CONFIRMATION MODAL */
+  /* CONFIRMATION MODAL FOR TASK*/
 
   public isConfirmModalOpen: boolean | null = null;
   public confirm = confirm;
   /* OPEN THE MODAL AND RECIEVE THE USER RESPONSE */
-  public openConfirmationModal = async (subTaskIndex: number) => {
+  public openConfirmationModal = async () => {
+    this.popModal.setConfirmaModalStatus(true);
+
+    try {
+      const response = await this.getUserConfirmResponse();
+      return response;
+    } finally {
+      this.popModal.setConfirmaModalStatus(false);
+    }
+  };
+
+  /* CONFIRMATION MODAL FOR SUBTASK */
+  public openSubTaskConfirmationModal = async (subTaskIndex: number) => {
     this.popModal.setConfirmaModalStatus(true);
 
     const response = await this.getUserConfirmResponse();
 
-    if (response) {
+    if (response && subTaskIndex) {
       this.popModal.setConfirmaModalStatus(false);
       this.deleteSubTask(subTaskIndex);
     }

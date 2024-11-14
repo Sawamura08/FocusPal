@@ -14,7 +14,7 @@
       <span class="icon"
         ><i
           class="fa-sharp fa-regular fa-arrow-left"
-          (click)="closeAddTask()"
+          (click)="closeTaskModal()"
         ></i
       ></span>
     </div>
@@ -181,7 +181,7 @@
               ><img
                 src="extra/trash.png"
                 alt=""
-                (click)="openConfirmationModal(i)"
+                (click)="openSubTaskConfirmationModal(i)"
             /></span>
           </li>
         </ul>
@@ -243,7 +243,7 @@
 
         <div class="edit-btn" *ngIf="modalStatus?.mode">
           <button class="btn delete">Delete</button>
-          <button class="btn update">Update</button>
+          <button class="btn update" (click)="updateTask()">Update</button>
         </div>
       </section>
     </form>

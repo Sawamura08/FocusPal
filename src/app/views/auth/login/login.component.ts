@@ -104,7 +104,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   };
 
   private authSucess = (): void => {
-    this.router.navigate(['../../apps/apps'], { relativeTo: this.route });
+    this.router.navigate(['../../apps/home'], { relativeTo: this.route });
   };
 
   /* ------------- CHECKING THE NETWORK IF ONLINE OR OFFLINE -------------*/

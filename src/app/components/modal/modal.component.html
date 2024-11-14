@@ -1,6 +1,6 @@
 <main>
   @if (confirmation) {
-  <div class="loader-container" [@slide]="true">
+  <div class="loader-container" [@slide] *ngIf="animateModal">
     <img [src]="data?.imgPath" alt="" />
 
     <!-- CONFIRMATION -->

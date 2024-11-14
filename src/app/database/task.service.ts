@@ -50,6 +50,7 @@ export class taskService {
       status: 0,
       subTask: userInputs.subTask,
       priority: userInputs.priority,
+      startDate: userInputs.startDate,
       dueDate: userInputs.dueDate,
       createdAt: new Date(currentDate!),
       taskCategory: userInputs.taskCategory,
@@ -69,14 +70,9 @@ export class taskService {
   };
 
   /* UPDATE SPECIFIC TASK */
-  public updateTask = async (update: Task) => {
-    await db.taskList.update(1, update).then((udpated) => {
-      if (udpated) {
-        console.log('Success');
-      } else {
-        console.log('Error');
-      }
-    });
+  public updateTask = async (update: Task, taskId: number) => {
+    const key = taskId;
+    return await db.taskList.update(key, update);
   };
 
   /* DELETE TASK */

@@ -20,6 +20,9 @@ import { UpdateTaskModeService } from '../../../service/update-task-mode.service
 import { catchError, of, Subject, takeUntil } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { TaskObservableService } from '../../../service/task-observable.service';
+import { ToastrService } from 'ngx-toastr';
+import { ToastModalService } from '../../../service/toast-modal.service';
+import { toastModal } from '../../../interfaces/export.object';
 
 @Component({
   selector: 'app-task',
@@ -34,7 +37,9 @@ export class TaskComponent implements OnDestroy {
     private network: NetworkStatusService,
     private popModal: PopModalService,
     private updateMode: UpdateTaskModeService,
-    private task$: TaskObservableService
+    private task$: TaskObservableService,
+    private toastr: ToastrService,
+    private toastNotif: ToastModalService
   ) {}
   taskList: Task[] = [];
   userId!: number | undefined;
@@ -49,6 +54,9 @@ export class TaskComponent implements OnDestroy {
 
     /* GET ALL TASK */
     this.setTaskList();
+
+    /* SUBSRIBE TO TOASTR */
+    this.getToastr();
   }
 
   /* GET SESSION FOR USER */
@@ -96,7 +104,6 @@ export class TaskComponent implements OnDestroy {
       .subscribe({
         next: (value) => {
           this.taskList = value;
-          console.log(value);
         },
       });
   };
@@ -133,8 +140,46 @@ export class TaskComponent implements OnDestroy {
     this.task$.setTaskDataValue(this.taskData);
   };
 
-  /* UPDATE THE TASK */
-  public updateTasks = () => {};
+  /* -------------- END  ----------------- */
+
+  /* SUBSRIBE TO TOASTER MODAL AND CONFIGURE */
+
+  public getToastr = () => {
+    this.toastNotif
+      .getToastModal()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (value) => this.triggerToast(value),
+        error: (err) => console.error('Error Subscribe on Toastr', err),
+      });
+  };
+
+  private triggerToast = (value: toastModal) => {
+    /* RESET NOTIF */
+    const toastModalReset: toastModal = {
+      type: '',
+      status: false,
+    };
+    if (value.type === 'Update' && value.status) {
+      this.toastr.success(
+        'Update Successful',
+        'The schedule has been updated successfully.',
+        { timeOut: 2500 }
+      );
+
+      // I INCLUDE THIS TO PREVENT MAX STACK SIZE ERROR
+      this.toastNotif.switchToastModal(toastModalReset);
+    } else if (value.type === 'Delete' && value.status) {
+      this.toastr.success(
+        'Deletion Successful',
+        'The schedule has been deleted successfully.',
+        { timeOut: 2500 }
+      );
+
+      // I INCLUDE THIS TO PREVENT MAX STACK SIZE ERROR
+      this.toastNotif.switchToastModal(toastModalReset);
+    }
+  };
 
   /* -------------- END  ----------------- */
 

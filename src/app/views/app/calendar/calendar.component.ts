@@ -262,7 +262,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
         'The schedule has been updated successfully.',
         { timeOut: 2500 }
       );
-
+      // I INCLUDE THIS TO PREVENT MAX STACK SIZE ERROR
       this.toastNotif.switchToastModal(toastModalReset);
     } else if (value.type === 'Delete' && value.status) {
       this.toastr.success(
@@ -270,6 +270,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
         'The schedule has been deleted successfully.',
         { timeOut: 2500 }
       );
+      // I INCLUDE THIS TO PREVENT MAX STACK SIZE ERROR
       this.toastNotif.switchToastModal(toastModalReset);
     }
   };

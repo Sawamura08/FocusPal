@@ -12,6 +12,7 @@ export class ModalComponent implements OnInit {
   constructor(private popModal: PopModalService) {}
   @Input() data: any;
   @Input() confirmation: boolean | null = null;
+  public animateModal: boolean = true;
   text: boolean = false;
 
   ngOnInit(): void {
@@ -39,8 +40,11 @@ export class ModalComponent implements OnInit {
   /* CANCEL */
 
   public cancel = () => {
-    this.popModal.sendValueModal(false);
-    this.popModal.setConfirmaModalStatus(false);
+    this.animateModal = false;
+    setTimeout(() => {
+      this.popModal.sendValueModal(false);
+      this.popModal.setConfirmaModalStatus(false);
+    }, 200);
   };
 
   /* END */
@@ -48,6 +52,7 @@ export class ModalComponent implements OnInit {
   /* CONFIRM */
   public confirm = () => {
     this.popModal.sendValueModal(true);
+    this.animateModal = false;
   };
   /* END */
 }
