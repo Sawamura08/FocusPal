@@ -254,6 +254,9 @@ export class AddTaskComponent implements OnInit, OnDestroy {
     this.subTaskList.splice(index, 1);
   };
 
+  /* for TIME DEADLINE */
+  public dueTime: string | undefined;
+
   /* END */
 
   /* CLOSE ADD TASK */

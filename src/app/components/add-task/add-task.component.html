@@ -211,6 +211,7 @@
               </div>
             </div>
           </div>
+
           <div class="user-select">
             <p class="label">Due Date</p>
             <mat-form-field>
@@ -234,6 +235,33 @@
             </div>
           </div>
         </div>
+      </section>
+
+      <section class="form-input">
+        <div class="timepicker-container">
+          <label class="label">Due Time</label>
+          <input
+            [ngxTimepicker]="timePickers"
+            name="startTimePicker"
+            class="time-picker"
+            id="startTimePicker"
+            [(ngModel)]="dueTime"
+            [ngModelOptions]="{ standalone: true }"
+            readonly
+          />
+          <span class="icon"><i class="fa-solid fa-clock"></i></span>
+          <!-- (blur)="setTimeChange('startTime', newStartTime)" -->
+        </div>
+
+        <ngx-material-timepicker #timePickers></ngx-material-timepicker>
+        <!-- <div class="hint-text">
+          <div
+            class="hints"
+            *ngIf="!validators(startTime) || invalidStartTime === false"
+          >
+            <p>This is a required Field</p>
+          </div>
+        </div> -->
       </section>
 
       <section class="button-container">

@@ -2,6 +2,7 @@ import { computed, Injectable, Signal, signal } from '@angular/core';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { Task } from '../database/db';
 import { taskFilter } from '../interfaces/Request';
+import { taskCompletion } from '../interfaces/export.object';
 
 @Injectable({
   providedIn: 'root',
@@ -49,5 +50,17 @@ export class TaskObservableService {
 
   public getTaskDataSignal = () => {
     return this.updatedTaskDataSignal;
+  };
+
+  /* TASK FILTER SPECIFICALLY FOR PROGRESS -- pedning,complete,past-due */
+  public taskProgressFilter = signal<taskCompletion>(taskCompletion.PENDING);
+  public updateTaskProgressFilter = computed(() => this.taskProgressFilter());
+
+  public setTaskProgressFilter = (value: taskCompletion) => {
+    this.taskProgressFilter.set(value);
+  };
+
+  public getTaskProgressFilter = () => {
+    return this.taskProgressFilter;
   };
 }

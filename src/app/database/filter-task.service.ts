@@ -22,8 +22,7 @@ export class FilterTaskService extends taskService {
     datePipe: DatePipe,
     sortDate: ScheduleService,
     task$: TaskObservableService,
-    private level: PriorityService,
-    private userFilter: TaskObservableService
+    private level: PriorityService
   ) {
     super(datePipe, sortDate, task$);
     /* ----------- QUERY FETCH data from DB REACTIVELY/ ON LIVE */
@@ -84,7 +83,7 @@ export class FilterTaskService extends taskService {
   /* OBSERVABLE FOR FILTERING ALL task DATA */
 
   public observableFilterTask = (): Observable<Task[]> => {
-    return this.userFilter
+    return this.task$
       .getUserTaskFilter()
       .pipe(
         switchMap((task) =>
@@ -98,6 +97,8 @@ export class FilterTaskService extends taskService {
   /* GET TASK BASED ON THE USER FILTER CHOICES*/
 
   public fetchTaskFiltered = async (data: taskFilter): Promise<Task[]> => {
+    const progress = this.task$.getTaskProgressFilter()();
+
     let query = db.taskList.where('userId').equals(data.userId);
 
     if (data.category !== null) {
@@ -110,6 +111,10 @@ export class FilterTaskService extends taskService {
 
     if (data.tags !== null) {
       query = query.and((task) => task.tags === data.tags);
+    }
+
+    if (progress !== null) {
+      query = query.and((task) => task.status === progress);
     }
 
     const filteredTask = await query.sortBy('dueDate');

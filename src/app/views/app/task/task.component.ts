@@ -33,15 +33,13 @@ import { unsuccessful } from '../../../Objects/modal.details';
 })
 export class TaskComponent implements OnDestroy {
   constructor(
-    private db: taskService,
-    private session: SessionService,
-    private sync: BackgroundSyncService,
-    private network: NetworkStatusService,
-    private popModal: PopModalService,
-    private updateMode: UpdateTaskModeService,
-    private task$: TaskObservableService,
-    private toastr: ToastrService,
-    private toastNotif: ToastModalService
+    protected db: taskService,
+    protected session: SessionService,
+    protected network: NetworkStatusService,
+    protected popModal: PopModalService,
+    protected task$: TaskObservableService,
+    protected toastr: ToastrService,
+    protected toastNotif: ToastModalService
   ) {}
   taskList: Task[] = [];
   userId!: number | undefined;
@@ -86,6 +84,9 @@ export class TaskComponent implements OnDestroy {
 
   /* FETCH USER TASK */
   public fetchAllTask = () => {
+    //REMOVE THE PREVIOUS SUBSCRIPTIONS
+    this.destroySubs$.next(true);
+
     this.db.taskList$.pipe(takeUntil(this.destroySubs$)).subscribe({
       next: (value) => {
         this.task$.setNewTaskList(value);

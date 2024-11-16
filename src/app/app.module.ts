@@ -24,6 +24,7 @@ import {
   MatNativeDateModule,
 } from '@angular/material/core';
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 
 @NgModule({
   declarations: [
@@ -45,6 +46,7 @@ import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
     MatNativeDateModule,
     ReactiveFormsModule,
     FormsModule,
+    NgxMaterialTimepickerModule,
     ServiceWorkerModule.register('service-worker.js', {
       enabled: !isDevMode(),
       // Register the ServiceWorker as soon as the application is stable

@@ -27,7 +27,12 @@ export class taskService {
 
   /* GET ALL TASK */
   public getTaskList = async (): Promise<Task[]> => {
-    const sched = await db.taskList.where('status').equals(0).sortBy('dueDate');
+    const progress = this.task$.getTaskProgressFilter()();
+
+    const sched = await db.taskList
+      .where('status')
+      .equals(progress)
+      .sortBy('dueDate');
     this.task$.setNewTaskList(sched);
     return sched;
   };
