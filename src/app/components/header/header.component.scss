@@ -6,6 +6,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  box-shadow: 0 2px 4px $textColor;
+  background-color: $neutralColor;
 
   figure {
     img {

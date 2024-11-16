@@ -1,22 +1,27 @@
 <main>
-  <button (click)="fetchAllTask()">All Task</button>
-  <br />
-  <br />
-  <button (click)="openTaskFilterModal()">Open Modal</button>
+  <header class="task-module-header">
+    <app-header [data]="appHeaderText"></app-header>
+  </header>
+  <section class="task-container">
+    <div class="filter-container">
+      <app-task-filter-control></app-task-filter-control>
+    </div>
+    <button (click)="fetchAllTask()">All Task</button>
 
-  <div *ngFor="let task of taskList; index as i">
-    <br />
-    <p>TASK LIST</p>
-    <p>taskId - {{ task.taskId }}</p>
-    <p>userId - {{ task.userId }}</p>
-    <p>description - {{ task.description }}</p>
-    <p>Priority - {{ task.priority | textPipe }}</p>
-    <p>subTask - {{ task.subTask }}</p>
-    <p>status - {{ task.status }}</p>
-    <p>dueDate - {{ task.dueDate | date : "medium" }}</p>
-    <p>createdAt - {{ task.createdAt | date : "medium" }}</p>
-    <button (click)="openUpdateModal(taskList[i])">Update</button>
-  </div>
+    <div *ngFor="let task of taskList; index as i">
+      <br />
+      <p>TASK LIST</p>
+      <p>taskId - {{ task.taskId }}</p>
+      <p>userId - {{ task.userId }}</p>
+      <p>description - {{ task.description }}</p>
+      <p>Priority - {{ task.priority | textPipe }}</p>
+      <p>subTask - {{ task.subTask }}</p>
+      <p>status - {{ task.status }}</p>
+      <p>dueDate - {{ task.dueDate | date : "medium" }}</p>
+      <p>createdAt - {{ task.createdAt | date : "medium" }}</p>
+      <button (click)="openUpdateModal(taskList[i])">Update</button>
+    </div>
+  </section>
 </main>
 
 <!-- ERROR RESULT UDPATE OR DELETE MODAL -->

@@ -50,9 +50,3 @@ export enum TASK_TAGS_ACADEMIC {
   ORGANIZATION = 5,
   OTHERS = 6,
 }
-
-export enum TASK_STATUS {
-  COMPLETED = 0,
-  PENDING = 1,
-  PAST_DUE = 2,
-}

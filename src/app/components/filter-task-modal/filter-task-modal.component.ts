@@ -66,7 +66,6 @@ export class FilterTaskModalComponent
       userId: ['', Validators.required],
       category: [null],
       tags: [null],
-      status: [null],
       priority: [null],
     });
 

@@ -3,8 +3,29 @@
 
 main {
   width: 100%;
-  height: 100dvh;
+  max-height: 90dvh;
+  height: 90dvh;
+  overflow-y: hidden;
   position: relative;
+
+  background: url("/background/background1.png");
+  background-size: cover;
+  background-position: center;
+
+  .task-container {
+    width: 100%;
+    height: calc(90dvh - 5rem);
+    max-height: calc(90dvh - 5rem);
+    overflow-y: auto;
+    padding: 1rem;
+    display: flex;
+    gap: 1rem;
+    flex-direction: column;
+
+    .filter-container {
+      width: 100%;
+    }
+  }
 }
 
 .modal {

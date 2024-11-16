@@ -47,6 +47,7 @@ export class TaskComponent implements OnDestroy {
   userId!: number | undefined;
   public destroyRef = inject(DestroyRef);
   public destroySubs$: Subject<boolean> = new Subject<boolean>();
+  public appHeaderText: string = 'Task';
   ngOnInit(): void {
     /* get the session ID */
     this.getId();
@@ -216,13 +217,6 @@ export class TaskComponent implements OnDestroy {
       .subscribe((result) => {
         this.isResultModalOpen = result;
       });
-  };
-
-  /* MODAL TASK FILTER MODAL */
-
-  public openTaskFilterModal = () => {
-    this.popModal.setTaskFilterSignal(true);
-    const value = this.popModal.getTaskFilterSignal()();
   };
 
   ngOnDestroy(): void {

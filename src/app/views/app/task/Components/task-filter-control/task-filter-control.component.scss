@@ -1,0 +1,31 @@
+@use "../../../../../app.component.scss" as *;
+@use "../../../../../icons/font-awesome-6-pro-main/css/all.css" as *;
+
+.filter-content {
+  width: 100%;
+
+  .filter-buttons {
+    width: 100%;
+    list-style-type: none;
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+
+    .button-container {
+      .btn {
+        padding: 0.5rem;
+        border-radius: 1rem;
+        border: none;
+        outline: none;
+        box-shadow: 0 2px 4px $textColor;
+        font-size: 0.9rem;
+        transition: all 0.2s ease-in;
+      }
+
+      .selected {
+        background: linear-gradient(to top, $mainColor, $shadow);
+        color: white;
+      }
+    }
+  }
+}

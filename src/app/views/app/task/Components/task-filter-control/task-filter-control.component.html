@@ -1,0 +1,18 @@
+<div class="filter-content">
+  <ul class="filter-buttons">
+    <li class="button-container">
+      <button class="btn" (click)="openTaskFilterModal()">
+        <i class="fa-sharp fa-solid fa-filter-list"></i>
+      </button>
+    </li>
+    <li class="button-container" *ngFor="let text of filterTextArr; index as i">
+      <button
+        class="btn"
+        [ngClass]="{ selected: progressFilterIndex === i }"
+        (click)="setProgressFilter(i)"
+      >
+        {{ text }}
+      </button>
+    </li>
+  </ul>
+</div>

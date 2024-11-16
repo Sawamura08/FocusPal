@@ -108,15 +108,11 @@ export class FilterTaskService extends taskService {
       query = query.and((task) => task.priority === data.priority);
     }
 
-    if (data.status !== null) {
-      query = query.and((task) => task.status === data.status);
-    }
-
     if (data.tags !== null) {
       query = query.and((task) => task.tags === data.tags);
     }
 
-    const filteredTask = await query.toArray();
+    const filteredTask = await query.sortBy('dueDate');
 
     return filteredTask;
   };
