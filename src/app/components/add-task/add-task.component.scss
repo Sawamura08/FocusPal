@@ -93,12 +93,17 @@
             padding: 0.5rem;
             font-size: 1rem;
             width: 50%;
+            z-index: 2;
           }
 
           .icon {
             position: absolute;
-            top: 0;
-            right: 0;
+            top: 50%;
+            right: 25%;
+            transform: translate(0%, -50%);
+            font-size: 1.25rem;
+            opacity: 0.7;
+            z-index: 1;
           }
         }
       }

@@ -242,15 +242,15 @@
           <label class="label">Due Time</label>
           <input
             [ngxTimepicker]="timePickers"
-            name="startTimePicker"
+            name="dueTime"
             class="time-picker"
-            id="startTimePicker"
+            id="dueTime"
             [(ngModel)]="dueTime"
             [ngModelOptions]="{ standalone: true }"
+            (blur)="setDueTime(dueTime)"
             readonly
           />
           <span class="icon"><i class="fa-solid fa-clock"></i></span>
-          <!-- (blur)="setTimeChange('startTime', newStartTime)" -->
         </div>
 
         <ngx-material-timepicker #timePickers></ngx-material-timepicker>

@@ -43,6 +43,7 @@ import { taskFilter } from '../../interfaces/Request';
 import { Task } from '../../database/db';
 import { ToastModalService } from '../../service/toast-modal.service';
 import { unsuccessful } from '../../Objects/modal.details';
+import { DateTimeService } from '../../service/date-time.service';
 
 @Component({
   selector: 'app-add-task',
@@ -62,7 +63,8 @@ export class AddTaskComponent implements OnInit, OnDestroy {
     private actRoute: ActivatedRoute,
     private updateMode: UpdateTaskModeService,
     private task$: TaskObservableService,
-    private toastNotif: ToastModalService
+    private toastNotif: ToastModalService,
+    private dateTime: DateTimeService
   ) {
     this.userInput = this.fb.group({
       title: ['', Validators.required],
@@ -71,6 +73,7 @@ export class AddTaskComponent implements OnInit, OnDestroy {
       priority: ['', Validators.required],
       startDate: ['', Validators.required],
       dueDate: ['', Validators.required],
+      dueTime: ['', Validators.required],
       taskCategory: ['', Validators.required],
       tags: ['', Validators.required],
     });
@@ -255,7 +258,21 @@ export class AddTaskComponent implements OnInit, OnDestroy {
   };
 
   /* for TIME DEADLINE */
-  public dueTime: string | undefined;
+  public dueTime: string = '';
+  public invalidDueTime: boolean = false;
+  public setDueTime = (timeValue: string) => {
+    // check whether the 'dueTime' has a value
+    if (timeValue != '') {
+      this.invalidDueTime = false;
+      let newFormat: Date = this.dateTime.transformTimeToDate(timeValue);
+      this.userInput.get('dueTime')?.setValue(newFormat);
+      console.log(this.userInput.get('dueTime')?.value);
+      return;
+    } else {
+      this.invalidDueTime = true;
+      return;
+    }
+  };
 
   /* END */
 
@@ -326,6 +343,8 @@ export class AddTaskComponent implements OnInit, OnDestroy {
     // SET WHICH TAG TO DISPLAY
     this.tagList = this.setTagListValue();
 
+    this.dueTime = this.dateTime.transformDateToTime(data.dueTime);
+
     if (data.subTask) {
       this.subTaskList = data.subTask;
     }
@@ -337,7 +356,6 @@ export class AddTaskComponent implements OnInit, OnDestroy {
   public updateTask = async () => {
     const toastConfig: toastModal = { type: 'Update', status: true };
     const response = await this.openConfirmationModal();
-
     if (response) {
       try {
         const result = await this.task.updateTask(

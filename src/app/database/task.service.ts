@@ -57,6 +57,7 @@ export class taskService {
       priority: userInputs.priority,
       startDate: userInputs.startDate,
       dueDate: userInputs.dueDate,
+      dueTime: userInputs.dueTime,
       createdAt: new Date(currentDate!),
       taskCategory: userInputs.taskCategory,
       tags: userInputs.tags,

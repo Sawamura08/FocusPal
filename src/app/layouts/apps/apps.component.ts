@@ -63,11 +63,7 @@ export class AppsComponent extends navigation implements OnInit, OnDestroy {
       .getAddTaskModalStatus()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-        next: (value) =>
-          (this.modalStatus = {
-            mode: false,
-            isOpen: true,
-          }),
+        next: (value) => (this.modalStatus = value),
         error: (err) => console.error('Error Subscribe Add Task', err),
       });
   };
