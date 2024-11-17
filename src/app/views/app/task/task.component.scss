@@ -25,6 +25,67 @@ main {
     .filter-container {
       width: 100%;
     }
+
+    .task-list-container {
+      width: 100%;
+      list-style-type: none;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+
+      .task-list-content {
+        width: 100%;
+        border-radius: 1rem;
+        padding: 1rem;
+        box-shadow: 0 2px 4px $textColor;
+
+        //background-color: $inProgress;
+        font-family: $subText;
+        position: relative;
+        color: $textColor;
+
+        .title {
+          font-family: $fontFamily;
+        }
+
+        .tags {
+          margin-block: 0.25rem;
+          font-size: 0.9rem;
+          font-style: italic;
+        }
+
+        .subText {
+          font-size: 0.9rem;
+          opacity: 0.6;
+        }
+
+        .category {
+          text-align: right;
+        }
+
+        .flex-subText {
+          display: flex;
+          justify-content: space-between;
+          width: 100%;
+
+          .icon {
+            margin-inline-end: 0.5rem;
+          }
+        }
+
+        .icon-update {
+          position: absolute;
+          top: 0;
+          right: 0;
+          width: 1.5rem;
+          height: 1.5rem;
+          background-color: $neutralColor;
+          border-radius: 50%;
+          display: grid;
+          place-content: center;
+        }
+      }
+    }
   }
 }
 

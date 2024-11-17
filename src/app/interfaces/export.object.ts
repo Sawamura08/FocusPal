@@ -32,21 +32,21 @@ export const categories = {
 };
 
 export enum TASK_TAGS_PERSONAL {
-  HEALTH = 0,
-  FINANCE = 1,
-  ERRANDS = 2,
-  FITNESS = 3,
-  SOCIAL = 4,
-  ORGANIZATION = 5,
-  OTHERS = 6,
+  Health = 0,
+  Finance = 1,
+  Errands = 2,
+  Fitness = 3,
+  Social = 4,
+  Organization = 5,
+  Others = 6,
 }
 
 export enum TASK_TAGS_ACADEMIC {
-  HOMEWORK = 0,
-  EXAMS = 1,
-  PROJECTS = 2,
-  READING = 3,
-  RESEARCH = 4,
-  ORGANIZATION = 5,
-  OTHERS = 6,
+  Homework = 0,
+  Exams = 1,
+  Projects = 2,
+  Reading = 3,
+  Research = 4,
+  Organization = 5,
+  Others = 6,
 }

@@ -6,21 +6,42 @@
     <div class="filter-container">
       <app-task-filter-control></app-task-filter-control>
     </div>
-    <button (click)="fetchAllTask()">All Task</button>
 
-    <div *ngFor="let task of taskList; index as i">
-      <br />
-      <p>TASK LIST</p>
-      <p>taskId - {{ task.taskId }}</p>
-      <p>userId - {{ task.userId }}</p>
-      <p>description - {{ task.description }}</p>
-      <p>Priority - {{ task.priority | textPipe }}</p>
-      <p>subTask - {{ task.subTask }}</p>
-      <p>status - {{ task.status }}</p>
-      <p>dueDate - {{ task.dueDate | date : "medium" }}</p>
-      <p>createdAt - {{ task.createdAt | date : "medium" }}</p>
-      <button (click)="openUpdateModal(taskList[i])">Update</button>
-    </div>
+    <ul class="task-list-container">
+      <li
+        class="task-list-content"
+        *ngFor="let data of taskList; index as i"
+        [appTaskBackgroundColor]="data.status"
+      >
+        <h4 class="title">{{ data.title }}</h4>
+
+        <!-- PERSONAL -->
+        @if (data.taskCategory === 0) {
+        <p class="tags">{{ data.tags | taskTagPersonal }}</p>
+        }
+        <!-- ACADEMIC -->
+        @if (data.taskCategory === 1) {
+        <p class="tags">{{ data.tags | taskTagAcademic }}</p>
+        }
+
+        <p class="subText category">
+          {{ data.taskCategory | taskCategory }}
+        </p>
+
+        <div class="flex-subText">
+          <p class="subText dataTime">
+            <span class="icon"><i class="fa-solid fa-clock"></i></span
+            >{{ data.dueTime | date : "shortTime" }} |
+            {{ data.dueDate | date : "longDate" }}
+          </p>
+          <p class="subText priority">{{ data.priority | textPipe }}</p>
+        </div>
+
+        <span class="icon-update"
+          ><i class="fa-regular fa-arrow-up-right"></i
+        ></span>
+      </li>
+    </ul>
   </section>
 </main>
 

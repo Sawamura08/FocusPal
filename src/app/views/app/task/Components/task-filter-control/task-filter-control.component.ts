@@ -9,6 +9,7 @@ import { SessionService } from '../../../../../service/session.service';
 import { ToastModalService } from '../../../../../service/toast-modal.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { catchError, of } from 'rxjs';
+import { FilterTaskService } from '../../../../../database/filter-task.service';
 
 @Component({
   selector: 'app-task-filter-control',
@@ -26,9 +27,19 @@ export class TaskFilterControlComponent
     popModal: PopModalService,
     task$: TaskObservableService,
     toastr: ToastrService,
-    toastNotif: ToastModalService
+    toastNotif: ToastModalService,
+    filterTask: FilterTaskService
   ) {
-    super(db, session, network, popModal, task$, toastr, toastNotif);
+    super(
+      db,
+      session,
+      network,
+      popModal,
+      task$,
+      toastr,
+      toastNotif,
+      filterTask
+    );
   }
 
   override ngOnInit(): void {

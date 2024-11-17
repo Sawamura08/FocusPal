@@ -266,7 +266,6 @@ export class AddTaskComponent implements OnInit, OnDestroy {
       this.invalidDueTime = false;
       let newFormat: Date = this.dateTime.transformTimeToDate(timeValue);
       this.userInput.get('dueTime')?.setValue(newFormat);
-      console.log(this.userInput.get('dueTime')?.value);
       return;
     } else {
       this.invalidDueTime = true;

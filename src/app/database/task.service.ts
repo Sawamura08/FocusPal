@@ -94,4 +94,45 @@ export class taskService {
 
     /*  db.taskList.update() */
   };
+
+  /* SET TASK PAST DUE */
+
+  public fetchUnfinishedTask = async () => {
+    const pending = taskCompletion.PENDING;
+    const currentDate = new Date().getTime();
+
+    try {
+      const result = await db.taskList
+        .where('status')
+        .equals(pending)
+        .toArray();
+
+      /* FILTER TO GET THE PAST DUE TASK */
+      const unFinishedTask = result.filter((task) => {
+        return currentDate > task.dueDate.getTime();
+      });
+
+      return this.setTaskPastDueStatus(unFinishedTask);
+    } catch {
+      console.log('Error Fetching task due Date');
+      return [];
+    }
+  };
+
+  /* UPDATE TASK TO PAST DUE */
+  public setTaskPastDueStatus = async (unfinishedTask: Task[]) => {
+    unfinishedTask.map((task) => {
+      /* copy the object */
+      let copyTask = { ...task };
+      // change the value
+      copyTask.status = taskCompletion.PAST_DUE;
+      const udpatedTask = copyTask;
+
+      try {
+        db.taskList.update(task.taskId!, udpatedTask);
+      } finally {
+        return copyTask;
+      }
+    });
+  };
 }

@@ -17,7 +17,7 @@ import {
   PopModalService,
   updateMode,
 } from '../../../service/pop-modal.service';
-import { UpdateTaskModeService } from '../../../service/update-task-mode.service';
+
 import { catchError, EMPTY, of, Subject, takeUntil } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { TaskObservableService } from '../../../service/task-observable.service';
@@ -39,7 +39,8 @@ export class TaskComponent implements OnDestroy {
     protected popModal: PopModalService,
     protected task$: TaskObservableService,
     protected toastr: ToastrService,
-    protected toastNotif: ToastModalService
+    protected toastNotif: ToastModalService,
+    protected filterTask: FilterTaskService
   ) {}
   taskList: Task[] = [];
   userId!: number | undefined;
@@ -61,6 +62,9 @@ export class TaskComponent implements OnDestroy {
 
     /* FETCH MODAL FOR ACTION(UPDATE OR DELETE) RESULT */
     this.getActionResultModal();
+
+    /* CHANGE TASK STATUS IF PAST DUE */
+    this.changeStatusPastDue();
   }
 
   /* GET SESSION FOR USER */
@@ -218,6 +222,11 @@ export class TaskComponent implements OnDestroy {
       .subscribe((result) => {
         this.isResultModalOpen = result;
       });
+  };
+
+  /* SET THE TASK TO PAST DUE IF IT'S PAST DUE */
+  public changeStatusPastDue = async () => {
+    const result = await this.filterTask.fetchUnfinishedTask();
   };
 
   ngOnDestroy(): void {
