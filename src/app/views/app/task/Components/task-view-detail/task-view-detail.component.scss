@@ -1,0 +1,93 @@
+@use "../../../../../app.component.scss" as *;
+@use "../../../../../icons/font-awesome-6-pro-main/css/all.css" as *;
+
+.view-detail-container {
+  width: 100%;
+  height: 100%;
+  overflow-y: scroll;
+  background: url("/background/background2.png");
+  background-position: center;
+  background-size: cover;
+  color: $textColor;
+  font-family: $subText;
+  padding: 1rem;
+
+  .detail-header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: $fontFamily;
+    padding: 1rem;
+
+    .title {
+      font-size: 1.25rem;
+    }
+
+    .icon > i {
+      font-size: 1.25rem;
+    }
+  }
+
+  .task-content {
+    width: 100%;
+    margin-block-start: 1rem;
+
+    .task-title {
+      font-size: 1.5rem;
+      font-family: $fontFamily;
+    }
+
+    .sub-text {
+      font-size: 0.9rem;
+      margin-block: 0.5rem;
+      opacity: 0.8;
+    }
+
+    .information-container {
+      width: 100%;
+      margin-block: 0.5rem;
+
+      .titles {
+        font-size: 1.25rem;
+        font-weight: bold;
+      }
+
+      .info {
+        background-color: $neutralColor;
+        padding: 0.5rem;
+        box-shadow: 0 2px 4px $textColor;
+        border-radius: 8px;
+        margin: 0.5rem;
+        width: fit-content;
+        max-width: 100%;
+        min-width: 30%;
+        display: flex;
+        justify-content: center;
+      }
+
+      .italic {
+        font-style: italic;
+      }
+    }
+
+    .other-tags {
+      width: 100%;
+      display: flex;
+      gap: 1rem;
+
+      .info {
+        background-color: $neutralColor;
+        padding: 0.25rem;
+        box-shadow: 0 2px 4px $textColor;
+        border-radius: 8px;
+        width: fit-content;
+        max-width: 100%;
+        min-width: 30%;
+        display: flex;
+        justify-content: center;
+        gap: 0.25rem;
+      }
+    }
+  }
+}

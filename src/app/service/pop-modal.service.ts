@@ -150,9 +150,11 @@ export class PopModalService {
   };
   /* --------------- END ---------------------- */
 
+  /* MODAL FOR TASK FILTER */
   public taskFilterStateSignal = signal(false);
   public isTaskFilterModalOpen = computed(() => this.taskFilterStateSignal());
 
+  /* SET OPEN/CLOSE */
   public setTaskFilterSignal = (value: boolean) => {
     this.taskFilterStateSignal.set(value);
   };
@@ -160,4 +162,21 @@ export class PopModalService {
   public getTaskFilterSignal = () => {
     return this.isTaskFilterModalOpen;
   };
+
+  /* --------------- END ---------------------- */
+
+  /* MODAL FOR TASK VIEW DETAILS */
+
+  public taskViewStateSignal = signal<boolean>(true);
+  public isTaskViewModalOpen = computed(() => this.taskViewStateSignal());
+
+  public setTaskViewSignal = (isOpen: boolean) => {
+    this.taskViewStateSignal.set(isOpen);
+  };
+
+  public getTaskViewSignal = () => {
+    return this.taskViewStateSignal;
+  };
+
+  /* --------------- END ---------------------- */
 }

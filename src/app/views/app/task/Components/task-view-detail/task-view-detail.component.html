@@ -1,0 +1,67 @@
+<section class="view-detail-container">
+  @if (details) {
+  <header class="detail-header">
+    <span class="icon"><i class="fa-regular fa-arrow-left"></i></span>
+    <h3 class="title">Task Details</h3>
+    <span class="icon edit"><i class="fa-solid fa-ellipsis"></i></span>
+  </header>
+
+  <div class="task-content">
+    <h1 class="task-title">{{ details.title }}</h1>
+    <p class="sub-text deadline">
+      Deadline on {{ details.dueDate | date : "longDate" }} |
+      {{ details.dueTime | date : "shortTime" }}
+    </p>
+
+    <div class="other-tags">
+      <p class="info">
+        <span class="icon"
+          ><i
+            class="fa-regular"
+            [ngClass]="{
+              'fa-book': details.taskCategory === 0,
+              'fa-user': details.taskCategory === 1
+            }"
+          ></i></span
+        >{{ details.taskCategory | taskCategory }}
+      </p>
+      <!-- PERSONAL -->
+      @if (details.taskCategory === 0) {
+      <p class="info">
+        <span class="icon"><i class="fa-regular fa-tag"></i></span
+        >{{ details.tags | taskTagPersonal }}
+      </p>
+      }@else {
+      <!-- ACADEMIC -->
+      <p class="info">
+        <span class="icon"><i class="fa-regular fa-tag"></i></span
+        >{{ details.tags | taskTagAcademic }}
+      </p>
+      }
+    </div>
+
+    <div class="information-container">
+      <h3 class="titles">Description</h3>
+      @if (details.description != '') {
+      <p class="info">{{ details.description }}</p>
+      }@else {
+      <p class="info italic">No Description</p>
+      }
+    </div>
+  </div>
+
+  @if(details.subTask) {
+  <div class="information-container sub-tasks">
+    <h3 class="titles">SubTaks</h3>
+    <ul class="sub-task-list">
+      <li
+        class="sub-task-info"
+        *ngFor="let data of details.subTask; index as i"
+      >
+        <p class="info">{{ data }}</p>
+        <span class="icon"><i class="fa-regular fa-solid fa-check"></i></span>
+      </li>
+    </ul>
+  </div>
+  } }
+</section>

@@ -37,7 +37,7 @@
           <p class="subText priority">{{ data.priority | textPipe }}</p>
         </div>
 
-        <span class="icon-update"
+        <span class="icon-update" (click)="viewTaskDetails(data)"
           ><i class="fa-regular fa-arrow-up-right"></i
         ></span>
       </li>
@@ -51,3 +51,7 @@
   <app-modal [data]="resultModalDetail"></app-modal>
 </div>
 }
+
+<div class="modal" *ngIf="getViewDetailStatus()">
+  <app-task-view-detail [details]="taskDetails!"></app-task-view-detail>
+</div>

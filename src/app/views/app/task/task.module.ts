@@ -10,6 +10,7 @@ import { TaskTagPerosnalPipe } from '../../../pipe/task-tag.pipe';
 import { TaskTagAcademicPipe } from '../../../pipe/task-tag-academic.pipe';
 import { TaskCategoryPipe } from '../../../pipe/task-category.pipe';
 import { TaskBackgroundColorDirective } from './directives/task-background-color.directive';
+import { TaskViewDetailComponent } from './Components/task-view-detail/task-view-detail.component';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { TaskBackgroundColorDirective } from './directives/task-background-color
     TaskTagAcademicPipe,
     TaskCategoryPipe,
     TaskBackgroundColorDirective,
+    TaskViewDetailComponent,
   ],
   imports: [CommonModule, TaskRoutingModule, SharedModule],
 })
