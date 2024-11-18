@@ -7,6 +7,7 @@ import { DatePipe } from '@angular/common';
 import { ScheduleService } from './schedule.service';
 import { TaskObservableService } from '../service/task-observable.service';
 import { taskCompletion } from '../interfaces/export.object';
+import { SubTaskService } from './sub-task.service';
 
 @Injectable({
   providedIn: 'root',
@@ -18,7 +19,8 @@ export class taskService {
   constructor(
     protected datePipe: DatePipe,
     protected sortDate: ScheduleService,
-    protected task$: TaskObservableService
+    protected task$: TaskObservableService,
+    protected subTasks: SubTaskService
   ) {
     /* ----------- QUERY FETCH data from DB REACTIVELY/ ON LIVE */
     this.taskList$ = from(liveQuery(() => this.getTaskList()));
@@ -53,7 +55,7 @@ export class taskService {
       title: userInputs.title,
       description: userInputs.description,
       status: 0,
-      subTask: userInputs.subTask,
+      subTasks: userInputs.subTasks,
       priority: userInputs.priority,
       startDate: userInputs.startDate,
       dueDate: userInputs.dueDate,
@@ -68,6 +70,11 @@ export class taskService {
     };
     try {
       const taskId = await db.taskList.add(newTask);
+
+      /* IF INSERT TASK IS SUCCESS AND THERE IS A SUBTASKS */
+      if (taskId && newTask.subTasks?.length != 0) {
+        this.subTasks.insertSubTask(newTask);
+      }
       return taskId;
     } catch (err) {
       console.error('Error', err);

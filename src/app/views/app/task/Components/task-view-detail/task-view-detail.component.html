@@ -1,9 +1,22 @@
-<section class="view-detail-container">
+<section class="view-detail-container" @slide *ngIf="animateModal">
   @if (details) {
   <header class="detail-header">
-    <span class="icon"><i class="fa-regular fa-arrow-left"></i></span>
+    <span class="icon" (click)="closeTaskDetailModal()"
+      ><i class="fa-regular fa-arrow-left"></i
+    ></span>
     <h3 class="title">Task Details</h3>
-    <span class="icon edit"><i class="fa-solid fa-ellipsis"></i></span>
+    <span class="icon edit" (click)="toggleEditTask()"
+      ><i class="fa-solid fa-ellipsis"></i
+    ></span>
+
+    @if (isEditTaskOpen) {
+    <div class="edit-container">
+      <p class="text">Edit Task</p>
+      <span class="icon" (click)="openUpdateModal(details)"
+        ><i class="fa-sharp fa-solid fa-pen-to-square"></i
+      ></span>
+    </div>
+    }
   </header>
 
   <div class="task-content">
@@ -19,8 +32,8 @@
           ><i
             class="fa-regular"
             [ngClass]="{
-              'fa-book': details.taskCategory === 0,
-              'fa-user': details.taskCategory === 1
+              'fa-user': details.taskCategory === 0,
+              'fa-book': details.taskCategory === 1
             }"
           ></i></span
         >{{ details.taskCategory | taskCategory }}
@@ -48,20 +61,23 @@
       <p class="info italic">No Description</p>
       }
     </div>
-  </div>
 
-  @if(details.subTask) {
-  <div class="information-container sub-tasks">
-    <h3 class="titles">SubTaks</h3>
-    <ul class="sub-task-list">
-      <li
-        class="sub-task-info"
-        *ngFor="let data of details.subTask; index as i"
-      >
-        <p class="info">{{ data }}</p>
-        <span class="icon"><i class="fa-regular fa-solid fa-check"></i></span>
-      </li>
-    </ul>
+    @if(subTasks) {
+    <div class="information-container sub-tasks">
+      <h3 class="titles">SubTaks</h3>
+      <ul class="sub-task-list">
+        <li class="sub-task-info" *ngFor="let data of subTasks; index as i">
+          <p class="data">{{ data.subTask }}</p>
+          <span
+            class="icon"
+            [ngClass]="{ completed: syncDataToUI(i) }"
+            (click)="changeSubTaskStatus(i)"
+            ><i class="fa-regular fa-solid fa-check"></i
+          ></span>
+        </li>
+      </ul>
+    </div>
+    }
   </div>
-  } }
+  }
 </section>

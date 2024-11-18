@@ -1,6 +1,6 @@
 import { FormGroup } from '@angular/forms';
 import { Injectable } from '@angular/core';
-import { taskFilter } from '../interfaces/Request';
+import { subTaskTypes, taskFilter } from '../interfaces/Request';
 
 @Injectable({
   providedIn: 'root',
@@ -31,18 +31,15 @@ export class AddTaskInput {
 
   /* SET VALUES */
 
-  public setCategoryValue = (subTask: string[]) => {
-    this.userInput.get('subTask')?.setValue(subTask);
+  public setCategoryValue = (subTask: subTaskTypes[]) => {
+    this.userInput.get('subTasks')?.setValue(subTask);
   };
 
   /* END */
 
   /* SET VALUES ON CHANGE UI */
 
-  public setValueOnChange = (
-    value: number | string[] | null,
-    fieldName: string
-  ) => {
+  public setValueOnChange = (value: any, fieldName: string) => {
     this.userInput.get(fieldName)?.setValue(value);
   };
 

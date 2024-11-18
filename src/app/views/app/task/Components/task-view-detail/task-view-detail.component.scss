@@ -11,6 +11,7 @@
   color: $textColor;
   font-family: $subText;
   padding: 1rem;
+  opacity: 0;
 
   .detail-header {
     width: 100%;
@@ -19,6 +20,7 @@
     align-items: center;
     font-family: $fontFamily;
     padding: 1rem;
+    position: relative;
 
     .title {
       font-size: 1.25rem;
@@ -26,6 +28,22 @@
 
     .icon > i {
       font-size: 1.25rem;
+    }
+
+    .edit-container {
+      position: absolute;
+      top: 50%;
+      right: 10%;
+      transform: translate(20%, 30%);
+      width: 9rem;
+      height: 3rem;
+      background: linear-gradient(to right, $mainColor, $shadow);
+      border-radius: 8px;
+      color: $neutralColor;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      padding: 0.25rem;
     }
   }
 
@@ -46,7 +64,7 @@
 
     .information-container {
       width: 100%;
-      margin-block: 0.5rem;
+      margin-block: 1rem;
 
       .titles {
         font-size: 1.25rem;
@@ -54,8 +72,9 @@
       }
 
       .info {
-        background-color: $neutralColor;
+        background: linear-gradient(to right, #a3ffc6, #fff5f2);
         padding: 0.5rem;
+        font-size: 0.8rem;
         box-shadow: 0 2px 4px $textColor;
         border-radius: 8px;
         margin: 0.5rem;
@@ -75,6 +94,7 @@
       width: 100%;
       display: flex;
       gap: 1rem;
+      margin-inline-start: 0.5rem;
 
       .info {
         background-color: $neutralColor;
@@ -87,6 +107,48 @@
         display: flex;
         justify-content: center;
         gap: 0.25rem;
+
+        background: linear-gradient(to right, #f5c0ef, #fff5f2);
+      }
+    }
+
+    .other-tags > .info:last-child {
+      background: linear-gradient(to right, #ffe8a3, #fff5f2);
+    }
+
+    .sub-tasks {
+      .sub-task-list {
+        list-style-type: none;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        margin-inline-start: 0.5rem;
+        margin-block: 0.5rem;
+
+        .sub-task-info {
+          width: 95%;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 0.5rem 1rem;
+          background: linear-gradient(to top, $mainColor, $shadow);
+          color: $neutralColor;
+          border-radius: 8px;
+
+          .icon {
+            width: 1.5rem;
+            height: 1.5rem;
+            display: grid;
+            place-content: center;
+            border-radius: 50%;
+            background-color: $neutralColor;
+          }
+
+          .completed {
+            background-color: $updateColor;
+          }
+        }
       }
     }
   }

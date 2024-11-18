@@ -167,7 +167,7 @@ export class PopModalService {
 
   /* MODAL FOR TASK VIEW DETAILS */
 
-  public taskViewStateSignal = signal<boolean>(true);
+  public taskViewStateSignal = signal<boolean>(false);
   public isTaskViewModalOpen = computed(() => this.taskViewStateSignal());
 
   public setTaskViewSignal = (isOpen: boolean) => {

@@ -5,3 +5,8 @@ export interface taskFilter {
   category?: number; // 0 - personal; 1- academic
   tags?: number; // the tags is depends on the task category
 }
+
+export interface subTaskTypes {
+  id: number;
+  data: string;
+}

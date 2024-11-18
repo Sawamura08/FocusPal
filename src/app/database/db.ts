@@ -5,7 +5,7 @@ export interface Task {
   userId: number;
   title: string;
   description?: string;
-  subTask?: Array<string>; // it should be array string
+  subTasks?: Array<{ id: number; data: string }>; // it should be array string
   status: number; // pending OR completed
   priority: number;
   startDate: Date;
@@ -18,6 +18,14 @@ export interface Task {
   isSync: number;
   isUpdated: number;
   isQueued: number;
+}
+
+export interface SubTasks {
+  subTaskId?: number;
+  taskSubtaskId: number; // unique identifier for update and delete OF SUBTASKS
+  subTask: string;
+  taskId: number;
+  status: number;
 }
 
 export interface User {
@@ -43,15 +51,17 @@ export class localDB extends Dexie {
   taskList!: Table<Task, number>;
   userList!: Table<User, number>;
   schedList!: Table<Schedule, number>;
+  subTaskList!: Table<SubTasks, number>;
 
   constructor() {
     super('myDB');
-    this.version(27).stores({
+    this.version(30).stores({
       taskList:
         '++taskId, userId, title,description,subTask, status, priority, startDate, dueDate,dueTime , createdAt, taskCategory, tags ,isSync, isUpdated,isQueued',
       userList: 'userId,userName',
       schedList:
         '++schedId,userId,title,date,startTime,endTime,repeat,type,isActive,daysOfWeek,location',
+      subTaskList: '++subTaskId,taskSubtaskId,subTask,taskId,status',
     });
   }
 }

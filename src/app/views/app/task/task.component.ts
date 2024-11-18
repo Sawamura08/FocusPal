@@ -130,24 +130,7 @@ export class TaskComponent implements OnDestroy {
   /* ----------- TASK VIEW DETAILS ----------------- */
 
   /* OPEN MODAL FOR TASK DETAILS */
-  public taskDetails: Task | undefined = {
-    userId: 52,
-    title: 'Work Out',
-    description: 'Just a workout',
-    status: 0,
-    subTask: ['PUSH UP', 'PULL UPS'],
-    priority: 0,
-    startDate: new Date(),
-    dueDate: new Date(),
-    dueTime: new Date(),
-    createdAt: new Date(),
-    taskCategory: 0,
-    tags: 3,
-    isSync: 0,
-    isUpdated: 0,
-    isQueued: 0,
-    taskId: 9,
-  };
+  public taskDetails: Task | undefined;
   public isViewDetailsOpen: boolean | undefined;
   public viewTaskDetails = (taskData: Task) => {
     this.taskDetails = taskData;

@@ -39,7 +39,7 @@ import {
   toastModal,
 } from '../../interfaces/export.object';
 import { TaskObservableService } from '../../service/task-observable.service';
-import { taskFilter } from '../../interfaces/Request';
+import { subTaskTypes, taskFilter } from '../../interfaces/Request';
 import { Task } from '../../database/db';
 import { ToastModalService } from '../../service/toast-modal.service';
 import { unsuccessful } from '../../Objects/modal.details';
@@ -69,7 +69,7 @@ export class AddTaskComponent implements OnInit, OnDestroy {
     this.userInput = this.fb.group({
       title: ['', Validators.required],
       description: [''],
-      subTask: [''],
+      subTasks: [''],
       priority: ['', Validators.required],
       startDate: ['', Validators.required],
       dueDate: ['', Validators.required],
@@ -222,10 +222,16 @@ export class AddTaskComponent implements OnInit, OnDestroy {
   subTaksInput: string = '';
   isSubTaskMode: boolean = false;
   protected closing: boolean = false;
-  subTaskList: string[] = [];
+  subTaskList: subTaskTypes[] = [];
+  subTaskId: number = 0;
   public subTasks = () => {
     if (this.isSubTaskMode && this.subTaksInput != '') {
-      this.setSubTasks(this.subTaksInput);
+      const newSubTask: subTaskTypes = {
+        id: this.subTaskId,
+        data: this.subTaksInput,
+      };
+      this.setSubTasks(newSubTask);
+      this.subTaskId++;
       this.subTaskButtonText = 'Add';
     } else {
       this.isSubTaskMode ? this.closeSubTask() : (this.isSubTaskMode = true);
@@ -247,9 +253,9 @@ export class AddTaskComponent implements OnInit, OnDestroy {
     this.subTaskButtonText = inputElement.value != '' ? 'Save' : 'Add';
   };
 
-  public setSubTasks = (value: string) => {
+  public setSubTasks = (value: subTaskTypes) => {
     this.subTaskList?.push(value);
-    this.addTaskConfig.setValueOnChange(this.subTaskList, 'subTask');
+    this.addTaskConfig.setValueOnChange(this.subTaskList, 'subTasks');
     this.subTaksInput = '';
   };
 
@@ -300,6 +306,10 @@ export class AddTaskComponent implements OnInit, OnDestroy {
     this.userInput.markAllAsTouched();
 
     if (this.userInput.valid) {
+      //RESET SUBTASK ID FOR NEW TASK
+      this.subTaskId = 0;
+
+      /* INSERT */
       const taskId = await this.task.insertTask(
         this.userId!,
         this.userInput.value
@@ -323,7 +333,7 @@ export class AddTaskComponent implements OnInit, OnDestroy {
   //
 
   /* SET THE DATA */
-  @Input() taskData: any;
+  public taskData: any;
   public fetchTaskData = () => {
     this.taskData = this.task$.getTaskDataSignal()();
 
@@ -344,8 +354,8 @@ export class AddTaskComponent implements OnInit, OnDestroy {
 
     this.dueTime = this.dateTime.transformDateToTime(data.dueTime);
 
-    if (data.subTask) {
-      this.subTaskList = data.subTask;
+    if (data.subTasks) {
+      this.subTaskList = data.subTasks;
     }
   };
 
