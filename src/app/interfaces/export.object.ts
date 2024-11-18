@@ -50,3 +50,8 @@ export enum TASK_TAGS_ACADEMIC {
   Organization = 5,
   Others = 6,
 }
+
+export enum SubtTaskModes {
+  AddMode = 0,
+  UpdateMode = 1,
+}

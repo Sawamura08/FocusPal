@@ -145,8 +145,8 @@
       <section class="form-input text-input">
         <p class="label">SubTasks</p>
         <div class="sub-task-header">
-          <!-- *ngIf="isSubTaskMode" -->
-          @if (isSubTaskMode) {
+          <!-- *ngIf="isSubTaskOpen" -->
+          @if (isSubTaskOpen) {
           <div
             class="sub-task-input"
             [ngClass]="{ 'exit-sub-task-input': closing }"
@@ -167,8 +167,8 @@
             <button
               class="btn"
               type="button"
-              (click)="subTasks()"
-              [ngClass]="{ 'add-sub-task': isSubTaskMode }"
+              (click)="subTasks(modeUsed, editSubtaskById)"
+              [ngClass]="{ 'add-sub-task': isSubTaskOpen }"
             >
               {{ subTaskButtonText }}<i class="fa-solid fa-plus-large"></i>
             </button>
@@ -177,6 +177,12 @@
         <ul class="sub-task-list" *ngIf="subTaskList.length > 0">
           <li class="list" *ngFor="let list of subTaskList; index as i">
             <p>{{ list.data }}</p>
+            <span
+              ><img
+                src="extra/edit.png"
+                alt=""
+                (click)="setUpdateSubTaskMode(i)"
+            /></span>
             <span
               ><img
                 src="extra/trash.png"

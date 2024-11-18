@@ -36,6 +36,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
   categories,
   confirm,
+  SubtTaskModes,
   toastModal,
 } from '../../interfaces/export.object';
 import { TaskObservableService } from '../../service/task-observable.service';
@@ -219,13 +220,29 @@ export class AddTaskComponent implements OnInit, OnDestroy {
 
   /* ADD OR UPDATE SUBTASK */
 
-  subTaksInput: string = '';
-  isSubTaskMode: boolean = false;
+  public subTaksInput: string = '';
+  public isSubTaskOpen: boolean = false;
   protected closing: boolean = false;
-  subTaskList: subTaskTypes[] = [];
-  subTaskId: number = 0;
-  public subTasks = () => {
-    if (this.isSubTaskMode && this.subTaksInput != '') {
+  public subTaskList: subTaskTypes[] = [];
+
+  // unique identifier
+  public subTaskId: number = 0;
+
+  // just interface
+  protected subTasksMode = SubtTaskModes;
+
+  // which mode is used on subtasks
+  public modeUsed: SubtTaskModes = this.subTasksMode.AddMode;
+
+  // use to determine which subtask to edit
+  public editSubtaskById: number | undefined;
+
+  public subTasks = (mode: number, subTaskId?: number) => {
+    if (
+      mode === this.subTasksMode.AddMode &&
+      this.isSubTaskOpen &&
+      this.subTaksInput != ''
+    ) {
       const newSubTask: subTaskTypes = {
         id: this.subTaskId,
         data: this.subTaksInput,
@@ -233,8 +250,21 @@ export class AddTaskComponent implements OnInit, OnDestroy {
       this.setSubTasks(newSubTask);
       this.subTaskId++;
       this.subTaskButtonText = 'Add';
+    } else if (
+      mode === this.subTasksMode.UpdateMode &&
+      this.isSubTaskOpen &&
+      this.subTaksInput != ''
+    ) {
+      this.subTaskButtonText = 'Update';
+      if (
+        subTaskId != undefined &&
+        this.subTaskList[subTaskId].data != this.subTaksInput
+      ) {
+        this.updateSubTask(subTaskId, this.subTaskList, this.subTaksInput);
+      }
     } else {
-      this.isSubTaskMode ? this.closeSubTask() : (this.isSubTaskMode = true);
+      console.log('close');
+      this.isSubTaskOpen ? this.closeSubTask() : (this.isSubTaskOpen = true);
     }
   };
 
@@ -242,7 +272,7 @@ export class AddTaskComponent implements OnInit, OnDestroy {
     this.closing = true;
 
     setTimeout(() => {
-      this.isSubTaskMode = false;
+      this.isSubTaskOpen = false;
       this.closing = false;
     }, 450);
   };
@@ -262,6 +292,42 @@ export class AddTaskComponent implements OnInit, OnDestroy {
   public deleteSubTask = (index: number) => {
     this.subTaskList.splice(index, 1);
   };
+
+  /* SET UP SUBTASK FOR UPDATE */
+  public setUpdateSubTaskMode = (index: number) => {
+    /* SET THE SUBTASK INPUT INTO UPDATE MODE  */
+    if (!this.isSubTaskOpen) {
+      this.setSubTaskInputConfig(index);
+      this.subTasks(this.subTasksMode.UpdateMode, index);
+    } else {
+      this.subTaskButtonText = 'Add';
+      this.closeSubTask();
+    }
+  };
+
+  public setSubTaskInputConfig = (index: number) => {
+    this.isSubTaskOpen = true;
+    this.subTaksInput = this.subTaskList[index].data;
+    this.modeUsed = this.subTasksMode.UpdateMode;
+    this.editSubtaskById = index;
+  };
+
+  public updateSubTask = (
+    index: number,
+    subtaskList: subTaskTypes[],
+    newInput: string
+  ) => {
+    let subTask = subtaskList[index];
+    subTask.data = newInput;
+
+    //update
+    //this.addTaskConfig.setValueOnChange(this.subTaskList, 'subTasks');
+    console.log(JSON.stringify(this.userInput.value, null, 2));
+    console.log(this.task$.getTaskDataSignal()());
+  };
+  /* END */
+
+  /* END OF SUBTASK */
 
   /* for TIME DEADLINE */
   public dueTime: string = '';
