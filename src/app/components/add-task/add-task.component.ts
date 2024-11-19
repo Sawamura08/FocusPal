@@ -159,6 +159,7 @@ export class AddTaskComponent implements OnInit, OnDestroy {
       next: (value) => {
         this.modalStatus = value;
 
+        //CHECK IF THE VALUE IS UPDATE MODE
         if (this.modalStatus.mode) {
           this.fetchTaskData();
         }
@@ -263,7 +264,6 @@ export class AddTaskComponent implements OnInit, OnDestroy {
         this.updateSubTask(subTaskId, this.subTaskList, this.subTaksInput);
       }
     } else {
-      console.log('close');
       this.isSubTaskOpen ? this.closeSubTask() : (this.isSubTaskOpen = true);
     }
   };
@@ -317,13 +317,12 @@ export class AddTaskComponent implements OnInit, OnDestroy {
     subtaskList: subTaskTypes[],
     newInput: string
   ) => {
-    let subTask = subtaskList[index];
+    const subTaskList = [...subtaskList];
+    let subTask = subTaskList[index];
     subTask.data = newInput;
 
     //update
-    //this.addTaskConfig.setValueOnChange(this.subTaskList, 'subTasks');
-    console.log(JSON.stringify(this.userInput.value, null, 2));
-    console.log(this.task$.getTaskDataSignal()());
+    this.addTaskConfig.setValueOnChange(this.subTaskList, 'subTasks');
   };
   /* END */
 
@@ -421,7 +420,8 @@ export class AddTaskComponent implements OnInit, OnDestroy {
     this.dueTime = this.dateTime.transformDateToTime(data.dueTime);
 
     if (data.subTasks) {
-      this.subTaskList = data.subTasks;
+      //DEEP COPY since if I modify the (subTaksList = data.Subtasks) it will modify the object directly (data.subTasks)
+      this.subTaskList = structuredClone(data.subTasks);
     }
   };
 
