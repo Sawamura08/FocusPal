@@ -8,8 +8,13 @@ import { NetworkStatusService } from '../../../../../service/network-status.serv
 import { SessionService } from '../../../../../service/session.service';
 import { ToastModalService } from '../../../../../service/toast-modal.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { catchError, of } from 'rxjs';
+import { catchError, EMPTY, of } from 'rxjs';
 import { FilterTaskService } from '../../../../../database/filter-task.service';
+import { taskFilter } from '../../../../../interfaces/Request';
+import {
+  categories,
+  taskCompletion,
+} from '../../../../../interfaces/export.object';
 
 @Component({
   selector: 'app-task-filter-control',
@@ -48,6 +53,7 @@ export class TaskFilterControlComponent
   }
 
   public filterTextArr: string[] = ['In Progress', 'Completed', 'Past Due'];
+  public taskCategories = categories;
 
   /* MODAL TASK FILTER MODAL */
 
@@ -66,6 +72,8 @@ export class TaskFilterControlComponent
     this.fetchAllTask();
   };
 
+  /* FETCH CHOSEN FILTER */
+  public choosenFilter: taskFilter | undefined;
   public getFilterSelection = () => {
     this.task$
       .getUserTaskFilter()
@@ -73,9 +81,9 @@ export class TaskFilterControlComponent
         takeUntilDestroyed(this.destroyRef),
         catchError((err) => {
           console.error('Error Fetching Filtered choice', err);
-          return of([]);
+          return of(undefined);
         })
       )
-      .subscribe((filters) => console.log(filters));
+      .subscribe((filters) => (this.choosenFilter = filters));
   };
 }

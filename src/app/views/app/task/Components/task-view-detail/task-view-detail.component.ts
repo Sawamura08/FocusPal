@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, Input, OnInit } from '@angular/core';
 import { SubTasks, Task } from '../../../../../database/db';
 import { SubTaskService } from '../../../../../database/sub-task.service';
 import {
@@ -8,6 +8,10 @@ import {
 import { taskCompletion } from '../../../../../interfaces/export.object';
 import { slideRight } from '../../../../../animation/slide-right.animate';
 import { TaskObservableService } from '../../../../../service/task-observable.service';
+import { taskFilter } from '../../../../../interfaces/Request';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { catchError, of } from 'rxjs';
+import { ResponseService } from '../../../../../service/reponse.service';
 
 @Component({
   selector: 'app-task-view-detail',
@@ -19,7 +23,8 @@ export class TaskViewDetailComponent implements OnInit {
   constructor(
     protected SubTask: SubTaskService,
     protected popModal: PopModalService,
-    protected task$: TaskObservableService
+    protected task$: TaskObservableService,
+    protected Response: ResponseService
   ) {}
 
   ngOnInit(): void {
@@ -28,6 +33,7 @@ export class TaskViewDetailComponent implements OnInit {
   }
 
   @Input() details!: Task;
+  protected destroyRef = inject(DestroyRef);
   public animateModal: boolean = true;
 
   /* CLOSE TASK DETAIL VIEW MODAL */

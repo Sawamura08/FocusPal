@@ -447,6 +447,8 @@ export class AddTaskComponent implements OnInit, OnDestroy {
     this.tagIndex = data.tags;
     this.priorityIndex = data.priority;
     this.taskId = data.taskId;
+    this.isTaskComplete =
+      data.status === taskCompletion.COMPLETE ? true : false;
     // SET WHICH TAG TO DISPLAY
     this.tagList = this.setTagListValue();
 

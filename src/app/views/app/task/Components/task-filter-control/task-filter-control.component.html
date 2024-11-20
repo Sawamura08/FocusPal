@@ -15,4 +15,40 @@
       </button>
     </li>
   </ul>
+  @if (choosenFilter) {
+  <ul class="filter-list">
+    @if (choosenFilter.category) {
+    <li
+      class="filter"
+      [ngClass]="{ category: choosenFilter.category != undefined }"
+    >
+      {{ choosenFilter.category | taskCategory }}
+    </li>
+    }
+    <!-- PERSONAL -->
+
+    @if (choosenFilter.tags) {
+    <li class="filter" [ngClass]="{ tags: choosenFilter.tags != undefined }">
+      <!-- PERSONAL -->
+      @if (choosenFilter.category === taskCategories.PERSONAL) {
+      {{ choosenFilter.tags | taskTagPersonal }}
+      }
+      <!-- ACADEMIC -->
+      @if (choosenFilter.category === taskCategories.ACADEMIC) {
+      {{ choosenFilter.tags | taskTagAcademic }}
+      }
+    </li>
+    }
+
+    <!-- PRIORITY -->
+    @if (choosenFilter.priority) {
+    <li
+      class="filter"
+      [ngClass]="{ priority: choosenFilter.priority != undefined }"
+    >
+      {{ choosenFilter.priority | textPipe }}
+    </li>
+    }
+  </ul>
+  }
 </div>

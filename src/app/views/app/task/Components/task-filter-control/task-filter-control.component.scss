@@ -28,4 +28,30 @@
       }
     }
   }
+
+  .filter-list {
+    width: 100%;
+    list-style: none;
+    display: flex;
+    justify-content: space-evenly;
+    margin-block: 1rem;
+
+    .filter {
+      border-radius: 8px;
+      padding: 0.5rem 1rem;
+      box-shadow: 0 2px 4px $textColor;
+    }
+
+    .category {
+      background: linear-gradient(to right, #f5c0ef, #fff5f2);
+    }
+
+    .tags {
+      background: linear-gradient(to right, #ffe8a3, #fff5f2);
+    }
+
+    .priority {
+      background: linear-gradient(to right, #a3ffc6, #fff5f2);
+    }
+  }
 }

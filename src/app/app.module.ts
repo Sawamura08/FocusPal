@@ -25,6 +25,7 @@ import {
 } from '@angular/material/core';
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
+import { GamifiedCompletionModalComponent } from './components/gamified-completion-modal/gamified-completion-modal.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
     AppComponent,
     StarterComponent,
     AddTaskComponent,
+    GamifiedCompletionModalComponent,
   ],
   imports: [
     BrowserModule,

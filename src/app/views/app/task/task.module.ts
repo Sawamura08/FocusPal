@@ -15,11 +15,7 @@ import { TaskViewDetailComponent } from './Components/task-view-detail/task-view
 @NgModule({
   declarations: [
     TaskComponent,
-    TextPipePipe,
     TaskFilterControlComponent,
-    TaskTagPerosnalPipe,
-    TaskTagAcademicPipe,
-    TaskCategoryPipe,
     TaskBackgroundColorDirective,
     TaskViewDetailComponent,
   ],

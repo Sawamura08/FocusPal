@@ -20,6 +20,11 @@ import { WeeklySchedComponent } from '../components/weekly-sched/weekly-sched.co
 import { ChatComponent } from '../components/chat/chat.component';
 import { AnimateOnceDirective } from '../pipe/animate-once.directive';
 import { FilterTaskModalComponent } from '../components/filter-task-modal/filter-task-modal.component';
+import { TaskTagAcademicPipe } from '../pipe/task-tag-academic.pipe';
+
+import { TextPipePipe } from '../pipe/text-pipe.pipe';
+import { TaskTagPerosnalPipe } from '../pipe/task-tag.pipe';
+import { TaskCategoryPipe } from '../pipe/task-category.pipe';
 
 @NgModule({
   declarations: [
@@ -33,6 +38,10 @@ import { FilterTaskModalComponent } from '../components/filter-task-modal/filter
     AnimateOnceDirective,
     ChatComponent,
     FilterTaskModalComponent,
+    TextPipePipe,
+    TaskTagAcademicPipe,
+    TaskTagPerosnalPipe,
+    TaskCategoryPipe,
   ],
   imports: [
     CommonModule,
@@ -56,6 +65,10 @@ import { FilterTaskModalComponent } from '../components/filter-task-modal/filter
     AnimateOnceDirective,
     ChatComponent,
     FilterTaskModalComponent,
+    TextPipePipe,
+    TaskTagAcademicPipe,
+    TaskTagPerosnalPipe,
+    TaskCategoryPipe,
   ],
 })
 export class SharedModule {}
