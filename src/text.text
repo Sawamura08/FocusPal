@@ -49,3 +49,5 @@ every 1 minute check
 isUpdated = 0 and isQueued = 0
 
 0 1 0
+
+structuredClone() // DEEP COPY

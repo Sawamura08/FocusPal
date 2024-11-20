@@ -46,7 +46,7 @@ export class TaskViewDetailComponent implements OnInit {
   };
 
   /* update the subtasks status */
-  public completeSubTasks: number[] = [];
+  /*  public completeSubTasks: number[] = []; */
   public changeSubTaskStatus = (subTaskIndex: number) => {
     /* CHECK FIRST  */
     const result = this.syncDataToUI(subTaskIndex);
@@ -60,7 +60,7 @@ export class TaskViewDetailComponent implements OnInit {
     this.SubTask.updateSubTaskStatus(this.subTasks![subTaskIndex]);
   };
 
-  /* THIS FUNCTION HAS DUAL PURPOSE SYNC DATA AND CHECK IF IT EXIST IN NUMBER ARR */
+  /* THIS FUNCTION HAS DUAL PURPOSE SYNC DATA AND CHECK IF IT'S COMPLETED */
   /* CHANGE THE UI COMPLETE DEPENDING ON STATUS */
   public syncDataToUI = (index: number) => {
     return this.subTasks![index].status === 1;

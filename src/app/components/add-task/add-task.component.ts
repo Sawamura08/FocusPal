@@ -37,14 +37,16 @@ import {
   categories,
   confirm,
   SubtTaskModes,
+  taskCompletion,
   toastModal,
 } from '../../interfaces/export.object';
 import { TaskObservableService } from '../../service/task-observable.service';
 import { subTaskTypes, taskFilter } from '../../interfaces/Request';
-import { Task } from '../../database/db';
+import { SubTasks, Task } from '../../database/db';
 import { ToastModalService } from '../../service/toast-modal.service';
 import { unsuccessful } from '../../Objects/modal.details';
 import { DateTimeService } from '../../service/date-time.service';
+import { SubTaskService } from '../../database/sub-task.service';
 
 @Component({
   selector: 'app-add-task',
@@ -65,7 +67,8 @@ export class AddTaskComponent implements OnInit, OnDestroy {
     private updateMode: UpdateTaskModeService,
     private task$: TaskObservableService,
     private toastNotif: ToastModalService,
-    private dateTime: DateTimeService
+    private dateTime: DateTimeService,
+    protected subTaskService: SubTaskService
   ) {
     this.userInput = this.fb.group({
       title: ['', Validators.required],
@@ -214,8 +217,17 @@ export class AddTaskComponent implements OnInit, OnDestroy {
 
   // COMPLETE THE TASK
   public isTaskComplete: boolean = false;
-  public setTaskCompletion = () => {
-    this.isTaskComplete = !this.isTaskComplete;
+  public setTaskCompletion = async () => {
+    if (!this.isTaskComplete) {
+      this.taskData.status = taskCompletion.COMPLETE;
+      this.isTaskComplete = true;
+    } else {
+      this.taskData.status = taskCompletion.PENDING;
+      this.isTaskComplete = false;
+    }
+
+    const result = await this.task.setTaskCompletetionStatus(this.taskData);
+    console.log(result);
   };
   /* END */
 
@@ -227,7 +239,16 @@ export class AddTaskComponent implements OnInit, OnDestroy {
   public subTaskList: subTaskTypes[] = [];
 
   // unique identifier
-  public subTaskId: number = 0;
+  public subTaskId: number | undefined;
+
+  /* SUBTASK LIST TO BE UPDATED  on subtask object */
+  public subTaskListForUpdate: subTaskTypes[] = [];
+
+  /* SUBTASK LIST TO BE DELETED on subtask object */
+  public subTaskListForDelete: subTaskTypes[] = [];
+
+  /* SUBTASK LIST TO BE INSERTED on subtask object */
+  public subTaskListForInsert: subTaskTypes[] = [];
 
   // just interface
   protected subTasksMode = SubtTaskModes;
@@ -244,12 +265,15 @@ export class AddTaskComponent implements OnInit, OnDestroy {
       this.isSubTaskOpen &&
       this.subTaksInput != ''
     ) {
+      //CREATE UNIQUE ID FOR SUBTASK
+      this.subTaskId = this.subTaskUniqueID();
       const newSubTask: subTaskTypes = {
-        id: this.subTaskId,
+        id: this.subTaskId!,
         data: this.subTaksInput,
       };
+      //SET THE SUBTASK DATA
       this.setSubTasks(newSubTask);
-      this.subTaskId++;
+      this.subTaskListForInsert.push(newSubTask);
       this.subTaskButtonText = 'Add';
     } else if (
       mode === this.subTasksMode.UpdateMode &&
@@ -277,6 +301,7 @@ export class AddTaskComponent implements OnInit, OnDestroy {
     }, 450);
   };
 
+  /* ON BLUR CHANGE THE BUTTON TEXT */
   protected subTaskButtonText: string = 'Add';
   public changeSubTaskText = (event: Event) => {
     const inputElement = event.target as HTMLInputElement;
@@ -289,8 +314,13 @@ export class AddTaskComponent implements OnInit, OnDestroy {
     this.subTaksInput = '';
   };
 
-  public deleteSubTask = (index: number) => {
+  public deleteSubTask = (index: number, subTask: subTaskTypes) => {
+    // deletion from the UI and userinput
     this.subTaskList.splice(index, 1);
+    this.addTaskConfig.setValueOnChange(this.subTaskList, 'subTasks');
+
+    //deletion from the subtask object
+    this.subTaskListForDelete.push(subTask);
   };
 
   /* SET UP SUBTASK FOR UPDATE */
@@ -322,9 +352,15 @@ export class AddTaskComponent implements OnInit, OnDestroy {
     subTask.data = newInput;
 
     //update
+    this.subTaskListForUpdate.push(subTask);
     this.addTaskConfig.setValueOnChange(this.subTaskList, 'subTasks');
   };
   /* END */
+
+  /* CREATE UNIQUE IDENTIFIER FOR THE SUBTASK in TASK */
+  public subTaskUniqueID = () => {
+    return new Date().getTime();
+  };
 
   /* END OF SUBTASK */
 
@@ -371,9 +407,6 @@ export class AddTaskComponent implements OnInit, OnDestroy {
     this.userInput.markAllAsTouched();
 
     if (this.userInput.valid) {
-      //RESET SUBTASK ID FOR NEW TASK
-      this.subTaskId = 0;
-
       /* INSERT */
       const taskId = await this.task.insertTask(
         this.userId!,
@@ -408,7 +441,7 @@ export class AddTaskComponent implements OnInit, OnDestroy {
   };
 
   /* SET TASK DATA IN THE UI UDPATE | DELETE */
-  public syncDataToUI = (data: Task) => {
+  public syncDataToUI = async (data: Task) => {
     // SET UI
     this.categoryIndex = data.taskCategory;
     this.tagIndex = data.tags;
@@ -419,7 +452,7 @@ export class AddTaskComponent implements OnInit, OnDestroy {
 
     this.dueTime = this.dateTime.transformDateToTime(data.dueTime);
 
-    if (data.subTasks) {
+    if (data.subTasks?.length != undefined) {
       //DEEP COPY since if I modify the (subTaksList = data.Subtasks) it will modify the object directly (data.subTasks)
       this.subTaskList = structuredClone(data.subTasks);
     }
@@ -439,6 +472,10 @@ export class AddTaskComponent implements OnInit, OnDestroy {
         );
 
         if (result) {
+          // UPDATE OR DELETE THE SUBTASK OBJECT
+          this.insertSubTaskObject(this.subTaskListForInsert, this.taskId!);
+          this.updateSubTaskObject(this.subTaskListForUpdate);
+          this.deleteSubTaskObject(this.subTaskListForDelete);
           this.toastNotif.switchToastModal(toastConfig);
         } else {
           this.popModal.openModal(ModalType.UNSUCCESSFUL);
@@ -458,12 +495,67 @@ export class AddTaskComponent implements OnInit, OnDestroy {
     if (response) {
       try {
         this.task.deleteTask(this.taskId!);
-
+        this.subTaskService.deleteAllSubTaskByTaskId(this.taskId!);
         this.toastNotif.switchToastModal(toastConfig);
       } finally {
         this.closeTaskModal();
       }
     }
+  };
+
+  /* UPDATE SUBTASK OBJECT ON INDEXEDB */
+
+  public updateSubTaskObject = (subTaskForEdit: subTaskTypes[]) => {
+    if (subTaskForEdit.length > 0) {
+      subTaskForEdit.forEach(async (subTask) => {
+        let subTaskObject = await this.fetchSubTaskById(subTask.id);
+        if (subTaskObject != null) {
+          subTaskObject.subTask = subTask.data;
+
+          const result = await this.subTaskService.updateSubTaskStatus(
+            subTaskObject
+          );
+        }
+      });
+    }
+  };
+
+  /* DELETE SUBTASK OBJECT ON INDEXEDB */
+
+  public deleteSubTaskObject = (subTaskList: subTaskTypes[]) => {
+    if (subTaskList.length > 0) {
+      subTaskList.forEach(async (subTask) => {
+        const subTaskObject = await this.fetchSubTaskById(subTask.id);
+
+        if (subTaskObject != null && subTaskObject.subTaskId != null) {
+          console.log('deleted');
+          this.subTaskService.deleteSubTaskById(subTaskObject.subTaskId);
+        }
+      });
+    }
+  };
+
+  /* INSERT SUBTASK OJECT ON INDEXEDB */
+
+  public insertSubTaskObject = (
+    subTaskAddList: subTaskTypes[],
+    taskId: number
+  ) => {
+    if (this.subTaskList.length > 0) {
+      subTaskAddList.forEach(async (subTask) => {
+        const result = await this.subTaskService.insertSubTaskOnUpdate(
+          subTask,
+          taskId
+        );
+      });
+    }
+  };
+
+  /* FETCH SBUTASK FOR UPDATE OR DELETE */
+  public fetchSubTaskById = async (
+    id: number
+  ): Promise<SubTasks | undefined> => {
+    return await this.subTaskService.getSubTaskById(id);
   };
 
   /* HANDLES OBSERBABLES CONFIRMATION MODAL */
@@ -502,14 +594,17 @@ export class AddTaskComponent implements OnInit, OnDestroy {
   };
 
   /* CONFIRMATION MODAL FOR SUBTASK */
-  public openSubTaskConfirmationModal = async (subTaskIndex: number) => {
+  public openSubTaskConfirmationModal = async (
+    index: number,
+    subTask: subTaskTypes
+  ) => {
     this.popModal.setConfirmaModalStatus(true);
 
     const response = await this.getUserConfirmResponse();
 
-    if (response && subTaskIndex) {
+    if (response && index != undefined) {
       this.popModal.setConfirmaModalStatus(false);
-      this.deleteSubTask(subTaskIndex);
+      this.deleteSubTask(index, subTask);
     }
   };
 

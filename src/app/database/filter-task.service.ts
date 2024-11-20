@@ -9,6 +9,7 @@ import { ScheduleService } from './schedule.service';
 import { TaskObservableService } from '../service/task-observable.service';
 import { taskFilter } from '../interfaces/Request';
 import { SubTaskService } from './sub-task.service';
+import { ResponseService } from '../service/reponse.service';
 
 @Injectable({
   providedIn: 'root',
@@ -24,9 +25,10 @@ export class FilterTaskService extends taskService {
     sortDate: ScheduleService,
     task$: TaskObservableService,
     subTasks: SubTaskService,
+    Response: ResponseService,
     private level: PriorityService
   ) {
-    super(datePipe, sortDate, task$, subTasks);
+    super(datePipe, sortDate, task$, subTasks, Response);
     /* ----------- QUERY FETCH data from DB REACTIVELY/ ON LIVE */
     this.allTaskByStatus$ = from(liveQuery(() => this.getTaskByStatus()));
     this.allTaskByDueDate$ = from(liveQuery(() => this.getTaskByDueDate()));

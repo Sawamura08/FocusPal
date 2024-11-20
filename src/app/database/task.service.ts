@@ -8,6 +8,7 @@ import { ScheduleService } from './schedule.service';
 import { TaskObservableService } from '../service/task-observable.service';
 import { taskCompletion } from '../interfaces/export.object';
 import { SubTaskService } from './sub-task.service';
+import { ResponseService } from '../service/reponse.service';
 
 @Injectable({
   providedIn: 'root',
@@ -20,7 +21,8 @@ export class taskService {
     protected datePipe: DatePipe,
     protected sortDate: ScheduleService,
     protected task$: TaskObservableService,
-    protected subTasks: SubTaskService
+    protected subTasks: SubTaskService,
+    protected Response: ResponseService
   ) {
     /* ----------- QUERY FETCH data from DB REACTIVELY/ ON LIVE */
     this.taskList$ = from(liveQuery(() => this.getTaskList()));
@@ -96,10 +98,13 @@ export class taskService {
 
   /* SET TASK COMPLETION */
 
-  public setTaskCompletetionStatus = (isComplete: boolean) => {
-    const value = isComplete ? taskCompletion.COMPLETE : taskCompletion.PENDING;
-
-    /*  db.taskList.update() */
+  public setTaskCompletetionStatus = async (task: Task) => {
+    try {
+      const result = await db.taskList.update(task.taskId!, task);
+      return this.Response.successResponse(result);
+    } catch {
+      return this.Response.errorResponse();
+    }
   };
 
   /* SET TASK PAST DUE */
