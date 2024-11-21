@@ -1,1 +1,54 @@
-<p>gamified-completion-modal works!</p>
+<div class="background">
+  <section class="modal-container">
+    <div class="modal-content">
+      <header class="modal-header">
+        <figure class="modal-logo">
+          <span class="icon"><img src="extra/trophy.png" alt="" /></span>
+        </figure>
+        <div class="modal-header-text">
+          <h2>🎉 Congratulations! 🎉</h2>
+          <p>{{ phrase }}</p>
+        </div>
+      </header>
+      <section class="modal-body">
+        <div class="small-card">
+          <section class="card-title">
+            <p class="text">Exp Earned</p>
+            <span class="icon"><i class="fa-regular fa-arrow-up"></i></span>
+          </section>
+          <div class="card-body">
+            <h3>+20 EXP</h3>
+          </div>
+        </div>
+        <section class="small-card">
+          <section class="card-title">
+            <p class="text">Rank</p>
+            <span class="icon"><i class="fa-regular fa-shield"></i></span>
+          </section>
+          <figure class="card-body"><img src="ranks/0.png" alt="" /></figure>
+        </section>
+      </section>
+      <div class="rank-progress">
+        <div class="ranks">
+          <div class="current-rank">
+            <span class="icon"><i class="fa-regular fa-crown"></i></span>
+            <h4 class="rank text">Silver III</h4>
+          </div>
+          <h4 class="text">Next: Silver II</h4>
+        </div>
+
+        <div class="progress-container">
+          <div class="progress-bar"><div class="progress"></div></div>
+        </div>
+        <div class="sub-info">
+          <div class="info">375/500 XP</div>
+          <div class="info">125 XP to next rank</div>
+        </div>
+      </div>
+      <section class="modal-footer">
+        <button class="btn">Share Victory</button>
+        <button class="btn">Continue</button>
+      </section>
+    </div>
+  </section>
+</div>

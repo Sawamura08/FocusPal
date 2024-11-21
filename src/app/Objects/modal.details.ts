@@ -3,7 +3,12 @@ export const unsuccessful = {
   imgPath: '/extra/warning.png',
 };
 
-export const modalStatus = {
+export interface modalStatusDataType {
+  open: boolean;
+  close: boolean;
+}
+
+export const modalStatus: modalStatusDataType = {
   open: true,
   close: false,
 };

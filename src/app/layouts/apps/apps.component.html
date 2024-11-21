@@ -67,6 +67,10 @@
 
 <!-- TASK FILTER MODAL -->
 <!-- *ngIf For signals -->
-<div class="filter-task-modal" *ngIf="fetchTaskFilterSignal()">
+<div class="modal" *ngIf="fetchTaskFilterSignal()">
   <app-filter-task-modal></app-filter-task-modal>
+</div>
+
+<div class="modal" *ngIf="fetchCompletionModalStatus()">
+  <app-gamified-completion-modal></app-gamified-completion-modal>
 </div>

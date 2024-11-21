@@ -20,6 +20,10 @@ $grayColor: #e5eafc;
 $inProgress: #a5d0ed;
 $complete: #9ed6a8;
 $pastDue: #f29a8d;
+$yellow: #ffd700;
+
+$darkerColor: #e85c54;
+$darkerShadow: #d6473f;
 
 /* DELETE */
 $deleteColor: #bf0603;
@@ -47,6 +51,10 @@ $updateShadow: #38b000;
 @mixin buttonOnClick($color) {
   top: 4px;
   box-shadow: $color 0px 3px 2px, #000 0px 3px 5px;
+}
+
+@mixin yellowBg() {
+  background: linear-gradient(to right, #f2994a, #f2c94c);
 }
 
 @mixin inputTheme($color) {
