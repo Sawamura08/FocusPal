@@ -1,5 +1,5 @@
 <div class="background">
-  <section class="modal-container">
+  <section class="modal-container" @slide *ngIf="animateModal">
     <div class="modal-content">
       <header class="modal-header">
         <figure class="modal-logo">
@@ -32,13 +32,15 @@
         <div class="ranks">
           <div class="current-rank">
             <span class="icon"><i class="fa-regular fa-crown"></i></span>
-            <h4 class="rank text">Silver III</h4>
+            <h4 class="rank text">Bronze</h4>
           </div>
-          <h4 class="text">Next: Silver II</h4>
+          <h4 class="text">Next: Silver</h4>
         </div>
 
         <div class="progress-container">
-          <div class="progress-bar"><div class="progress"></div></div>
+          <div class="progress-bar">
+            <div class="progress" [appProgressBar]="meme"></div>
+          </div>
         </div>
         <div class="sub-info">
           <div class="info">375/500 XP</div>
@@ -46,8 +48,8 @@
         </div>
       </div>
       <section class="modal-footer">
-        <button class="btn">Share Victory</button>
-        <button class="btn">Continue</button>
+        <button class="btn">Share</button>
+        <button class="btn" (click)="closeModal()">Continue</button>
       </section>
     </div>
   </section>

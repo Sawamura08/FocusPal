@@ -1,4 +1,5 @@
 import Dexie, { Table } from 'dexie';
+import { userGameData } from '../interfaces/game.interface';
 
 export interface Task {
   taskId?: number;
@@ -52,6 +53,7 @@ export class localDB extends Dexie {
   userList!: Table<User, number>;
   schedList!: Table<Schedule, number>;
   subTaskList!: Table<SubTasks, number>;
+  userGameInfo!: Table<userGameData, number>;
 
   constructor() {
     super('myDB');

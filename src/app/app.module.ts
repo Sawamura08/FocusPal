@@ -26,6 +26,7 @@ import {
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { GamifiedCompletionModalComponent } from './components/gamified-completion-modal/gamified-completion-modal.component';
+import { ProgressBarDirective } from './components/gamified-completion-modal/progress-bar.directive';
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import { GamifiedCompletionModalComponent } from './components/gamified-completi
     StarterComponent,
     AddTaskComponent,
     GamifiedCompletionModalComponent,
+    ProgressBarDirective,
   ],
   imports: [
     BrowserModule,

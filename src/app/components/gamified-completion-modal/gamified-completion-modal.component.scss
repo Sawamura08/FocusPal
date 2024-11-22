@@ -163,6 +163,33 @@
             }
           }
         }
+
+        .progress-container {
+          width: 100%;
+          margin-block-start: 0.5rem;
+          padding: 0.5rem 0;
+
+          .progress-bar {
+            width: 100%;
+            height: 1rem;
+            border-radius: 1rem;
+            background-color: #641e16;
+
+            .progress {
+              height: 100%;
+              border-radius: 1rem;
+              background-color: $shadow;
+              //animation: progress 1s ease-in;
+            }
+          }
+        }
+
+        .sub-info {
+          width: 100%;
+          font-family: $subText;
+          display: flex;
+          justify-content: space-between;
+        }
       }
 
       .modal-footer {
