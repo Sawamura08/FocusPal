@@ -249,7 +249,9 @@ export class AddTaskComponent implements OnInit, OnDestroy {
   public setTaskCompletionData = async () => {
     const result = await this.gamified.fetchUserByID(this.userId!);
 
+    /* SET VALUE ON MODAL */
     if (result && result.value != undefined) {
+      this.setTaskCompletionAnimationOnce();
       this.gameData.setCompletionModalValue(result.value);
 
       this.closeTaskModal();
@@ -259,6 +261,14 @@ export class AddTaskComponent implements OnInit, OnDestroy {
     }
   };
   /* END */
+
+  /* PREVENT TASK COMPLETION ANIMATION/ LIMIT TO ONE*/
+  public setTaskCompletionAnimationOnce = async () => {
+    if (this.taskData) {
+      this.taskData.completeAnimationStatus = true;
+      const result = await this.task.setTaskCompletetionStatus(this.taskData);
+    }
+  };
 
   /* ADD OR UPDATE SUBTASK */
 

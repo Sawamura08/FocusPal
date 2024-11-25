@@ -57,6 +57,7 @@ export class GamifiedCompletionModalComponent implements OnInit {
 
   public closeModal = () => {
     this.animateModal = false;
+    this.checkExpStatus();
 
     setTimeout(() => {
       this.game.setCompletionModalStatus(modalStatus.close);
@@ -77,16 +78,6 @@ export class GamifiedCompletionModalComponent implements OnInit {
       this.newExp = this.userData.currentExp + EXP;
       /* configuration */
       this.neededExpToRankUp();
-
-      // close userData
-      this.updatedUserData = structuredClone(this.userData);
-
-      // check whether the user will rank up
-      if (this.newExp < this.userData.nextLevelExp) {
-        this.setUpdateCommonConfig();
-      } else {
-        this.setUpdateRankUpConfig();
-      }
     }
   };
 
@@ -100,6 +91,21 @@ export class GamifiedCompletionModalComponent implements OnInit {
     const expToRankUp = this.userData?.nextLevelExp;
 
     return (this.neededExp = expToRankUp! - currentExp!);
+  };
+
+  /* check whether rank up or not */
+  public checkExpStatus = () => {
+    // close userData
+    this.updatedUserData = structuredClone(this.userData);
+
+    if (this.userData) {
+      // check whether the user will rank up
+      if (this.newExp < this.userData.nextLevelExp) {
+        this.setUpdateCommonConfig();
+      } else {
+        this.setUpdateRankUpConfig();
+      }
+    }
   };
 
   // EXP UPDATE IF THE USER DON'T RANK UP
