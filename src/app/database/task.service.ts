@@ -65,6 +65,7 @@ export class taskService {
       createdAt: new Date(currentDate!),
       taskCategory: userInputs.taskCategory,
       tags: userInputs.tags,
+      completeAnimationStatus: false,
 
       isSync: 0,
       isUpdated: 0,
@@ -101,7 +102,7 @@ export class taskService {
   public setTaskCompletetionStatus = async (task: Task) => {
     try {
       const result = await db.taskList.update(task.taskId!, task);
-      return this.Response.successResponse(result);
+      return this.Response.successResponse(result, task.status);
     } catch {
       return this.Response.errorResponse();
     }

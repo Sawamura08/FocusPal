@@ -12,6 +12,7 @@ import { buttonValues, navigation } from '../../class/navigation';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { TaskObservableService } from '../../service/task-observable.service';
 import { GamifiedCompletionService } from '../../components/gamified-completion-modal/service/gamified-completion.service';
+import { RankUpService } from '../../service/rank-up.service';
 
 enum buttons {
   HOME,
@@ -32,7 +33,8 @@ export class AppsComponent extends navigation implements OnInit, OnDestroy {
     private popModal: PopModalService,
     location: Location,
     private task$: TaskObservableService,
-    private gamified: GamifiedCompletionService
+    private gamified: GamifiedCompletionService,
+    private rankUp: RankUpService
   ) {
     super(location, route, actRoute);
   }
@@ -109,6 +111,14 @@ export class AppsComponent extends navigation implements OnInit, OnDestroy {
 
   public fetchCompletionModalStatus = () => {
     return this.gamified.getCompletionModalStatus()();
+  };
+
+  /* END */
+
+  /* MODAL FOR RANK UP */
+
+  public fetchRankUpModalStatus = () => {
+    return this.rankUp.getRankUpModalStatus()();
   };
 
   /* END */

@@ -150,7 +150,7 @@ export class HomeComponent implements OnInit, OnChanges, OnDestroy {
 
   /* RANKINGS */
   public userRank = 1;
-  public userBadge = 0;
+  public userBadge = 1;
 
   public setUserBadge = (badge: number) => {
     return `ranks/${badge}.png`;

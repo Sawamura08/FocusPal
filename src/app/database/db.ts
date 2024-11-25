@@ -15,6 +15,7 @@ export interface Task {
   createdAt: Date;
   taskCategory: number; // 0 - personal; 1- academic
   tags: number; // the tags is depends on the task category
+  completeAnimationStatus?: boolean; // to check if the task completed once
 
   isSync: number;
   isUpdated: number;
@@ -57,13 +58,15 @@ export class localDB extends Dexie {
 
   constructor() {
     super('myDB');
-    this.version(30).stores({
+    this.version(32).stores({
       taskList:
-        '++taskId, userId, title,description,subTask, status, priority, startDate, dueDate,dueTime , createdAt, taskCategory, tags ,isSync, isUpdated,isQueued',
+        '++taskId, userId, title,description,subTask, status, priority, startDate, dueDate,dueTime , createdAt, taskCategory, tags ,isSync, isUpdated,isQueued,completeAnimationStatus',
       userList: 'userId,userName',
       schedList:
         '++schedId,userId,title,date,startTime,endTime,repeat,type,isActive,daysOfWeek,location',
       subTaskList: '++subTaskId,taskSubtaskId,subTask,taskId,status',
+      userGameInfo:
+        '++userGameData,userId,rank,currentExp,nextLevelExp,avatarID',
     });
   }
 }

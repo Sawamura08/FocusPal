@@ -1,5 +1,5 @@
 <div class="background">
-  <section class="modal-container" @slide *ngIf="animateModal">
+  <section class="modal-container" @slide *ngIf="animateModal" id="capture">
     <div class="modal-content">
       <header class="modal-header">
         <figure class="modal-logo">
@@ -25,30 +25,32 @@
             <p class="text">Rank</p>
             <span class="icon"><i class="fa-regular fa-shield"></i></span>
           </section>
-          <figure class="card-body"><img src="ranks/0.png" alt="" /></figure>
+          <figure class="card-body">
+            <img [src]="setUserBadgeRank(userData?.rank!)" alt="" />
+          </figure>
         </section>
       </section>
       <div class="rank-progress">
         <div class="ranks">
           <div class="current-rank">
             <span class="icon"><i class="fa-regular fa-crown"></i></span>
-            <h4 class="rank text">Bronze</h4>
+            <h4 class="rank text">{{ userData?.rank! | ranks }}</h4>
           </div>
-          <h4 class="text">Next: Silver</h4>
+          <h4 class="text">Next: {{ userData?.rank! + 1 | ranks }}</h4>
         </div>
 
         <div class="progress-container">
           <div class="progress-bar">
-            <div class="progress" [appProgressBar]="meme"></div>
+            <div class="progress" [appProgressBar]="userData!"></div>
           </div>
         </div>
         <div class="sub-info">
-          <div class="info">375/500 XP</div>
-          <div class="info">125 XP to next rank</div>
+          <div class="info">{{ newExp }}/ {{ userData?.nextLevelExp }} XP</div>
+          <div class="info">{{ neededExp }} XP to next rank</div>
         </div>
       </div>
       <section class="modal-footer">
-        <button class="btn">Share</button>
+        <button class="btn" (click)="share('#capture')">Save</button>
         <button class="btn" (click)="closeModal()">Continue</button>
       </section>
     </div>

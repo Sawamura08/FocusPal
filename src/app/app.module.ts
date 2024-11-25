@@ -27,6 +27,9 @@ import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { GamifiedCompletionModalComponent } from './components/gamified-completion-modal/gamified-completion-modal.component';
 import { ProgressBarDirective } from './components/gamified-completion-modal/progress-bar.directive';
+import { RanksPipe } from './pipe/ranks.pipe';
+import { ExpToFillPipe } from './pipe/exp-to-fill.pipe';
+import { RankUpComponent } from './components/rank-up/rank-up.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +40,9 @@ import { ProgressBarDirective } from './components/gamified-completion-modal/pro
     AddTaskComponent,
     GamifiedCompletionModalComponent,
     ProgressBarDirective,
+    RanksPipe,
+    ExpToFillPipe,
+    RankUpComponent,
   ],
   imports: [
     BrowserModule,

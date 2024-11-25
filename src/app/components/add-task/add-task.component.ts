@@ -44,9 +44,11 @@ import { TaskObservableService } from '../../service/task-observable.service';
 import { subTaskTypes, taskFilter } from '../../interfaces/Request';
 import { SubTasks, Task } from '../../database/db';
 import { ToastModalService } from '../../service/toast-modal.service';
-import { unsuccessful } from '../../Objects/modal.details';
+import { modalStatus, unsuccessful } from '../../Objects/modal.details';
 import { DateTimeService } from '../../service/date-time.service';
 import { SubTaskService } from '../../database/sub-task.service';
+import { GameUserDataService } from '../../database/game-user-data.service';
+import { GamifiedCompletionService } from '../gamified-completion-modal/service/gamified-completion.service';
 
 @Component({
   selector: 'app-add-task',
@@ -68,7 +70,9 @@ export class AddTaskComponent implements OnInit, OnDestroy {
     private task$: TaskObservableService,
     private toastNotif: ToastModalService,
     private dateTime: DateTimeService,
-    protected subTaskService: SubTaskService
+    protected subTaskService: SubTaskService,
+    protected gamified: GameUserDataService,
+    protected gameData: GamifiedCompletionService
   ) {
     this.userInput = this.fb.group({
       title: ['', Validators.required],
@@ -220,14 +224,39 @@ export class AddTaskComponent implements OnInit, OnDestroy {
   public setTaskCompletion = async () => {
     if (!this.isTaskComplete) {
       this.taskData.status = taskCompletion.COMPLETE;
+      //this.taskData.completeAnimationStatus = true;
       this.isTaskComplete = true;
     } else {
       this.taskData.status = taskCompletion.PENDING;
       this.isTaskComplete = false;
     }
 
+    // update the task status
     const result = await this.task.setTaskCompletetionStatus(this.taskData);
-    console.log(result);
+
+    if (
+      result.value &&
+      result.updateKeyValue === taskCompletion.COMPLETE &&
+      !this.taskData.completeAnimationStatus
+    ) {
+      this.setTaskCompletionData();
+    } else {
+      this.closeTaskModal();
+    }
+  };
+
+  // SET COMPLETION USER DATA FOR MODAL
+  public setTaskCompletionData = async () => {
+    const result = await this.gamified.fetchUserByID(this.userId!);
+
+    if (result && result.value != undefined) {
+      this.gameData.setCompletionModalValue(result.value);
+
+      this.closeTaskModal();
+      this.gameData.setCompletionModalStatus(modalStatus.open);
+    } else {
+      console.log(result);
+    }
   };
   /* END */
 

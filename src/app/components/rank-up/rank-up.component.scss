@@ -1,0 +1,155 @@
+@use "../../app.component.scss" as *;
+@use "../../icons/font-awesome-6-pro-main/css/all.css" as *;
+
+.background {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.6),
+    rgba(0, 0, 0, 0.6),
+    rgba(0, 0, 0, 0.6)
+  );
+  backdrop-filter: blur(2px);
+
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .rank-up-container {
+    position: absolute;
+    width: 90%;
+    background: linear-gradient(to top, $mainColor, $shadow);
+    color: $neutralColor;
+    padding: 1rem;
+    border-radius: 1rem;
+
+    .modal-content {
+      width: 100%;
+
+      .modal-header {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        position: relative;
+
+        .modal-logo {
+          width: 6rem;
+          height: 6rem;
+          border-radius: 50%;
+          .icon {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation: bounce 1s infinite ease-in-out;
+            @include yellowBg();
+
+            i {
+              font-size: 3rem;
+            }
+          }
+        }
+
+        .modal-logo {
+          animation: pulse 1.5s infinite ease-in-out;
+        }
+
+        @keyframes pulse {
+          0% {
+            box-shadow: 0 0 0 0px #f2994a;
+          }
+          100% {
+            box-shadow: 0 0 0 4rem rgba(0, 0, 0, 0);
+          }
+        }
+
+        .modal-header-text {
+          width: 100%;
+          text-align: center;
+          margin-block-start: 1rem;
+
+          h2 {
+            font-family: $fontFamily;
+            font-size: 1.5rem;
+          }
+
+          p {
+            margin-block-start: 0.5rem;
+            font-family: $subText;
+            font-size: 1rem;
+          }
+        }
+      }
+
+      .modal-body {
+        width: 100%;
+        display: flex;
+        justify-content: space-around;
+
+        margin-block: 1rem;
+
+        .card {
+          margin-block: 1rem;
+          width: 48%;
+          padding: 1rem;
+          box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+          border-radius: 8px;
+        }
+
+        .rank {
+          width: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: space-around;
+
+          .arrow-up > i {
+            font-size: 2rem;
+            color: #ffd700;
+            animation: bounce 1s infinite;
+            opacity: 1;
+          }
+
+          .icon > img {
+            width: 5rem;
+            height: 5rem;
+          }
+        }
+
+        .rank-text {
+          width: 100%;
+
+          h4 {
+            margin-block-end: 1rem;
+          }
+
+          h2 {
+            text-align: center;
+            font-size: 2rem;
+            font-family: $fontFamily;
+          }
+        }
+      }
+
+      .modal-footer {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+
+        .btn {
+          width: 100%;
+          @include buttonTheme(#e85c54, $neutralColor, #d6473f);
+
+          &:active {
+            @include buttonOnClick(#d6473f);
+          }
+        }
+      }
+    }
+  }
+}

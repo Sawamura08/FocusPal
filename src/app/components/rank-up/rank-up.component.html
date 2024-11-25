@@ -1,0 +1,40 @@
+<div class="background">
+  <section
+    class="rank-up-container"
+    id="rankCapture"
+    @slide
+    *ngIf="animateModal"
+  >
+    <div class="modal-content">
+      <header class="modal-header">
+        <figure class="modal-logo">
+          <span class="icon"><img src="extra/trophy.png" alt="" /></span>
+        </figure>
+        <div class="modal-header-text">
+          <h2>🎉 Congratulations! 🎉</h2>
+          <p>{{ phrase }}</p>
+        </div>
+      </header>
+
+      <div class="modal-body">
+        <figure class="rank card">
+          <span class="icon"
+            ><img [src]="setUserBadgeRank(rankUpData?.rank!)" alt="Rank"
+          /></span>
+          <div class="arrow-up">
+            <i class="fa-regular fa-arrow-up"></i>
+          </div>
+        </figure>
+        <div class="rank-text card">
+          <h4>Your New Rank:</h4>
+          <h2>{{ rankUpData?.rank! | ranks }}</h2>
+        </div>
+      </div>
+
+      <section class="modal-footer">
+        <button class="btn" (click)="share('#rankCapture')">Save</button>
+        <button class="btn" (click)="closeModal()">Continue</button>
+      </section>
+    </div>
+  </section>
+</div>

@@ -28,6 +28,7 @@
     "@google/generative-ai": "^0.21.0",
     "canvas-confetti": "^1.9.3",
     "dexie": "^4.0.8",
+    "html2canvas": "^1.4.1",
     "idb": "^8.0.0",
     "jeep-sqlite": "^2.8.0",
     "luxon": "^3.5.0",

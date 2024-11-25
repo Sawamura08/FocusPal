@@ -11,14 +11,20 @@ export class ResponseService {
     return {
       success: false,
       message: 'An unexpected error occurred. Please try again later.',
+      value: false,
     };
   };
 
-  public successResponse = (value: any): SucessResponse => {
+  // value is more like a success 0 = unsuccessful and 1 = sucessful
+  public successResponse = (
+    value: any,
+    updateKeyValue?: any
+  ): SucessResponse => {
     return {
       success: true,
       message: 'Operation completed successfully.',
       value: value,
+      updateKeyValue: updateKeyValue,
     };
   };
 }
