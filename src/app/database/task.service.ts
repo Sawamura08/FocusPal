@@ -148,4 +148,14 @@ export class taskService {
       }
     });
   };
+
+  /* FETCH TASK BY ID */
+  public fetchAllTaskByID = async (id: number) => {
+    try {
+      const result = await db.taskList.where('userId').equals(id).toArray();
+      return this.Response.successResponse(result);
+    } catch {
+      return this.Response.errorResponse();
+    }
+  };
 }

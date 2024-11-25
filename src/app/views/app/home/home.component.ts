@@ -22,6 +22,10 @@ import { WeeklyScheduleService } from '../../../database/weekly-schedule.service
 import { SessionService } from '../../../service/session.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DestroyRef } from '@angular/core';
+import { GameUserDataService } from '../../../database/game-user-data.service';
+import { taskService } from '../../../database/task.service';
+import { ResponseService } from '../../../service/reponse.service';
+import { taskCompletion } from '../../../interfaces/export.object';
 
 @Component({
   selector: 'app-home',
@@ -42,7 +46,9 @@ export class HomeComponent implements OnInit, OnChanges, OnDestroy {
     private filterTask: FilterTaskService,
     private filterSched: FilterScheduleService,
     private weeklySched: WeeklyScheduleService,
-    protected session: SessionService
+    protected session: SessionService,
+    protected task: taskService,
+    protected response: ResponseService
   ) {
     this.Progress = new SetProgressBar();
   }
@@ -59,6 +65,8 @@ export class HomeComponent implements OnInit, OnChanges, OnDestroy {
 
     /* FETCH CLASS SCHED TODAY */
     this.getSchedToday();
+
+    this.getUser();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -85,13 +93,13 @@ export class HomeComponent implements OnInit, OnChanges, OnDestroy {
   public getGreeting = (): void => {
     const index = Math.floor(Math.random() * greetings.length);
     this.greeting = this.greetingsArr[index];
-    this.getUser();
   };
   /* end */
 
   /* FETCH USERNAME */
   public username: string | undefined = undefined;
   public userInfo!: User;
+  public userId: number | undefined;
   public getUser = () => {
     this.session
       .getUser()
@@ -105,6 +113,9 @@ export class HomeComponent implements OnInit, OnChanges, OnDestroy {
       .subscribe({
         next: (value) => {
           this.username = value?.userName;
+          this.userId = value?.userId;
+          /* FETCH COMPLETED TASK */
+          this.fetchCompletedTask();
         },
       });
   };
@@ -112,9 +123,28 @@ export class HomeComponent implements OnInit, OnChanges, OnDestroy {
   /* END */
 
   /* TASK SUMMARY PROGRESS */
-  public completedTask: number = 3;
-  public pendingTask: number = 7;
-  public totalTask: number = 10;
+  public completedTask: number = 0;
+  public pendingTask: number = 0;
+  public totalTask: number = 0;
+
+  public fetchCompletedTask = async () => {
+    const result = await this.task.fetchAllTaskByID(this.userId!);
+
+    if (result.success && result.value.length != undefined) {
+      const allTask = result.value;
+
+      const completedTask = allTask.filter((task: Task) => {
+        return task.status === taskCompletion.COMPLETE;
+      });
+
+      this.completedTask = completedTask.length;
+      this.totalTask = allTask.length;
+
+      /* THERE IS A DELAY ON SESSION DATA THAT'S WHY I RUN IT AGAIN */
+      this.setProgressBarStyle();
+      this.setPendingBatStyle();
+    }
+  };
 
   /* FOR COMPLETED TASK */
   private setProgressBarStyle = () => {
@@ -163,7 +193,10 @@ export class HomeComponent implements OnInit, OnChanges, OnDestroy {
   private taskListSubscribe!: Subscription;
   public getPendingTask = () => {
     this.taskListSubscribe = this.filterTask.allTaskByStatus$.subscribe({
-      next: (value) => (this.pendingTaskList = value),
+      next: (value) => {
+        this.pendingTaskList = value;
+        this.pendingTask = value.length;
+      },
       error: (err) => console.log('Error Subscribe on TaskList', err),
     });
 

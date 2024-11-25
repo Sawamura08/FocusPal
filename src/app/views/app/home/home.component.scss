@@ -132,6 +132,7 @@ main {
               grid-area: a;
             }
             .username {
+              word-wrap: break-word;
               grid-area: b;
             }
 
