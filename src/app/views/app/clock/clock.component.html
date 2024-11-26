@@ -1,0 +1,47 @@
+<main>
+  <app-header [data]="appHeaderText"></app-header>
+
+  <div class="container">
+    <div class="time-board-container">
+      <div class="time-board-content">
+        <div class="icon"><i class="fa-light fa-gear"></i></div>
+        <div class="button-container">
+          <button
+            class="btn"
+            *ngFor="let btn of pomoPalBtn; index as i"
+            [ngClass]="{ selected: btnStatus === i }"
+            (click)="setButtonStatus(i)"
+          >
+            {{ btn }}
+          </button>
+        </div>
+        <div class="timer">
+          @if (displayCountDown != '0') {
+          <h1>{{ displayCountDown }}</h1>
+          }@else {
+          <h1>{{ defaultCountDown * 1000 | date : "mm:ss" }}</h1>
+          }
+        </div>
+        <div class="other-btn">
+          <!-- start time -->
+          @if (!isTimerRunning && !isPause) {
+          <button class="btn" (click)="runTimer(defaultCountDown)">
+            Start
+          </button>
+          }
+
+          <!-- PAUSE TIME -->
+          @if (isTimerRunning) {
+          <button class="btn" (click)="pauseTimer()">Pause</button>
+          }
+          <!-- resume time -->
+          @if (isPause) {
+          <button class="btn" (click)="setRemainingTime(displayCountDown)">
+            Resume
+          </button>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</main>

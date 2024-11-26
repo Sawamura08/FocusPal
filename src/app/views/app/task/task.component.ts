@@ -2,10 +2,7 @@ import { Component, DestroyRef, inject, OnDestroy } from '@angular/core';
 import { taskService } from '../../../database/task.service';
 import { Task } from '../../../database/db';
 import { FilterTaskService } from '../../../database/filter-task.service';
-import { DatePipe } from '@angular/common';
-import { TextPipePipe } from '../../../pipe/text-pipe.pipe';
 import { SessionService } from '../../../service/session.service';
-import { PriorityService } from '../../../service/priority.service';
 import {
   BackgroundSyncService,
   syncType,

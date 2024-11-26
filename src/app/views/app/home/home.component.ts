@@ -48,6 +48,7 @@ export class HomeComponent implements OnInit, OnChanges, OnDestroy {
     private weeklySched: WeeklyScheduleService,
     protected session: SessionService,
     protected task: taskService,
+    protected gameData: GameUserDataService,
     protected response: ResponseService
   ) {
     this.Progress = new SetProgressBar();
@@ -116,6 +117,7 @@ export class HomeComponent implements OnInit, OnChanges, OnDestroy {
           this.userId = value?.userId;
           /* FETCH COMPLETED TASK */
           this.fetchCompletedTask();
+          this.fetchUserGameData();
         },
       });
   };
@@ -123,9 +125,12 @@ export class HomeComponent implements OnInit, OnChanges, OnDestroy {
   /* END */
 
   /* TASK SUMMARY PROGRESS */
-  public completedTask: number = 0;
-  public pendingTask: number = 0;
-  public totalTask: number = 0;
+  public completedTask: number | undefined;
+  public pendingTask: number | undefined;
+  public totalTask: number | undefined;
+  public userExp: number | undefined;
+  /* RANKINGS */
+  public userBadge: number | undefined;
 
   public fetchCompletedTask = async () => {
     const result = await this.task.fetchAllTaskByID(this.userId!);
@@ -146,11 +151,20 @@ export class HomeComponent implements OnInit, OnChanges, OnDestroy {
     }
   };
 
+  public fetchUserGameData = async () => {
+    const result = await this.gameData.fetchUserByID(this.userId!);
+
+    if (result.success && result.value != null) {
+      this.userBadge = result.value.rank;
+      this.userExp = result.value.currentExp;
+    }
+  };
+
   /* FOR COMPLETED TASK */
   private setProgressBarStyle = () => {
     const gradient = this.Progress.progressBar(
-      this.totalTask,
-      this.completedTask
+      this.totalTask!,
+      this.completedTask!
     );
 
     // Set the style using Renderer2
@@ -164,7 +178,7 @@ export class HomeComponent implements OnInit, OnChanges, OnDestroy {
   /* FOR PENDING TASK */
   private setPendingBatStyle = () => {
     const gradient = this.Progress.progressBar(
-      this.totalTask,
+      this.totalTask!,
       null,
       this.pendingTask
     );
@@ -177,10 +191,6 @@ export class HomeComponent implements OnInit, OnChanges, OnDestroy {
     );
   };
   /* END */
-
-  /* RANKINGS */
-  public userRank = 1;
-  public userBadge = 1;
 
   public setUserBadge = (badge: number) => {
     return `ranks/${badge}.png`;

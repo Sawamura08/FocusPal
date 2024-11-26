@@ -49,6 +49,11 @@ const routes: Routes = [
         loadChildren: () =>
           import('./views/app/task/task.module').then((m) => m.TaskModule),
       },
+      {
+        path: 'clock',
+        loadChildren: () =>
+          import('./views/app/clock/clock.module').then((m) => m.ClockModule),
+      },
     ],
   },
   {

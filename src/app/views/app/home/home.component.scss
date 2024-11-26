@@ -152,6 +152,9 @@ main {
             }
           }
         }
+        li:last-child {
+          width: 130%;
+        }
 
         .rankings > .sub-text {
           width: 100%;
