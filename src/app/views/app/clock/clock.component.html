@@ -24,7 +24,7 @@
         </div>
         <div class="other-btn">
           <!-- start time -->
-          @if (!isTimerRunning && !isPause) {
+          @if (!isTimerRunning && !isPause && !isAlarmRunning) {
           <button class="btn" (click)="runTimer(defaultCountDown)">
             Start
           </button>
@@ -40,8 +40,17 @@
             Resume
           </button>
           }
+
+          <!-- STOP ALARM -->
+          @if (isAlarmRunning) {
+          <button class="btn" (click)="stopAlarm('alarm')">Stop</button>
+          }
         </div>
       </div>
     </div>
   </div>
 </main>
+
+<audio id="alarm">
+  <source src="music/alarm.mp3" type="audio/mp3" />
+</audio>

@@ -5,6 +5,7 @@ export class TimerClass {
   constructor(protected timer$: TimerObervableService) {}
 
   public intervalTimeOut$ = new Subject<boolean>();
+  public pomodoro: number = 0;
   /* SET CONFIG BEFORE RUNNING TIMER */
   /* THE SET TIMER IS ALWAYS AT SECONDS VALUE */
   public setConfig = (setTimer: number) => {
@@ -78,5 +79,12 @@ export class TimerClass {
     const converted = convertedToSeconds + seconds;
 
     return converted;
+  };
+
+  /* INCREMENT POMODORO EVERY SET OF 25MINS OR USER PREFERENCE IN TIME */
+  public incrementPomodoro = () => {
+    this.pomodoro++;
+
+    return this.pomodoro;
   };
 }
