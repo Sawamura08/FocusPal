@@ -3,17 +3,22 @@
 
   <div class="container">
     <div class="time-board-container">
-      <div class="time-board-content">
+      <section class="time-board-content">
         <div class="icon"><i class="fa-light fa-gear"></i></div>
-        <div class="button-container">
-          <button
-            class="btn"
-            *ngFor="let btn of pomoPalBtn; index as i"
-            [ngClass]="{ selected: btnStatus === i }"
-            (click)="setButtonStatus(i)"
-          >
-            {{ btn }}
-          </button>
+        <div class="status-container">
+          @if (btnStatus === pomoPalStatus.Pomodoro) {
+          <h4 class="status">Work Mode</h4>
+          }
+
+          <!-- BREAK MODE SHORT BREAK -->
+          @if (btnStatus === pomoPalStatus.ShortBreak) {
+          <h4 class="status">Short Break Mode</h4>
+          }
+
+          <!-- LONG BREAK -->
+          @if (btnStatus === pomoPalStatus.LongBreak) {
+          <h4 class="status">Long Break Mode</h4>
+          }
         </div>
         <div class="timer">
           @if (displayCountDown != '0') {
@@ -24,7 +29,7 @@
         </div>
         <div class="other-btn">
           <!-- start time -->
-          @if (!isTimerRunning && !isPause && !isAlarmRunning) {
+          @if (!isTimerRunning && !isPause && !isAlarmTriggered) {
           <button class="btn" (click)="runTimer(defaultCountDown)">
             Start
           </button>
@@ -42,14 +47,43 @@
           }
 
           <!-- STOP ALARM -->
-          @if (isAlarmRunning) {
+          @if ( isAlarmTriggered === true) {
           <button class="btn" (click)="stopAlarm('alarm')">Stop</button>
           }
         </div>
-      </div>
+      </section>
     </div>
+
+    <section class="message-container">
+      <h3 class="message">
+        {{ currentMode === "work" ? "Time to Focus!" : "Time to Rest!" }}
+      </h3>
+    </section>
+
+    <section class="task-container">
+      <div class="task-content">
+        <header class="task-header">
+          <h5>Tasks</h5>
+          <span class="icon"
+            ><i class="fa-solid fa-circle-ellipsis-vertical"></i
+          ></span>
+        </header>
+        <div class="button-container">
+          <button class="btn">
+            <span class="icon"
+              ><i class="fa-sharp fa-solid fa-circle-plus"></i
+            ></span>
+            Add Task
+          </button>
+        </div>
+      </div>
+    </section>
   </div>
 </main>
+
+<div class="modal">
+  <app-task-modal></app-task-modal>
+</div>
 
 <audio id="alarm">
   <source src="music/alarm.mp3" type="audio/mp3" />

@@ -1,5 +1,6 @@
 import Dexie, { Table } from 'dexie';
 import { userGameData } from '../interfaces/game.interface';
+import { pomoTask, userPomoConfig } from '../interfaces/pomoPal';
 
 export interface Task {
   taskId?: number;
@@ -55,10 +56,12 @@ export class localDB extends Dexie {
   schedList!: Table<Schedule, number>;
   subTaskList!: Table<SubTasks, number>;
   userGameInfo!: Table<userGameData, number>;
+  pomoTaskList!: Table<pomoTask, number>;
+  userPomoConfigList!: Table<userPomoConfig, number>;
 
   constructor() {
     super('myDB');
-    this.version(32).stores({
+    this.version(33).stores({
       taskList:
         '++taskId, userId, title,description,subTask, status, priority, startDate, dueDate,dueTime , createdAt, taskCategory, tags ,isSync, isUpdated,isQueued,completeAnimationStatus',
       userList: 'userId,userName',
@@ -67,6 +70,9 @@ export class localDB extends Dexie {
       subTaskList: '++subTaskId,taskSubtaskId,subTask,taskId,status',
       userGameInfo:
         '++userGameData,userId,rank,currentExp,nextLevelExp,avatarID',
+      pomoTaskList: '++taskId,userId,title,description,status',
+      userPomoconfigList:
+        '++configId,userId,pomodoro,shortBreak,longBreak,music',
     });
   }
 }

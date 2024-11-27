@@ -31,7 +31,6 @@ export class TimerClass {
       } else {
         this.timer$.setCountDownDisplay('Times Up');
         this.intervalTimeOut$.next(true);
-        this.intervalTimeOut$.complete();
       }
     });
   };

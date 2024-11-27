@@ -20,3 +20,20 @@ export const timerType = {
   Seconds: 'Seconds',
   Minutes: 'Minutes',
 };
+
+export interface pomoTask {
+  taskId?: number;
+  userId: number;
+  title: string;
+  description: string;
+  status: boolean; // COMPLETED OR IN PROGRESS,
+}
+
+export interface userPomoConfig {
+  configId?: number;
+  userId: number;
+  pomodoro?: number; // IN SECONDS
+  shortBreak?: number;
+  longBreak?: number;
+  music: number; // CHOOSE IF THERE IS MUSIC OR NOT
+}

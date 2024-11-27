@@ -17,10 +17,8 @@ export class Alarm {
         .catch((err: any) => {
           console.error('Playback failed', err);
         });
-      return true;
     } else {
       console.error(`Element with id ${id} not found`);
-      return false;
     }
   };
 
@@ -32,5 +30,26 @@ export class Alarm {
     } else {
       console.error(`Element with id ${id} not found`);
     }
+  };
+}
+
+export class AlarmHandler {
+  constructor() {}
+
+  private timeoutId: any;
+  private isInterrupted: boolean = false;
+  public waitWidthInterruption = (delay: number): Promise<void> => {
+    return new Promise((resolve, reject) => {
+      this.timeoutId = setTimeout(() => {
+        if (!this.isInterrupted) {
+          resolve();
+        }
+      }, delay);
+    });
+  };
+
+  public interrupt = () => {
+    this.isInterrupted = true;
+    clearTimeout(this.timeoutId);
   };
 }

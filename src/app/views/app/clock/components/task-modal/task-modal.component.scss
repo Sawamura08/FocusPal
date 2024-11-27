@@ -1,0 +1,63 @@
+@use "../../../../../app.component.scss" as *;
+@use "../../../../../icons/font-awesome-6-pro-main/css/all.css" as *;
+
+.background {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.6),
+    rgba(0, 0, 0, 0.6),
+    rgba(0, 0, 0, 0.6)
+  );
+  backdrop-filter: blur(4px);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+
+  .modal-container {
+    width: 100%;
+    height: 50dvh;
+
+    .modal-content {
+      width: 100%;
+      height: 100%;
+      padding: 1rem;
+      border-top-left-radius: 1rem;
+      border-top-right-radius: 1rem;
+      background-color: $neutralColor;
+
+      .modal-body > form {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+
+        .input-container {
+          width: 100%;
+
+          .inputs {
+            width: 100%;
+            padding: 0.5rem;
+            font-family: $subText;
+            font-size: 1rem;
+            border-radius: 8px;
+            outline: none;
+            border: none;
+            background: $grayColor;
+          }
+
+          .pomodoro {
+            width: 20%;
+          }
+
+          .label {
+            font-family: $fontFamily;
+            font-size: 1rem;
+            margin-block-end: 0.25rem;
+          }
+        }
+      }
+    }
+  }
+}
