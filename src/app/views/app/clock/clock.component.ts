@@ -186,6 +186,8 @@ export class ClockComponent implements OnInit, OnDestroy {
     this.isAlarmTriggered = false;
   };
 
+  /* -------------------------- TASK FEATURE -------------------------- */
+
   ngOnDestroy(): void {
     this.timer.intervalTimeOut$.next(true);
   }

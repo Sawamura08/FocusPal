@@ -17,7 +17,7 @@
 
   .modal-container {
     width: 100%;
-    height: 50dvh;
+    height: 70dvh;
 
     .modal-content {
       width: 100%;
@@ -25,13 +25,16 @@
       padding: 1rem;
       border-top-left-radius: 1rem;
       border-top-right-radius: 1rem;
-      background-color: $neutralColor;
+      /* background-color: $neutralColor; */
+      background: url("/background/background2.png");
+      background-position: center;
+      background-size: cover;
 
       .modal-body > form {
         width: 100%;
         display: flex;
         flex-direction: column;
-        gap: 1rem;
+        gap: 0.5rem;
 
         .input-container {
           width: 100%;
@@ -43,18 +46,106 @@
             font-size: 1rem;
             border-radius: 8px;
             outline: none;
-            border: none;
-            background: $grayColor;
-          }
-
-          .pomodoro {
-            width: 20%;
+            border: 1px solid $textColor;
+            background: transparent;
           }
 
           .label {
             font-family: $fontFamily;
             font-size: 1rem;
             margin-block-end: 0.25rem;
+            display: flex;
+            gap: 0.5rem;
+
+            .icon {
+              height: 1.5rem;
+              width: 1.5rem;
+              padding: 0.5rem;
+              border-radius: 50%;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              border: 2px solid $shadow;
+
+              i {
+                color: $shadow;
+              }
+            }
+          }
+
+          .input-number {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            margin-block: 0.5rem;
+
+            .icon > i {
+              font-size: 1.5rem;
+            }
+
+            .pomodoro {
+              width: 15%;
+              text-align: center;
+            }
+          }
+
+          .info {
+            width: 100%;
+            border: 2px solid $shadow;
+            background-color: $mainColor;
+            color: $neutralColor;
+            border-radius: 1rem;
+            padding: 0.5rem;
+
+            p {
+              font-size: 0.7rem;
+            }
+          }
+
+          textarea {
+            width: 100%;
+            padding: 0.5rem;
+            height: 4rem;
+            font-family: $subText;
+            resize: none;
+            border: 1px solid $textColor;
+            outline: none;
+            border-radius: 8px;
+          }
+
+          .error-container {
+            width: 100%;
+            height: 1rem;
+
+            p {
+              font-size: 0.8rem;
+              color: red;
+              font-family: $subText;
+            }
+          }
+        }
+      }
+
+      .modal-footer > .container {
+        width: 100%;
+        display: flex;
+        justify-content: flex-end;
+        gap: 1rem;
+        margin-block-start: 1rem;
+
+        .btn {
+          @include buttonTheme($mainColor, $neutralColor, $shadow);
+
+          &:active {
+            @include buttonOnClick($mainColor);
+          }
+        }
+
+        .cancel {
+          @include buttonTheme($neutralColor, $textColor, $grayColor);
+
+          &:active {
+            @include buttonOnClick($grayColor);
           }
         }
       }

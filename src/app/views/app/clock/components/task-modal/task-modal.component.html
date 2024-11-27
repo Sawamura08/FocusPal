@@ -2,7 +2,7 @@
   <main class="modal-container">
     <div class="modal-content">
       <section class="modal-body">
-        <form action="">
+        <form action="" [formGroup]="userInput">
           <div class="input-container">
             <p class="label">Title</p>
             <input
@@ -10,24 +10,67 @@
               name=""
               id=""
               class="inputs"
-              placeholder="What are you working on?"
+              formControlName="title"
+              placeholder="What’s your main focus now?"
             />
+            <div class="error-container">
+              <p *ngIf="!errorCheck('title')">This field is required</p>
+            </div>
           </div>
           <div class="input-container">
-            <p class="label">Est Pomodoros</p>
-
-            <input type="number" name="" id="" class="inputs pomodoro" />
+            <p class="label">
+              Est Pomodoros
+              <span class="icon" (click)="toggleInfo()"
+                ><i class="fa-sharp fa-solid fa-question"></i
+              ></span>
+            </p>
+            <section class="input-number">
+              <span class="icon" (click)="numberInputController('up')"
+                ><i class="fa-regular fa-circle-plus"></i
+              ></span>
+              <input
+                type="number"
+                name=""
+                id=""
+                formControlName="pomodoro"
+                class="inputs pomodoro"
+                readonly
+              />
+              <span class="icon" (click)="numberInputController('down')"
+                ><i class="fa-regular fa-circle-minus"></i
+              ></span>
+              @if (isInfoDisplayed) {
+              <section class="info">
+                <p>
+                  Estimate the number of Pomodoros (focused work sessions) this
+                  task will take. Default: 1 Pomodoro = 25 mins.
+                </p>
+              </section>
+              }
+            </section>
+            <div class="error-container">
+              <p *ngIf="!errorCheck('pomodoro')">This field is required</p>
+            </div>
           </div>
           <div class="input-container">
-            <textarea name="" id=""></textarea>
+            <p class="label">Description</p>
+            <textarea
+              name=""
+              id=""
+              formControlName="description"
+              placeholder="Add details about the task here…"
+            ></textarea>
+            <div class="error-container">
+              <p *ngIf="!errorCheck('description')">This field is required</p>
+            </div>
           </div>
         </form>
       </section>
       <section class="modal-footer">
-        <button class="container">
-          <button class="btn">Cancel</button>
-          <button class="btn">Save</button>
-        </button>
+        <div class="container">
+          <button class="btn cancel">Cancel</button>
+          <button class="btn" (click)="submit()">Save</button>
+        </div>
       </section>
     </div>
   </main>
