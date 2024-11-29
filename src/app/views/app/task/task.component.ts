@@ -187,7 +187,7 @@ export class TaskComponent implements OnDestroy {
     if (value.type === 'Update' && value.status) {
       this.toastr.success(
         'Update Successful',
-        'The schedule has been updated successfully.',
+        'The task has been updated successfully.',
         { timeOut: 2500 }
       );
 
@@ -196,7 +196,7 @@ export class TaskComponent implements OnDestroy {
     } else if (value.type === 'Delete' && value.status) {
       this.toastr.success(
         'Deletion Successful',
-        'The schedule has been deleted successfully.',
+        'The task has been deleted successfully.',
         { timeOut: 2500 }
       );
 

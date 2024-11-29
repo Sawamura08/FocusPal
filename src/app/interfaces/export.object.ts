@@ -9,7 +9,8 @@ export interface confirmModal {
 /* TOAST MODAL */
 export interface toastModal {
   type: string;
-  status: boolean;
+  status: boolean; // is it's displayed or not;
+  actionStatus?: boolean; // if action is succesful or not
 }
 
 export enum taskCompletion {

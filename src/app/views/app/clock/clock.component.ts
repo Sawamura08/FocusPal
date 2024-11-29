@@ -12,8 +12,15 @@ import { TimerClass } from './class/timer';
 import { TimerObervableService } from '../../../service/timer-obervable.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ResponseService } from '../../../service/reponse.service';
-import { pomoPalBtn, timerType } from '../../../interfaces/pomoPal';
+import { pomoPalBtn, pomoTask, timerType } from '../../../interfaces/pomoPal';
 import { Alarm, AlarmHandler } from './class/alarm';
+import { PomoTaskObservableService } from './service/pomo-task-observable.service';
+import { modalStatus } from '../../../Objects/modal.details';
+import { PomoTask } from './class/pomoTask';
+import { ToastrService } from 'ngx-toastr';
+import { PomodoroTaskService } from '../../../database/pomodoro-task.service';
+import { SessionService } from '../../../service/session.service';
+import { ToastModalService } from '../../../service/toast-modal.service';
 
 @Component({
   selector: 'app-clock',
@@ -25,7 +32,12 @@ export class ClockComponent implements OnInit, OnDestroy {
     protected timer$: TimerObervableService,
     protected response: ResponseService,
     protected el: ElementRef,
-    protected renderer: Renderer2
+    protected renderer: Renderer2,
+    protected pomoTask$: PomoTaskObservableService,
+    protected pomoTask: PomodoroTaskService,
+    protected session: SessionService,
+    protected toastr: ToastrService,
+    protected toastNotif: ToastModalService
   ) {
     this.timer = new TimerClass(timer$);
     this.alarm = new Alarm(el, renderer);
@@ -35,6 +47,9 @@ export class ClockComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     /* FETCH TIMER COUNT DOWN */
     this.fetchCountDownDisplay();
+
+    /* FETCH UNCOMPLETED TASK */
+    this.fetchTask();
   }
 
   public destroyRef = inject(DestroyRef);
@@ -43,6 +58,7 @@ export class ClockComponent implements OnInit, OnDestroy {
   public timer: TimerClass;
   public alarm: Alarm;
   public alarmHandler: AlarmHandler;
+  public taskList: pomoTask[] = [];
 
   public btnStatus: number = 0;
   public setButtonStatus = (value: number) => {
@@ -187,6 +203,38 @@ export class ClockComponent implements OnInit, OnDestroy {
   };
 
   /* -------------------------- TASK FEATURE -------------------------- */
+
+  public getModalStatus = () => {
+    return this.pomoTask$.getPomodoroModalStatus()();
+  };
+
+  public openTaskModal = () => {
+    this.pomoTask$.setPomodoroModalStatus(modalStatus.open);
+  };
+
+  public fetchTask = () => {
+    this.pomoTask.taskList$
+      .pipe(
+        catchError((err) => {
+          const error = this.response.errorResponse();
+          console.error(error, err);
+          return of([]);
+        }),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe((value) => (this.taskList = value));
+  };
+
+  public taskIndexSelected: number | undefined;
+
+  public selectTaskToWork = (index: number) => {
+    this.taskIndexSelected = index;
+  };
+
+  public editTask = (taskData: pomoTask) => {
+    this.pomoTask$.setPomodoroModalValue(taskData);
+    this.pomoTask$.setPomodoroModalStatus(modalStatus.open);
+  };
 
   ngOnDestroy(): void {
     this.timer.intervalTimeOut$.next(true);

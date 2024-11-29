@@ -68,8 +68,35 @@
             ><i class="fa-solid fa-circle-ellipsis-vertical"></i
           ></span>
         </header>
+
+        <section class="task-list-container">
+          <ul class="task-list">
+            <li class="list" *ngFor="let data of taskList; index as i">
+              <div class="list-header">
+                <div class="title-container">
+                  <span
+                    class="icon"
+                    [ngClass]="{ selected: taskIndexSelected === i }"
+                    (click)="selectTaskToWork(i)"
+                    ><i class="fa-solid fa-check"></i
+                  ></span>
+                  <h4 class="title">{{ data.title }}</h4>
+                </div>
+                <span class="status">
+                  <p>0 / {{ data.pomodoro }}</p>
+                  <span class="icon" (click)="editTask(data)"
+                    ><i class="fa-sharp fa-solid fa-pen-to-square"></i
+                  ></span>
+                </span>
+              </div>
+              <div class="body">
+                <h5>{{ data.description }}</h5>
+              </div>
+            </li>
+          </ul>
+        </section>
         <div class="button-container">
-          <button class="btn">
+          <button class="btn" (click)="openTaskModal()">
             <span class="icon"
               ><i class="fa-sharp fa-solid fa-circle-plus"></i
             ></span>
@@ -81,7 +108,7 @@
   </div>
 </main>
 
-<div class="modal">
+<div class="modal" *ngIf="getModalStatus()">
   <app-task-modal></app-task-modal>
 </div>
 

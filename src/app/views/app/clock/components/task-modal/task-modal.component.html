@@ -1,5 +1,5 @@
 <div class="background">
-  <main class="modal-container">
+  <main class="modal-container" @slide *ngIf="animateModal">
     <div class="modal-content">
       <section class="modal-body">
         <form action="" [formGroup]="userInput">
@@ -68,10 +68,23 @@
       </section>
       <section class="modal-footer">
         <div class="container">
-          <button class="btn cancel">Cancel</button>
-          <button class="btn" (click)="submit()">Save</button>
+          <div class="button-container">
+            @if(updateMode) {
+            <button class="btn delete" (click)="deleteTask()">Delete</button>
+            }
+          </div>
+          <div class="button-container">
+            <button class="btn cancel" (click)="closeModal()">Cancel</button>
+            @if(updateMode) {
+            <button class="btn" (click)="updateTask()">Update</button>
+            }@else {
+            <button class="btn" (click)="submit()">Save</button>
+            }
+          </div>
         </div>
       </section>
     </div>
   </main>
 </div>
+
+<!-- <app-modal></app-modal> -->
