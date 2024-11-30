@@ -87,4 +87,8 @@
   </main>
 </div>
 
-<!-- <app-modal></app-modal> -->
+@if(confirmModalStatus) {
+<div class="modal">
+  <app-modal [confirmation]="true" [data]="confirmationDataModal"></app-modal>
+</div>
+}

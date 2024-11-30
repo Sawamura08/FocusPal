@@ -12,6 +12,9 @@ import { PomoTaskObservableService } from '../../service/pomo-task-observable.se
 import { modalStatus } from '../../../../../Objects/modal.details';
 
 import { slideUp } from '../../../../../animation/slide-up.animate';
+import { PopModalService } from '../../../../../service/pop-modal.service';
+import { catchError, EMPTY, firstValueFrom, of } from 'rxjs';
+import { confirm } from '../../../../../interfaces/export.object';
 
 @Component({
   selector: 'app-task-modal',
@@ -27,7 +30,8 @@ export class TaskModalComponent implements OnInit {
     protected session: SessionService,
     protected toastr: ToastrService,
     protected toastNotif: ToastModalService,
-    protected pomoTask$: PomoTaskObservableService
+    protected pomoTask$: PomoTaskObservableService,
+    protected popModal: PopModalService
   ) {
     this.userInput = this.fb.group({
       title: ['', Validators.required],
@@ -52,6 +56,9 @@ export class TaskModalComponent implements OnInit {
 
     /* SET UP UPDATE  */
     this.setUpUpdate();
+
+    /* FETCH CONFIRMATION MODAL STATUS */
+    this.confirmModalObservable();
   }
 
   /* GLOBAL DECLARATION */
@@ -59,6 +66,7 @@ export class TaskModalComponent implements OnInit {
   public userId: number | undefined;
   public destroyRef = inject(DestroyRef);
   public animateModal: boolean = true;
+  public confirmationDataModal = confirm;
 
   public getSession = () => {
     this.pomoTaskClass
@@ -155,7 +163,7 @@ export class TaskModalComponent implements OnInit {
     }
   };
 
-  public updateTask = () => {
+  public updateTask = async () => {
     this.userInput.markAllAsTouched();
 
     if (
@@ -163,21 +171,68 @@ export class TaskModalComponent implements OnInit {
       this.taskUpdateData != undefined &&
       this.taskUpdateData.taskId != undefined
     ) {
-      this.pomoTaskClass.updateTask(
-        this.taskUpdateData.taskId,
-        this.userInput.value
-      );
+      const result = await this.openConfirmationModal();
+
+      if (result) {
+        this.pomoTaskClass.updateTask(
+          this.taskUpdateData.taskId,
+          this.userInput.value
+        );
+      }
       this.closeModal();
     }
   };
 
-  public deleteTask = () => {
+  public deleteTask = async () => {
     if (
       this.taskUpdateData != undefined &&
       this.taskUpdateData.taskId != undefined
     ) {
-      this.pomoTaskClass.deleteTask(this.taskUpdateData.taskId);
+      const result = await this.openConfirmationModal();
+      if (result) {
+        this.pomoTaskClass.deleteTask(this.taskUpdateData.taskId);
+      }
+
       this.closeModal();
     }
+  };
+
+  /* CONFIRMATION MODAL STATUS */
+  public confirmModalStatus: boolean = modalStatus.close;
+  public confirmModalObservable = () => {
+    this.popModal
+      .getConfirmModalStatus()
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        catchError(() => {
+          console.error(this.response.errorResponse());
+          return EMPTY;
+        })
+      )
+      .subscribe((value) => (this.confirmModalStatus = value));
+  };
+
+  /* OPEN CONFIRMATION MODAL */
+  public openConfirmationModal = async () => {
+    this.popModal.setConfirmaModalStatus(modalStatus.open);
+
+    try {
+      const result = await this.getUserConfirmationResponse();
+      return result;
+    } finally {
+      this.popModal.setConfirmaModalStatus(modalStatus.close);
+    }
+  };
+
+  public getUserConfirmationResponse = (): Promise<boolean> => {
+    return firstValueFrom(
+      this.popModal.getConfirmationModal().pipe(
+        takeUntilDestroyed(this.destroyRef),
+        catchError((err) => {
+          console.error(this.response.errorResponse(), err);
+          return of(false);
+        })
+      )
+    );
   };
 }
