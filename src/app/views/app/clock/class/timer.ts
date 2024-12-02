@@ -1,11 +1,24 @@
 import { interval, startWith, Subject, takeUntil, timer } from 'rxjs';
 import { TimerObervableService } from '../../../../service/timer-obervable.service';
+import { PomodoroTaskService } from '../../../../database/pomodoro-task.service';
+import { pomoTask } from '../../../../interfaces/pomoPal';
 
 export class TimerClass {
-  constructor(protected timer$: TimerObervableService) {}
+  constructor(
+    protected timer$: TimerObervableService,
+    protected pomoTask: PomodoroTaskService
+  ) {}
 
   public intervalTimeOut$ = new Subject<boolean>();
   public pomodoro: number = 0;
+  public taskData: pomoTask | undefined;
+
+  /* SETUP DATA OF THE SELECTED TASK */
+  public setUpTaskData = (pomoTask: pomoTask) => {
+    this.taskData = pomoTask;
+    this.pomodoro = pomoTask.pomodoroCompleted;
+  };
+
   /* SET CONFIG BEFORE RUNNING TIMER */
   /* THE SET TIMER IS ALWAYS AT SECONDS VALUE */
   public setConfig = (setTimer: number) => {
@@ -81,9 +94,17 @@ export class TimerClass {
   };
 
   /* INCREMENT POMODORO EVERY SET OF 25MINS OR USER PREFERENCE IN TIME */
-  public incrementPomodoro = () => {
+  public incrementPomodoro = async (taskData: pomoTask) => {
     this.pomodoro++;
 
-    return this.pomodoro;
+    /* ALSO INCREMENT THE COMPLETED POMODORO ON DATABASE */
+    let copyTaskData = structuredClone(taskData);
+    copyTaskData.pomodoroCompleted = this.pomodoro;
+
+    const result = await this.pomoTask.updateTask(
+      taskData.taskId!,
+      copyTaskData
+    );
+    return result.updateKeyValue;
   };
 }

@@ -61,7 +61,7 @@ export class localDB extends Dexie {
 
   constructor() {
     super('myDB');
-    this.version(34).stores({
+    this.version(35).stores({
       taskList:
         '++taskId, userId, title,description,subTask, status, priority, startDate, dueDate,dueTime , createdAt, taskCategory, tags ,isSync, isUpdated,isQueued,completeAnimationStatus',
       userList: 'userId,userName',
@@ -70,7 +70,8 @@ export class localDB extends Dexie {
       subTaskList: '++subTaskId,taskSubtaskId,subTask,taskId,status',
       userGameInfo:
         '++userGameData,userId,rank,currentExp,nextLevelExp,avatarID',
-      pomoTaskList: '++taskId,userId,title,pomodoro,description,status',
+      pomoTaskList:
+        '++taskId,userId,title,pomodoro,pomodoroCompleted,description,status',
       userPomoconfigList:
         '++configId,userId,pomodoro,shortBreak,longBreak,music',
     });

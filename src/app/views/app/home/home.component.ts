@@ -16,7 +16,14 @@ import { FetchHomeDataService } from '../../../service/fetch-home-data.service';
 import { SetProgressBar } from '../../../class/set-progress-bar';
 import { FilterTaskService } from '../../../database/filter-task.service';
 import { Schedule, Task, User } from '../../../database/db';
-import { combineLatest, Subscription, interval, catchError, of } from 'rxjs';
+import {
+  combineLatest,
+  Subscription,
+  interval,
+  catchError,
+  of,
+  filter,
+} from 'rxjs';
 import { FilterScheduleService } from '../../../database/filter-schedule.service';
 import { WeeklyScheduleService } from '../../../database/weekly-schedule.service';
 import { SessionService } from '../../../service/session.service';
@@ -105,6 +112,7 @@ export class HomeComponent implements OnInit, OnChanges, OnDestroy {
     this.session
       .getUser()
       .pipe(
+        filter((value) => value != undefined),
         takeUntilDestroyed(this.destroyRef),
         catchError((err) => {
           console.error('Error on fetching userInfo', err);

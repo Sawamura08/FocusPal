@@ -26,6 +26,7 @@ export interface pomoTask {
   userId: number;
   title: string;
   pomodoro: number;
+  pomodoroCompleted: number;
   description: string;
   status: boolean; // COMPLETED OR IN PROGRESS,
 }

@@ -36,6 +36,7 @@ export class TaskModalComponent implements OnInit {
     this.userInput = this.fb.group({
       title: ['', Validators.required],
       pomodoro: ['', Validators.required],
+      pomodoroCompleted: [0, Validators.required],
       description: ['', Validators.required],
       status: [0, Validators.required],
       userId: ['', Validators.required],

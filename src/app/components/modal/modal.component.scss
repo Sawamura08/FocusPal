@@ -52,7 +52,8 @@ main {
       gap: 1rem;
 
       .button-containers {
-        width: 100%;
+        width: 80%;
+        margin-inline: auto;
         .btn {
           width: 100%;
           @include buttonTheme($mainColor, $neutralColor, $shadow);

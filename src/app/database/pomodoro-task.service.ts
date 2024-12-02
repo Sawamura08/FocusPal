@@ -41,7 +41,7 @@ export class PomodoroTaskService {
   public updateTask = async (key: number, task: pomoTask) => {
     try {
       const result = await db.pomoTaskList.update(key, task);
-      return this.response.successResponse(result);
+      return this.response.successResponse(result, task);
     } catch {
       return this.response.errorResponse();
     }
@@ -50,4 +50,6 @@ export class PomodoroTaskService {
   public deleteTask = async (key: number) => {
     const result = await db.pomoTaskList.delete(key);
   };
+
+  /* ACTION DURING TIMER */
 }

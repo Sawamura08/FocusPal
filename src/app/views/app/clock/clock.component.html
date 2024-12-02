@@ -77,13 +77,13 @@
                   <span
                     class="icon"
                     [ngClass]="{ selected: taskIndexSelected === i }"
-                    (click)="selectTaskToWork(i)"
+                    (click)="selectTaskToWork(i, data)"
                     ><i class="fa-solid fa-check"></i
                   ></span>
                   <h4 class="title">{{ data.title }}</h4>
                 </div>
                 <span class="status">
-                  <p>0 / {{ data.pomodoro }}</p>
+                  <p>{{ data.pomodoroCompleted }} / {{ data.pomodoro }}</p>
                   <span class="icon" (click)="editTask(data)"
                     ><i class="fa-sharp fa-solid fa-pen-to-square"></i
                   ></span>
@@ -111,6 +111,12 @@
 <div class="modal" *ngIf="getModalStatus()">
   <app-task-modal></app-task-modal>
 </div>
+
+@if (sendNoTaskMessage) {
+<div class="modal">
+  <app-modal [data]="noTaskMessage"></app-modal>
+</div>
+}
 
 <audio id="alarm">
   <source src="music/alarm.mp3" type="audio/mp3" />
