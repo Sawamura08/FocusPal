@@ -1,0 +1,197 @@
+@use "../../../../../app.component.scss" as *;
+@use "../../../../../icons/font-awesome-6-pro-main/css/all.css" as *;
+
+.background {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.6),
+    rgba(0, 0, 0, 0.6),
+    rgba(0, 0, 0, 0.6)
+  );
+  backdrop-filter: blur(4px);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  position: relative;
+  font-family: $subText;
+  color: $textColor;
+
+  .modal-container {
+    width: 100%;
+    height: 50dvh;
+    position: relative;
+    display: none;
+
+    .modal-content {
+      width: 100%;
+      height: 100%;
+      background: url("/background/background2.png");
+      background-position: center;
+      background-size: cover;
+      padding: 1rem;
+      border-top-left-radius: 1rem;
+      border-top-right-radius: 1rem;
+
+      .icon {
+        text-align: right;
+
+        i {
+          font-size: 1.5rem;
+          opacity: 0.7;
+        }
+      }
+
+      .modal-navigation {
+        margin-top: 1rem;
+        width: 100%;
+        border-radius: 1rem;
+        box-shadow: 0 2px 4px $textColor;
+        display: flex;
+        gap: 1rem;
+
+        .btn {
+          width: 100%;
+          font-size: 1rem;
+          border-radius: 1rem;
+
+          padding: 0.5rem;
+          background-color: transparent;
+          color: $textColor;
+          outline: none;
+          border: none;
+          transition: 0.3s ease-in;
+        }
+
+        .selected {
+          color: $neutralColor;
+          background: linear-gradient(to top, $mainColor, $shadow);
+        }
+      }
+
+      .modal-body {
+        width: 100%;
+        margin-block-start: 2rem;
+
+        .time-settings {
+          width: 100%;
+          list-style-type: none;
+          display: flex;
+          flex-direction: column;
+          gap: 1rem;
+          .configure {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+
+            .config-value {
+              display: flex;
+              gap: 0.5rem;
+
+              .value-text {
+                margin-inline-end: 0.5rem;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .settings-background {
+      width: 100%;
+      height: 50dvh;
+      position: absolute;
+      z-index: 2;
+      top: 0;
+      left: 0;
+      background: linear-gradient(
+        to top,
+        rgba(0, 0, 0, 0.6),
+        rgba(0, 0, 0, 0.6),
+        rgba(0, 0, 0, 0.6)
+      );
+      backdrop-filter: blur(2px);
+      border-top-left-radius: 1rem;
+      border-top-right-radius: 1rem;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      .settings-modal {
+        width: 60%;
+        height: 60%;
+
+        .settings-container {
+          padding: 1rem;
+          width: 100%;
+          height: 100%;
+          background-color: $neutralColor;
+          color: $textColor;
+          border-radius: 1rem;
+
+          .icon {
+            width: 100%;
+            span {
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              width: 2rem;
+              height: 2rem;
+              border-radius: 50%;
+              border: 1px solid $textColor;
+              opacity: 0.6;
+
+              i {
+                font-size: 1.25rem;
+              }
+            }
+          }
+
+          .content {
+            width: 100%;
+            height: 20dvh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+
+            .title {
+              font-size: 1.25rem;
+              font-family: $fontFamily;
+            }
+
+            .configuration {
+              width: 100%;
+              display: flex;
+              justify-content: center;
+              gap: 1rem;
+
+              .inputs {
+                width: 15%;
+                text-align: center;
+                font-family: $subText;
+                font-size: 1rem;
+                border: 1px solid $textColor;
+                outline: none;
+                background-color: transparent;
+                border-radius: 4px;
+              }
+
+              .icon {
+                display: grid;
+                place-content: center;
+                width: 2rem;
+                height: 2rem;
+                border: 1px solid $textColor;
+                border-radius: 50%;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

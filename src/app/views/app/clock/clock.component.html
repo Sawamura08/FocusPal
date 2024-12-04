@@ -4,9 +4,19 @@
   <div class="container">
     <div class="time-board-container">
       <section class="time-board-content">
-        <div class="icon"><i class="fa-light fa-gear"></i></div>
+        <div class="icon" (click)="openPomoSettingsModal()">
+          <i class="fa-light fa-gear"></i>
+        </div>
         <div class="status-container">
-          @if (btnStatus === pomoPalStatus.Pomodoro) {
+          <!-- NO TASK SELECTED -->
+          @if (btnStatus === pomoPalStatus.Pomodoro && taskCurrentlyWorking ==
+          undefined) {
+          <h4 class="status">Select Task</h4>
+          }
+
+          <!-- work mode -->
+          @if (btnStatus === pomoPalStatus.Pomodoro && taskCurrentlyWorking !=
+          undefined) {
           <h4 class="status">Work Mode</h4>
           }
 
@@ -117,6 +127,10 @@
   <app-modal [data]="noTaskMessage"></app-modal>
 </div>
 }
+
+<div class="modal" *ngIf="fetchPomoSettingsModal()">
+  <app-pomo-settings></app-pomo-settings>
+</div>
 
 <audio id="alarm">
   <source src="music/alarm.mp3" type="audio/mp3" />

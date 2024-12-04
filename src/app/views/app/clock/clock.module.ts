@@ -5,15 +5,23 @@ import { ClockRoutingModule } from './clock-routing.module';
 import { ClockComponent } from './clock.component';
 import { SharedModule } from '../../../module/shared.module';
 import { TaskModalComponent } from './components/task-modal/task-modal.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { PomoSettingsComponent } from './components/pomo-settings/pomo-settings.component';
+import { ConvertToMin } from './pipe/convet-to-min.pipe';
 
 @NgModule({
-  declarations: [ClockComponent, TaskModalComponent],
+  declarations: [
+    ClockComponent,
+    TaskModalComponent,
+    PomoSettingsComponent,
+    ConvertToMin,
+  ],
   imports: [
     CommonModule,
     ClockRoutingModule,
     SharedModule,
     ReactiveFormsModule,
+    FormsModule,
   ],
 })
 export class ClockModule {}

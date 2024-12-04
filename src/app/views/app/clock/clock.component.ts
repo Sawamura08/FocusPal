@@ -12,7 +12,12 @@ import { TimerClass } from './class/timer';
 import { TimerObervableService } from '../../../service/timer-obervable.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ResponseService } from '../../../service/reponse.service';
-import { pomoPalBtn, pomoTask, timerType } from '../../../interfaces/pomoPal';
+import {
+  pomoPalBtn,
+  pomoTask,
+  timerType,
+  userPomoConfig,
+} from '../../../interfaces/pomoPal';
 import { Alarm, AlarmHandler } from './class/alarm';
 import { PomoTaskObservableService } from './service/pomo-task-observable.service';
 import { modalStatus } from '../../../Objects/modal.details';
@@ -25,6 +30,10 @@ import { ModalType, PopModalService } from '../../../service/pop-modal.service';
 import { GamifiedCompletionService } from '../../../components/gamified-completion-modal/service/gamified-completion.service';
 import { GameUserDataService } from '../../../database/game-user-data.service';
 import { userGameData } from '../../../interfaces/game.interface';
+import { PomoSettingsComponent } from './components/pomo-settings/pomo-settings.component';
+import { PomoSettingsObservableService } from './service/pomo-settings-observable.service';
+import { PomodoroConfiguration } from './class/config';
+import { PomoTaskConfigService } from './service/pomo-task-config.service';
 
 @Component({
   selector: 'app-clock',
@@ -44,11 +53,14 @@ export class ClockComponent implements OnInit, OnDestroy {
     protected toastNotif: ToastModalService,
     protected popModal: PopModalService,
     protected game$: GamifiedCompletionService,
-    protected gameData: GameUserDataService
+    protected gameData: GameUserDataService,
+    protected pomoSettings: PomoSettingsObservableService,
+    protected configService: PomoTaskConfigService
   ) {
     this.timer = new TimerClass(timer$, pomoTask);
     this.alarm = new Alarm(el, renderer);
     this.alarmHandler = new AlarmHandler();
+    this.configuration = new PomodoroConfiguration(this.configService);
   }
 
   ngOnInit(): void {
@@ -63,6 +75,9 @@ export class ClockComponent implements OnInit, OnDestroy {
 
     /* FETCH SESSION */
     this.getSession();
+
+    /* USER SETTINGS */
+    //this.fetchUserSettings();
   }
 
   public destroyRef = inject(DestroyRef);
@@ -71,9 +86,11 @@ export class ClockComponent implements OnInit, OnDestroy {
   public timer: TimerClass;
   public alarm: Alarm;
   public alarmHandler: AlarmHandler;
+  public configuration: PomodoroConfiguration;
   public taskList: pomoTask[] = [];
   public btnStatus: number = 0;
   public userId: number | undefined;
+  public userConfig: userPomoConfig | undefined;
 
   /* GET SESSION */
   public getSession = () => {
@@ -88,15 +105,44 @@ export class ClockComponent implements OnInit, OnDestroy {
         takeUntilDestroyed(this.destroyRef)
       )
       .subscribe((value) => {
+        this.fetchUserSettings();
         this.userId = value?.userId;
+      });
+  };
+
+  /* FETCH USER SETTINGS */
+  public fetchUserSettings = () => {
+    this.configuration
+      .fetchUserConfig()
+      .pipe(
+        filter((value) => value != undefined),
+        catchError((err) => {
+          console.error(err);
+          return of(undefined);
+        }),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe((value) => {
+        this.userConfig = value;
+        this.setButtonStatus(pomoPalBtn.Pomodoro);
       });
   };
 
   public setButtonStatus = (value: number) => {
     this.btnStatus = value;
 
-    // SHOW DEFAULT TIMER PER STATUS (BREAK OR WORK)
-    this.setDefaultTimerText(value);
+    if (this.userConfig === undefined) {
+      // SHOW DEFAULT TIMER PER STATUS (BREAK OR WORK)
+      this.setDefaultTimerText(value);
+    } else {
+      if (value === pomoPalBtn.Pomodoro) {
+        this.defaultCountDown = this.userConfig.pomodoro!;
+      } else if (value === pomoPalBtn.ShortBreak) {
+        this.defaultCountDown = this.userConfig.shortBreak!;
+      } else {
+        this.defaultCountDown = this.userConfig.longBreak!;
+      }
+    }
   };
 
   public setDefaultTimerText = (pomoStatus: number) => {
@@ -214,8 +260,9 @@ export class ClockComponent implements OnInit, OnDestroy {
       this.taskCurrentlyWorking &&
       this.runPomodoro < this.taskCurrentlyWorking.pomodoro
     ) {
-      /* CHECK IF THE USER  RUN POMODORO (25MINS) EVERY 3 TIMES*/
-      if (this.runPomodoro % 3 === 0) {
+      /* CHECK IF THE USER  RUN POMODORO (25MINS) EVERY 4 TIMES DEFAULT*/
+      const longBreakEvery = this.userConfig?.longBreakAfter ?? 4;
+      if (this.runPomodoro % longBreakEvery === 0) {
         this.setButtonStatus(pomoPalBtn.LongBreak);
       } else {
         this.setButtonStatus(pomoPalBtn.ShortBreak);
@@ -341,6 +388,16 @@ export class ClockComponent implements OnInit, OnDestroy {
         })
       )
       .subscribe((value) => (this.sendNoTaskMessage = value));
+  };
+  /* ----------------- END OF TASK FEATURE ------------------- */
+
+  /* ----------------- SETTINGS ------------------- */
+  public fetchPomoSettingsModal = () => {
+    return this.pomoSettings.getSettingsModalStatus()();
+  };
+
+  public openPomoSettingsModal = () => {
+    this.pomoSettings.setSettingsModalStatus(modalStatus.open);
   };
 
   ngOnDestroy(): void {

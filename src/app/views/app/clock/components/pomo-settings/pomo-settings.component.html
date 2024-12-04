@@ -1,0 +1,99 @@
+<div class="background">
+  <div class="modal-container" @slide *ngIf="animateSettings">
+    <section class="modal-content">
+      <div class="icon" (click)="closeSettings()">
+        <i class="fa-regular fa-xmark"></i>
+      </div>
+      <nav class="modal-navigation">
+        <button
+          class="btn"
+          *ngFor="let btn of navBtn; index as i"
+          (click)="setNavBtnIndex(i)"
+          [ngClass]="{ selected: navBtnIndex === i }"
+        >
+          {{ btn }}
+        </button>
+      </nav>
+      <section class="modal-body">
+        <ul class="time-settings">
+          <li class="configure">
+            <h3 class="configure-title">Focus Session</h3>
+            <div class="config-value">
+              <h3 class="value">{{ focusSession | convertToMin }}</h3>
+              <h3 class="value-text">mins</h3>
+              <span class="icon" (click)="openConfigModal(0)"
+                ><i class="fa-regular fa-angle-right"></i
+              ></span>
+            </div>
+          </li>
+          <li class="configure">
+            <h3 class="configure-title">Short Break</h3>
+            <div class="config-value">
+              <h3 class="value">{{ shortBreak | convertToMin }}</h3>
+              <h3 class="value-text">mins</h3>
+              <span class="icon" (click)="openConfigModal(1)"
+                ><i class="fa-regular fa-angle-right"></i
+              ></span>
+            </div>
+          </li>
+          <li class="configure">
+            <h3 class="configure-title">Long Break</h3>
+            <div class="config-value">
+              <h3 class="value">{{ longBreak | convertToMin }}</h3>
+              <h3 class="value-text">mins</h3>
+              <span class="icon" (click)="openConfigModal(2)"
+                ><i class="fa-regular fa-angle-right"></i
+              ></span>
+            </div>
+          </li>
+          <li class="configure">
+            <h3 class="configure-title">Long Break After</h3>
+            <div class="config-value">
+              <h3 class="value">{{ longBreakAfter }}</h3>
+              <h3 class="value-text">Sess.</h3>
+              <span class="icon" (click)="openConfigModal(3)"
+                ><i class="fa-regular fa-angle-right"></i
+              ></span>
+            </div>
+          </li>
+        </ul>
+      </section>
+    </section>
+
+    @if (valueConfigurationModal) {
+    <div class="settings-background">
+      <section class="settings-modal" @slide *ngIf="animateConfigModal">
+        <div class="settings-container">
+          <div class="icon">
+            <span (click)="closeConfigModal()"
+              ><i class="fa-regular fa-angle-left"></i
+            ></span>
+          </div>
+          <div class="content">
+            <h3 class="title">{{ currentConfigText }}</h3>
+            <div class="configuration">
+              <span class="icon" (click)="decrementConfigValue()"
+                ><i class="fa-regular fa-minus"></i
+              ></span>
+              <input
+                type="number"
+                name=""
+                id=""
+                class="inputs"
+                readonly
+                [(ngModel)]="configValue"
+              />
+              <span class="icon" (click)="IncrementConfigValue()"
+                ><i class="fa-regular fa-plus"></i
+              ></span>
+            </div>
+            <h4>
+              {{ currentConfigText != "Long Break After" ? "min" : "Sess." }}
+            </h4>
+          </div>
+        </div>
+      </section>
+    </div>
+    }
+  </div>
+</div>

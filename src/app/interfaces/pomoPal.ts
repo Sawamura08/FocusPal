@@ -16,6 +16,20 @@ export interface defaultTimeType {
   LongBreak: number;
 }
 
+export enum configText {
+  'Focus Session' = 0,
+  'Short Break' = 1,
+  'Long Break' = 2,
+  'Long Break After' = 3,
+}
+
+export enum updateConfigField {
+  pomodoro = 0,
+  shortBreak = 1,
+  longBreak = 2,
+  longBreakAfter = 3,
+}
+
 export const timerType = {
   Seconds: 'Seconds',
   Minutes: 'Minutes',
@@ -37,5 +51,8 @@ export interface userPomoConfig {
   pomodoro?: number; // IN SECONDS
   shortBreak?: number;
   longBreak?: number;
+  longBreakAfter?: number; // how many session should take before long break
   music: number; // CHOOSE IF THERE IS MUSIC OR NOT
 }
+
+/* SETTINGS */
