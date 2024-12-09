@@ -1,5 +1,7 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { PopModalService } from '../../service/pop-modal.service';
+import { HamburgerObservableService } from '../../views/app/home/service/hamburger-observable.service';
+import { modalStatus } from '../../Objects/modal.details';
 
 export interface headerType {
   type: string;
@@ -12,7 +14,10 @@ export interface headerType {
   styleUrl: './header.component.scss',
 })
 export class HeaderComponent implements OnInit, OnDestroy {
-  constructor(private popModal: PopModalService) {}
+  constructor(
+    private popModal: PopModalService,
+    protected hamburger$: HamburgerObservableService
+  ) {}
   @Input() data: any;
   @Input() homeData: headerType | null = null;
 
@@ -40,7 +45,17 @@ export class HeaderComponent implements OnInit, OnDestroy {
   public toggle: boolean = false;
   public toggleMenu = () => {
     this.toggle = !this.toggle;
-    console.log(this.toggle);
+
+    if (this.toggle) {
+      this.hamburger$.setHamburgerModalStatus(modalStatus.open);
+    } else {
+      this.hamburger$.setHamburgerAnimation(modalStatus.close);
+
+      setTimeout(() => {
+        this.hamburger$.setHamburgerAnimation(modalStatus.open);
+        this.hamburger$.setHamburgerModalStatus(modalStatus.close);
+      }, 200);
+    }
   };
 
   /* OPEN CHAT AI */

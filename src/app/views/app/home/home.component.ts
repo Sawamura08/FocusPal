@@ -33,6 +33,7 @@ import { GameUserDataService } from '../../../database/game-user-data.service';
 import { taskService } from '../../../database/task.service';
 import { ResponseService } from '../../../service/reponse.service';
 import { taskCompletion } from '../../../interfaces/export.object';
+import { HamburgerObservableService } from './service/hamburger-observable.service';
 
 @Component({
   selector: 'app-home',
@@ -56,7 +57,8 @@ export class HomeComponent implements OnInit, OnChanges, OnDestroy {
     protected session: SessionService,
     protected task: taskService,
     protected gameData: GameUserDataService,
-    protected response: ResponseService
+    protected response: ResponseService,
+    protected hamburger$: HamburgerObservableService
   ) {
     this.Progress = new SetProgressBar();
   }
@@ -243,6 +245,14 @@ export class HomeComponent implements OnInit, OnChanges, OnDestroy {
     });
 
     this.subscriptionArr?.push(this.schedSubscription);
+  };
+
+  /* END */
+
+  /* MODAL FOR HAMBURGER */
+
+  public fetchHamburgerModalStatus = () => {
+    return this.hamburger$.getHamburgetModalStatus()();
   };
 
   /* END */

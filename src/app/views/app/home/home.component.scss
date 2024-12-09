@@ -6,13 +6,28 @@ main {
   height: 100%;
   position: relative;
   overflow-x: hidden;
-  background-color: $neutralColor;
+  background: url("/background/background1.png");
+  background-position: center;
+  background-size: cover;
   color: $textColor;
+  z-index: 3;
 
   header {
-    position: relative;
+    position: sticky;
+    top: 0;
     width: 100%;
-    z-index: 1;
+    z-index: 4;
+
+    .modal {
+      position: absolute;
+      top: 9dvh;
+      z-index: 2;
+      left: 0;
+      transform: translateY(-1%);
+      width: 100%;
+      height: 80dvh;
+      overflow-y: hidden;
+    }
   }
 
   .container {
@@ -343,31 +358,5 @@ main {
         }
       }
     }
-  }
-}
-
-.time-bg {
-  position: absolute;
-  top: 0;
-  right: 0;
-  transform: translate(0, 25%);
-  z-index: 0; // Lower z-index to stay behind the container
-
-  .time {
-    width: 100%;
-    height: 15rem;
-  }
-}
-
-.person-bg {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  transform: translate(0, -50%);
-  z-index: 0; // Lower z-index to stay behind the container
-
-  .person {
-    width: 100%;
-    height: 10rem;
   }
 }

@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { AuthComponent } from './layouts/auth/auth.component';
 import { AppsComponent } from './layouts/apps/apps.component';
 import { StarterComponent } from './layouts/starter/starter.component';
+import { HamburgerInterfaceComponent } from './layouts/hamburger-interface/hamburger-interface.component';
 
 const routes: Routes = [
   {
@@ -69,6 +70,19 @@ const routes: Routes = [
         path: 'welcome',
         loadChildren: () =>
           import('./views/welcome/welcome.module').then((m) => m.WelcomeModule),
+      },
+    ],
+  },
+  {
+    path: 'hamburger-interface',
+    component: HamburgerInterfaceComponent,
+    children: [
+      {
+        path: 'leaderboards',
+        loadChildren: () =>
+          import('./views/leaderboards/leaderboards.module').then(
+            (m) => m.LeaderboardsModule
+          ),
       },
     ],
   },

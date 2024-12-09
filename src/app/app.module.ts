@@ -30,6 +30,7 @@ import { ProgressBarDirective } from './components/gamified-completion-modal/pro
 import { RanksPipe } from './pipe/ranks.pipe';
 import { ExpToFillPipe } from './pipe/exp-to-fill.pipe';
 import { RankUpComponent } from './components/rank-up/rank-up.component';
+import { HamburgerInterfaceComponent } from './layouts/hamburger-interface/hamburger-interface.component';
 
 @NgModule({
   declarations: [
@@ -43,6 +44,7 @@ import { RankUpComponent } from './components/rank-up/rank-up.component';
     RanksPipe,
     ExpToFillPipe,
     RankUpComponent,
+    HamburgerInterfaceComponent,
   ],
   imports: [
     BrowserModule,

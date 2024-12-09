@@ -1,0 +1,27 @@
+<div class="background" @slide *ngIf="getHamburgerAnimationStatus()">
+  <section class="container">
+    <figure>
+      <img src="FocusPal Logo/12.png" alt="Logo" />
+    </figure>
+
+    <nav class="hamburger">
+      <div class="avatar">
+        <figure><img [src]="setAvatar()" alt="Avatar" /></figure>
+        <figcaption class="caption">Hi, {{ userName }}!</figcaption>
+      </div>
+
+      <ul class="link-list">
+        <li
+          class="links"
+          *ngFor="let link of links; index as i"
+          (click)="navigateLinks(i)"
+        >
+          <span class="icon">
+            <i class="fa-regular" [ngClass]="setUpIcons(i)"></i>
+          </span>
+          <h4>{{ link }}</h4>
+        </li>
+      </ul>
+    </nav>
+  </section>
+</div>
