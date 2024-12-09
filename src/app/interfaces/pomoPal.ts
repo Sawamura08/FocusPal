@@ -56,3 +56,29 @@ export interface userPomoConfig {
 }
 
 /* SETTINGS */
+
+export const musicConfig = [
+  { music: 0, theme: 'None' },
+  { music: 1, theme: 'Chill' },
+  { music: 2, theme: 'Rainy' },
+  { music: 3, theme: 'Bird' },
+  { music: 4, theme: 'Dream' },
+  { music: 5, theme: 'Flow' },
+  { music: 6, theme: 'Insturmental' },
+  { music: 7, theme: 'Rainy 2' },
+  { music: 8, theme: 'Piano' },
+  { music: 9, theme: 'Calm' },
+];
+
+export const musicIcon = [
+  'fa-ban',
+  'fa-face-smile-relaxed',
+  'fa-droplet',
+  'fa-bird',
+  'fa-thought-bubble',
+  'fa-water',
+  'fa-violin',
+  'fa-raindrops',
+  'fa-piano-keyboard',
+  'fa-face-clouds',
+];

@@ -1,0 +1,15 @@
+<section class="container">
+  <ul class="content">
+    <li
+      class="music"
+      *ngFor="let music of musicObject; index as i"
+      [ngClass]="{ selected: selectedMusic === i }"
+      (click)="selectMusic(i)"
+    >
+      <span class="icon"
+        ><i class="fa-regular" [ngClass]="setMusicIcon(i)"></i
+      ></span>
+      <p>{{ music.theme }}</p>
+    </li>
+  </ul>
+</section>

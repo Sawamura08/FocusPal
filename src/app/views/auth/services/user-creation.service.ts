@@ -11,7 +11,7 @@ import { ErrorResponse } from '../../../interfaces/error-response';
 export class UserCreationService {
   constructor(private http: HttpClient, private catchErr: AuthService) {}
 
-  private readonly URL = 'http://192.168.1.7:7242/api/user/CreateUser';
+  private readonly URL = 'http://192.168.1.4:7242/api/user/CreateUser';
 
   public createUser = (
     userInfo: userCreation

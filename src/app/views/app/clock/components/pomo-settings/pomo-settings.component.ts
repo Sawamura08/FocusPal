@@ -36,7 +36,7 @@ export class PomoSettingsComponent implements OnInit {
   public destroyRef = inject(DestroyRef);
   public navBtnIndex: number = 0;
   public navBtn: string[] = ['Time', 'Music'];
-  @Input() userId: number | undefined = 52;
+  @Input() userId: number | undefined;
   public configClass: PomodoroConfiguration;
   public userConfig: userPomoConfig | undefined;
   public focusSession: number = 1500; // DEFAULT VALUES

@@ -12,11 +12,11 @@ export class GameUserDataService {
   constructor(protected response: ResponseService) {}
 
   /* INSERT */
-  public insertNewUser = async () => {
+  public insertNewUser = async (userId: number) => {
     const newData: userGameData = {
-      userId: 52,
+      userId: userId,
       rank: 1,
-      currentExp: 10,
+      currentExp: 0,
       nextLevelExp: 200,
       avatarID: 0,
     };

@@ -10,6 +10,7 @@ import { ModalType } from '../../../service/pop-modal.service';
 import { PopModalService } from '../../../service/pop-modal.service';
 import { SessionService } from '../../../service/session.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { GameUserDataService } from '../../../database/game-user-data.service';
 
 @Component({
   selector: 'app-login',
@@ -28,7 +29,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     private auth: AuthService,
     private networkService: NetworkStatusService,
     private popModal: PopModalService,
-    private session: SessionService
+    private session: SessionService,
+    private gameConfig: GameUserDataService
   ) {
     this.userInput = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -39,6 +41,9 @@ export class LoginComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.checkNetworkStatus();
     this.modalSubscribe();
+
+    /* FETCH SESSION */
+    this.fetchUserID();
   }
 
   /* FORM GROUP */
@@ -56,7 +61,7 @@ export class LoginComponent implements OnInit, OnDestroy {
           if ('success' in values && !values.success) {
             this.modal = ModalType.INCORRECT;
           } else {
-            this.authSucess();
+            this.insertUserGameData();
           }
         },
         error: (err) => {
@@ -148,6 +153,31 @@ export class LoginComponent implements OnInit, OnDestroy {
   };
 
   /* ------ END modal data --------- */
+
+  /* INSERT USER GAME DATA */
+  public insertUserGameData = async () => {
+    if (this.userId != undefined) {
+      const result = await this.gameConfig.insertNewUser(this.userId);
+
+      if (result.value != undefined) {
+        this.authSucess();
+      }
+    }
+  };
+
+  public userId: number | undefined;
+  public fetchUserID = () => {
+    this.session
+      .getUser()
+      .pipe(
+        catchError((err) => {
+          console.error(err);
+          return EMPTY;
+        }),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe((value) => (this.userId = value?.userId));
+  };
 
   // unsubscribing
 

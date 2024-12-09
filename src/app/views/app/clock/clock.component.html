@@ -129,9 +129,13 @@
 }
 
 <div class="modal" *ngIf="fetchPomoSettingsModal()">
-  <app-pomo-settings></app-pomo-settings>
+  <app-pomo-settings [userId]="userId"></app-pomo-settings>
 </div>
 
 <audio id="alarm">
   <source src="music/alarm.mp3" type="audio/mp3" />
+</audio>
+
+<audio loop id="music">
+  <source [src]="setMusicSettings()" type="audio/mp3" />
 </audio>

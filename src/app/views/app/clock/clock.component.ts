@@ -34,6 +34,7 @@ import { PomoSettingsComponent } from './components/pomo-settings/pomo-settings.
 import { PomoSettingsObservableService } from './service/pomo-settings-observable.service';
 import { PomodoroConfiguration } from './class/config';
 import { PomoTaskConfigService } from './service/pomo-task-config.service';
+import { Music } from './class/music';
 
 @Component({
   selector: 'app-clock',
@@ -61,6 +62,7 @@ export class ClockComponent implements OnInit, OnDestroy {
     this.alarm = new Alarm(el, renderer);
     this.alarmHandler = new AlarmHandler();
     this.configuration = new PomodoroConfiguration(this.configService);
+    this.musicClass = new Music(el, renderer);
   }
 
   ngOnInit(): void {
@@ -91,6 +93,7 @@ export class ClockComponent implements OnInit, OnDestroy {
   public btnStatus: number = 0;
   public userId: number | undefined;
   public userConfig: userPomoConfig | undefined;
+  public musicClass: Music;
 
   /* GET SESSION */
   public getSession = () => {
@@ -128,6 +131,16 @@ export class ClockComponent implements OnInit, OnDestroy {
       });
   };
 
+  /* SET MUSIC BASED ON SETTINGS  */
+  public setMusicSettings = () => {
+    if (this.userConfig != undefined) {
+      const music = this.userConfig.music;
+      return `music/${music}.mp3`;
+    } else {
+      return '';
+    }
+  };
+
   public setButtonStatus = (value: number) => {
     this.btnStatus = value;
 
@@ -147,11 +160,11 @@ export class ClockComponent implements OnInit, OnDestroy {
 
   public setDefaultTimerText = (pomoStatus: number) => {
     if (pomoStatus === pomoPalBtn.Pomodoro) {
-      this.defaultCountDown = 3;
+      this.defaultCountDown = 1500;
     } else if (pomoStatus === pomoPalBtn.ShortBreak) {
-      this.defaultCountDown = 3;
+      this.defaultCountDown = 300;
     } else {
-      this.defaultCountDown = 3;
+      this.defaultCountDown = 900;
     }
   };
 
@@ -177,9 +190,18 @@ export class ClockComponent implements OnInit, OnDestroy {
     if (this.taskCurrentlyWorking != undefined) {
       this.isTimerRunning = true;
       this.timer.setConfig(timer);
+
+      //PLAY MUSIC AS THE TIMER STARTS
+      this.playMusic();
     } else {
       //SET AS INCORRECT SINCE THE USER START THE TIMER WITHOUT SELECTED TASK!
       this.popModal.openModal(ModalType.INCORRECT);
+    }
+  };
+
+  public playMusic = () => {
+    if (this.userConfig != undefined && this.userConfig.music != 0) {
+      this.musicClass.autoPlay();
     }
   };
 
@@ -187,10 +209,13 @@ export class ClockComponent implements OnInit, OnDestroy {
     this.isPause = true;
     this.isTimerRunning = false;
     this.timer.pauseTimer();
+
+    // also pause the music if allowed
+    this.musicClass.stopMusic();
   };
 
   /* GET COUNT DOWN */
-  public defaultCountDown: number = 3;
+  public defaultCountDown: number = 1500;
   public displayCountDown: string = '0';
 
   /* Remaining Time for when pause */
@@ -225,6 +250,7 @@ export class ClockComponent implements OnInit, OnDestroy {
     this.isPause = false;
     this.isTimerRunning = true;
     this.timer.setConfig(remainingTime);
+    this.musicClass.autoPlay();
   };
 
   public stopAlarm = (id: string) => {
@@ -235,8 +261,9 @@ export class ClockComponent implements OnInit, OnDestroy {
   };
 
   /* CONFIGURATION OF UI TIME BOARD THEN THE TIME RUNS OUT */
-  /* TRIGGERED AFTER WORK TIME END */
+  /* TRIGGERED AFTER  TIME END */
   public configureUITimeBoard = () => {
+    this.musicClass.stopMusic();
     this.isTimerRunning = false;
     this.isAlarmTriggered = true;
     this.alarm.autoPlay('alarm');

@@ -8,6 +8,7 @@ import { TaskModalComponent } from './components/task-modal/task-modal.component
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PomoSettingsComponent } from './components/pomo-settings/pomo-settings.component';
 import { ConvertToMin } from './pipe/convet-to-min.pipe';
+import { MusicSettingsComponent } from './components/music-settings/music-settings.component';
 
 @NgModule({
   declarations: [
@@ -15,6 +16,7 @@ import { ConvertToMin } from './pipe/convet-to-min.pipe';
     TaskModalComponent,
     PomoSettingsComponent,
     ConvertToMin,
+    MusicSettingsComponent,
   ],
   imports: [
     CommonModule,

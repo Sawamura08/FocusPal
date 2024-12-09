@@ -14,6 +14,7 @@
           {{ btn }}
         </button>
       </nav>
+      @if (navBtnIndex === 0) {
       <section class="modal-body">
         <ul class="time-settings">
           <li class="configure">
@@ -58,6 +59,9 @@
           </li>
         </ul>
       </section>
+      }@else {
+      <app-music-settings></app-music-settings>
+      }
     </section>
 
     @if (valueConfigurationModal) {

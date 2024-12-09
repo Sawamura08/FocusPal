@@ -33,7 +33,6 @@ export class PomoTaskConfigService {
       .where('userId')
       .equals(id)
       .first();
-
     return result;
   };
 
