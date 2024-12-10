@@ -11,6 +11,8 @@ import { catchError, filter, firstValueFrom, of } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { GameUserDataService } from '../../../../../database/game-user-data.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Location } from '@angular/common';
+import { modalStatus } from '../../../../../Objects/modal.details';
 
 @Component({
   selector: 'app-hamburger-nav',
@@ -24,11 +26,15 @@ export class HamburgerNavComponent implements OnInit {
     protected session: SessionService,
     protected gameData: GameUserDataService,
     protected route: Router,
-    protected actRoute: ActivatedRoute
+    protected actRoute: ActivatedRoute,
+    protected location: Location
   ) {}
 
   ngOnInit(): void {
     this.fetchSession();
+
+    /* GET THE CURRENT LINK OF THE WEBPAGE */
+    this.getCurrentPath();
   }
 
   public destoryRef = inject(DestroyRef);
@@ -78,9 +84,34 @@ export class HamburgerNavComponent implements OnInit {
   };
 
   public navLinks = navigateLinks;
+  public currentPath: string = '';
+
   public navigateLinks = (link: number) => {
     const routeModule = this.navLinks[link];
-    const routingLink = `../../hamburger-interface/${routeModule}`;
+    let routingLink;
+
+    /* CHECK WHERE PATH TO GO */
+    /* HOME AND HAMBURGER HAD DIFFERENT PATH */
+    if (this.currentPath === 'home') {
+      routingLink = `../../hamburger-interface/${routeModule}`;
+    } else {
+      if (routeModule === 'home') {
+        routingLink = '../../apps/home';
+      } else {
+        routingLink = `/hamburger-interface/${routeModule}`;
+      }
+    }
+
     this.route.navigate([routingLink], { relativeTo: this.actRoute });
+
+    /* CLOSE HAMBURGER MODAL */
+    this.hamburger$.setHamburgerModalStatus(modalStatus.close);
+  };
+
+  /* THIS WILL DETERMINE WHICH ROUTING LINK TO USE */
+  public getCurrentPath = () => {
+    const link = this.location.path();
+    const webpageName = link.split('/');
+    this.currentPath = webpageName[webpageName.length - 1];
   };
 }

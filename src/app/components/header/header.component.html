@@ -9,23 +9,28 @@
 </section>
 
 <section class="home-header" *ngIf="home">
-  <div class="hamburger-menu" (click)="toggleMenu()">
-    <span
-      class="line-bar"
-      *ngFor="let span of spanArr"
-      [ngClass]="{ active: toggle === true }"
-    ></span>
-  </div>
-
-  <h6>{{ headerText }}</h6>
-
-  <figure>
-    <div class="img-container" (click)="openChatAi()">
-      <img
-        src="/FocusPal Logo/3.png"
-        alt="Focus Pal Logo"
-        [ngClass]="animationClass"
-      />
+  <div class="content">
+    <div class="hamburger-menu" (click)="toggleMenu()">
+      <span
+        class="line-bar"
+        *ngFor="let span of spanArr"
+        [ngClass]="{ active: toggle === true }"
+      ></span>
     </div>
-  </figure>
+
+    <h6>{{ headerText }}</h6>
+
+    <figure>
+      <div class="img-container" (click)="openChatAi()">
+        <img
+          src="/FocusPal Logo/3.png"
+          alt="Focus Pal Logo"
+          [ngClass]="animationClass"
+        />
+      </div>
+    </figure>
+  </div>
+  <div class="modal" *ngIf="fetchHamburgerModalStatus()">
+    <app-hamburger-nav></app-hamburger-nav>
+  </div>
 </section>

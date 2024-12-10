@@ -76,6 +76,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }, this.ANIMATION_DURATION);
   }
 
+  /* MODAL FOR HAMBURGER */
+
+  public fetchHamburgerModalStatus = () => {
+    return this.hamburger$.getHamburgetModalStatus()();
+  };
+
+  /* END */
+
   ngOnDestroy(): void {
     if (this.intervalId) clearInterval(this.intervalId);
   }

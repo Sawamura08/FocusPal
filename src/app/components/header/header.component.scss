@@ -26,85 +26,99 @@
 
 .home-header {
   width: 100%;
-  padding: 0.5rem 1rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: linear-gradient(to top, $mainColor, $shadow);
-  border-bottom-left-radius: 1rem;
-  border-bottom-right-radius: 1rem;
+  position: relative;
 
-  .hamburger-menu {
-    width: 20%;
+  .content {
+    width: 100%;
+    padding: 0.5rem 1rem;
     display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
+    background: linear-gradient(to top, $mainColor, $shadow);
+    border-bottom-left-radius: 1rem;
+    border-bottom-right-radius: 1rem;
 
-    .line-bar {
-      width: 1.5rem;
-      height: 3px;
-      background-color: $neutralColor;
-      border-radius: 8px;
-      transition: 0.2s ease-in;
-    }
-
-    .active {
-      position: absolute;
-    }
-
-    .active:first-child {
-      transform: rotate(45deg);
-    }
-
-    .active:nth-child(2) {
-      display: none;
-    }
-
-    .active:last-child {
-      transform: rotate(-45deg);
-    }
-  }
-
-  figure {
-    width: 20%;
-    .img-container {
-      width: 3.5rem;
-      height: 3.5rem;
-      background-color: $neutralColor;
-      border-radius: 50%;
+    .hamburger-menu {
+      width: 20%;
       display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
       justify-content: center;
       align-items: center;
 
-      img {
-        height: 3rem;
-        width: 3rem;
-        cursor: pointer;
+      .line-bar {
+        width: 1.5rem;
+        height: 3px;
+        background-color: $neutralColor;
+        border-radius: 8px;
+        transition: 0.2s ease-in;
       }
 
-      .animated {
-        animation: logo 2s cubic-bezier(0.42, 0, 0.58, 1) infinite;
+      .active {
+        position: absolute;
       }
 
-      @keyframes logo {
-        25% {
-          transform: rotate(30deg);
-          filter: drop-shadow(0 0 5px $shadow);
+      .active:first-child {
+        transform: rotate(45deg);
+      }
+
+      .active:nth-child(2) {
+        display: none;
+      }
+
+      .active:last-child {
+        transform: rotate(-45deg);
+      }
+    }
+
+    figure {
+      width: 20%;
+      .img-container {
+        width: 3.5rem;
+        height: 3.5rem;
+        background-color: $neutralColor;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        img {
+          height: 3rem;
+          width: 3rem;
+          cursor: pointer;
         }
-        75% {
-          transform: rotate(-30deg);
+
+        .animated {
+          animation: logo 2s cubic-bezier(0.42, 0, 0.58, 1) infinite;
+        }
+
+        @keyframes logo {
+          25% {
+            transform: rotate(30deg);
+            filter: drop-shadow(0 0 5px $shadow);
+          }
+          75% {
+            transform: rotate(-30deg);
+          }
         }
       }
     }
+
+    h6 {
+      text-align: center;
+      width: 60%;
+      font-size: 1.5rem;
+      font-family: $fontFamily;
+      color: $neutralColor;
+    }
   }
 
-  h6 {
-    text-align: center;
-    width: 60%;
-    font-size: 1.5rem;
-    font-family: $fontFamily;
-    color: $neutralColor;
+  .modal {
+    position: absolute;
+    top: 20%;
+    left: 0;
+    transform: translateY(8%);
+    width: 100%;
+    height: 80dvh;
   }
 }

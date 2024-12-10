@@ -25,6 +25,7 @@ import { TaskTagAcademicPipe } from '../pipe/task-tag-academic.pipe';
 import { TextPipePipe } from '../pipe/text-pipe.pipe';
 import { TaskTagPerosnalPipe } from '../pipe/task-tag.pipe';
 import { TaskCategoryPipe } from '../pipe/task-category.pipe';
+import { HamburgerNavComponent } from '../views/app/home/components/hamburger-nav/hamburger-nav.component';
 
 @NgModule({
   declarations: [
@@ -42,6 +43,7 @@ import { TaskCategoryPipe } from '../pipe/task-category.pipe';
     TaskTagAcademicPipe,
     TaskTagPerosnalPipe,
     TaskCategoryPipe,
+    HamburgerNavComponent,
   ],
   imports: [
     CommonModule,
@@ -69,6 +71,7 @@ import { TaskCategoryPipe } from '../pipe/task-category.pipe';
     TaskTagAcademicPipe,
     TaskTagPerosnalPipe,
     TaskCategoryPipe,
+    HamburgerNavComponent,
   ],
 })
 export class SharedModule {}

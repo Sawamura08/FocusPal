@@ -1,4 +1,5 @@
 export const hamburgerLinks = [
+  'Home',
   'User Profile',
   'Leaderboards',
   'Class Schedule',
@@ -7,6 +8,7 @@ export const hamburgerLinks = [
 
 /* THIS IS USE TO ROUTE THROUGH THE APPLICATION */
 export const navigateLinks = [
+  'home',
   'userProfile',
   'leaderboards',
   'classSchedule',
@@ -14,6 +16,7 @@ export const navigateLinks = [
 ];
 
 export const linkIcons = [
+  'fa-house',
   'fa-user',
   'fa-medal',
   'fa-calendar-circle-user',
