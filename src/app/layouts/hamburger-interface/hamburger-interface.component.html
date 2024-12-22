@@ -1,1 +1,10 @@
-<router-outlet></router-outlet>
+<main>
+  <router-outlet></router-outlet>
+</main>
+
+<!-- CHAT AI -->
+@if (isAiChatOpen) {
+<div class="chat-container">
+  <app-chat></app-chat>
+</div>
+}

@@ -13,4 +13,9 @@ export class LeaderboardsComponent {
     type: 'Leaderboards',
     isHome: true,
   };
+
+  isOtherLeaderShowed: boolean = false;
+  public showOtherLeaders = () => {
+    this.isOtherLeaderShowed = !this.isOtherLeaderShowed;
+  };
 }

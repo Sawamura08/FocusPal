@@ -3,6 +3,9 @@
 
   <section class="container">
     <div class="content">
+      <div class="head-container">
+        <h3>Top Performer</h3>
+      </div>
       <div class="leaderboards">
         <figure class="podium">
           <figure class="top-performer">
@@ -44,6 +47,111 @@
           </figure>
           <img src="Elements/podium.png" alt="Podium" />
         </figure>
+
+        <section class="other-leader-container">
+          <div class="background" [ngClass]="{ show: isOtherLeaderShowed }">
+            <div class="triangle" (click)="showOtherLeaders()">
+              <div class="circle"></div>
+            </div>
+            <div class="other-leaders">
+              <div class="top-players">
+                <figure>
+                  <img src="Elements/medal.png" alt="Medal" />
+                </figure>
+                <div class="text-container">
+                  <h3 class="text">Take a look at these</h3>
+                  <h3 class="text">TOP 10 PLAYERS!</h3>
+                </div>
+              </div>
+              <ul class="players">
+                <li class="list">
+                  <div class="player">
+                    <span class="rank">4</span>
+                    <figure>
+                      <img src="Avatars/7.png" alt="" />
+                    </figure>
+                    <h3 class="username">AdminPhone</h3>
+                  </div>
+                  <span class="points">
+                    <h5>1,445 points</h5>
+                  </span>
+                </li>
+                <li class="list">
+                  <div class="player">
+                    <span class="rank">5</span>
+                    <figure>
+                      <img src="Avatars/7.png" alt="" />
+                    </figure>
+                    <h3 class="username">AdminPhone</h3>
+                  </div>
+                  <span class="points">
+                    <h5>1,445 points</h5>
+                  </span>
+                </li>
+                <li class="list">
+                  <div class="player">
+                    <span class="rank">6</span>
+                    <figure>
+                      <img src="Avatars/7.png" alt="" />
+                    </figure>
+                    <h3 class="username">AdminPhone</h3>
+                  </div>
+                  <span class="points">
+                    <h5>1,445 points</h5>
+                  </span>
+                </li>
+                <li class="list">
+                  <div class="player">
+                    <span class="rank">7</span>
+                    <figure>
+                      <img src="Avatars/7.png" alt="" />
+                    </figure>
+                    <h3 class="username">AdminPhone</h3>
+                  </div>
+                  <span class="points">
+                    <h5>1,445 points</h5>
+                  </span>
+                </li>
+                <li class="list">
+                  <div class="player">
+                    <span class="rank">8</span>
+                    <figure>
+                      <img src="Avatars/7.png" alt="" />
+                    </figure>
+                    <h3 class="username">AdminPhone</h3>
+                  </div>
+                  <span class="points">
+                    <h5>1,445 points</h5>
+                  </span>
+                </li>
+                <li class="list">
+                  <div class="player">
+                    <span class="rank">9</span>
+                    <figure>
+                      <img src="Avatars/7.png" alt="" />
+                    </figure>
+                    <h3 class="username">AdminPhone</h3>
+                  </div>
+                  <span class="points">
+                    <h5>1,445 points</h5>
+                  </span>
+                </li>
+                <li class="list">
+                  <div class="player">
+                    <span class="rank">10</span>
+                    <figure>
+                      <img src="Avatars/7.png" alt="" />
+                    </figure>
+                    <h3 class="username">AdminPhone</h3>
+                  </div>
+                  <span class="points">
+                    <h5>1,445 points</h5>
+                  </span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </section>
       </div>
     </div>
   </section>
