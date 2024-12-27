@@ -19,12 +19,16 @@ export class BackgroundSyncService {
           sync?: any;
         };
 
+        console.log('attempt');
         if (syncRegistration.sync) {
+          console.log('attempt sync');
           return syncRegistration.sync.register(type);
         } else {
           console.error('Background Sync is not supported');
         }
       })
-      .catch(console.log);
+      .catch((err) => {
+        console.log('error', err);
+      });
   };
 }

@@ -1,5 +1,9 @@
 import { Component } from '@angular/core';
 import { headerType } from '../../components/header/header.component';
+import {
+  BackgroundSyncService,
+  syncType,
+} from '../../service/background-sync.service';
 
 @Component({
   selector: 'app-leaderboards',
@@ -7,7 +11,7 @@ import { headerType } from '../../components/header/header.component';
   styleUrl: './leaderboards.component.scss',
 })
 export class LeaderboardsComponent {
-  constructor() {}
+  constructor(protected backgroundSync: BackgroundSyncService) {}
 
   public homeHeaderData: headerType = {
     type: 'Leaderboards',
@@ -16,6 +20,8 @@ export class LeaderboardsComponent {
 
   isOtherLeaderShowed: boolean = false;
   public showOtherLeaders = () => {
+    this.backgroundSync.backgroundSync(syncType.SYNC_DATA);
+    console.log('syncccc');
     this.isOtherLeaderShowed = !this.isOtherLeaderShowed;
   };
 }

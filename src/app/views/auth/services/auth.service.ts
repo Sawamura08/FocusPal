@@ -18,6 +18,7 @@ export class AuthService {
         const errorResponse: ErrorResponse = {
           success: false,
           message: error.error?.message || 'Unknown error occurred',
+          updateKeyValue: null,
         };
         return of(errorResponse); // return as an Observable<ErrorResponse>
       })

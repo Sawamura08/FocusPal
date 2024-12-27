@@ -6,6 +6,7 @@ export interface auth {
 export interface authResponse {
   userId: number;
   email: string;
+  updateKeyValue?: any; //it's not update I just paired it to the errorReponse
 }
 
 export interface userCreation {
@@ -14,4 +15,13 @@ export interface userCreation {
   email: string;
   password: string;
   ConfirmPassword: string;
+  profile: string;
+}
+
+export interface userLeaderboard {
+  userId?: string;
+  userName: string;
+  points: number;
+  profile: number;
+  lastUpdated: Date;
 }

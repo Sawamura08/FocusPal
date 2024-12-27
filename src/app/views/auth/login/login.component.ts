@@ -11,6 +11,7 @@ import { PopModalService } from '../../../service/pop-modal.service';
 import { SessionService } from '../../../service/session.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { GameUserDataService } from '../../../database/game-user-data.service';
+import { LeaderboardsService } from '../../../service/leaderboards.service';
 
 @Component({
   selector: 'app-login',
@@ -30,7 +31,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     private networkService: NetworkStatusService,
     private popModal: PopModalService,
     private session: SessionService,
-    private gameConfig: GameUserDataService
+    private gameConfig: GameUserDataService,
+    private leaderboard: LeaderboardsService
   ) {
     this.userInput = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -61,6 +63,7 @@ export class LoginComponent implements OnInit, OnDestroy {
           if ('success' in values && !values.success) {
             this.modal = ModalType.INCORRECT;
           } else {
+            this.insertUserLeaderboard(values.updateKeyValue.userId);
             this.insertUserGameData();
           }
         },
@@ -165,6 +168,17 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
   };
 
+  /* insert leaderboard data */
+  public insertUserLeaderboard = (userId: number) => {
+    this.leaderboard
+      .insertNewUser(userId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((value) => {
+        console.log(value);
+      });
+  };
+
+  /* SESSION */
   public userId: number | undefined;
   public fetchUserID = () => {
     this.session
