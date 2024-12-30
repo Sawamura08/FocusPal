@@ -20,8 +20,6 @@ export class LeaderboardsComponent {
 
   isOtherLeaderShowed: boolean = false;
   public showOtherLeaders = () => {
-    this.backgroundSync.backgroundSync(syncType.SYNC_DATA);
-    console.log('syncccc');
     this.isOtherLeaderShowed = !this.isOtherLeaderShowed;
   };
 }

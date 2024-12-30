@@ -9,6 +9,7 @@ import { screenshot } from './screenshot';
 import { GameUserDataService } from '../../database/game-user-data.service';
 import { expToFill, rankInfo } from '../../interfaces/game';
 import { RankUpService } from '../../service/rank-up.service';
+import { LeaderboardSyncService } from './service/leaderboard-sync.service';
 
 @Component({
   selector: 'app-gamified-completion-modal',
@@ -20,7 +21,8 @@ export class GamifiedCompletionModalComponent implements OnInit {
   constructor(
     protected game: GamifiedCompletionService,
     protected gameData: GameUserDataService,
-    protected rankUp: RankUpService
+    protected rankUp: RankUpService,
+    protected leaderboardSync: LeaderboardSyncService
   ) {
     /* FETCH MOTIVATION CLASS */
     this.motivation = new Motivation();
@@ -55,9 +57,10 @@ export class GamifiedCompletionModalComponent implements OnInit {
     }, 500);
   };
 
-  public closeModal = () => {
+  public closeModal = async () => {
     this.animateModal = false;
-    this.checkExpStatus();
+    await this.checkExpStatus();
+    this.leaderboardSync.updateUserData(this.updatedUserData!);
 
     setTimeout(() => {
       this.game.setCompletionModalStatus(modalStatus.close);
@@ -69,6 +72,7 @@ export class GamifiedCompletionModalComponent implements OnInit {
   public updatedUserData: userGameData | undefined;
   public newExp: number = 0;
   public neededExp: number = 0;
+  public NOT_UPDATED: number = 0;
   public fetchUserGameData = () => {
     this.userData = this.game.getCompletionModalValue()();
 
@@ -95,23 +99,32 @@ export class GamifiedCompletionModalComponent implements OnInit {
 
   /* check whether rank up or not */
   public checkExpStatus = () => {
-    // close userData
-    this.updatedUserData = structuredClone(this.userData);
+    return new Promise((resolve, reject) => {
+      try {
+        // close userData
+        this.updatedUserData = structuredClone(this.userData);
 
-    if (this.userData) {
-      // check whether the user will rank up
-      if (this.newExp < this.userData.nextLevelExp) {
-        this.setUpdateCommonConfig();
-      } else {
-        this.setUpdateRankUpConfig();
+        if (this.userData) {
+          // check whether the user will rank up
+
+          if (this.newExp < this.userData.nextLevelExp) {
+            this.setUpdateCommonConfig();
+          } else {
+            this.setUpdateRankUpConfig();
+          }
+        }
+        resolve('succesfully');
+      } catch {
+        reject('Error on checking status');
       }
-    }
+    });
   };
 
   // EXP UPDATE IF THE USER DON'T RANK UP
   public setUpdateCommonConfig = () => {
     if (this.updatedUserData != undefined) {
       this.updatedUserData.currentExp = this.newExp;
+      this.updatedUserData.isUpdated = this.NOT_UPDATED;
 
       // trigger update
       this.userDataUpdate(this.updatedUserData);
@@ -128,6 +141,7 @@ export class GamifiedCompletionModalComponent implements OnInit {
       this.updatedUserData.rank++;
       this.updatedUserData.currentExp = this.newExp;
       this.updatedUserData.nextLevelExp = parseInt(newExpGoal);
+      this.updatedUserData.isUpdated = this.NOT_UPDATED;
 
       const result = await this.userDataUpdate(this.updatedUserData);
 

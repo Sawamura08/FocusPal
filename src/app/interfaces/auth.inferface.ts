@@ -19,7 +19,7 @@ export interface userCreation {
 }
 
 export interface userLeaderboard {
-  userId?: string;
+  id: string;
   userName: string;
   points: number;
   profile: number;

@@ -114,7 +114,7 @@ export class HomeComponent implements OnInit, OnChanges, OnDestroy {
     this.session
       .getUser()
       .pipe(
-        filter((value) => value != undefined),
+        filter((value) => value !== undefined),
         takeUntilDestroyed(this.destroyRef),
         catchError((err) => {
           console.error('Error on fetching userInfo', err);

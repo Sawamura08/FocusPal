@@ -5,4 +5,5 @@ export interface userGameData {
   currentExp: number;
   nextLevelExp: number;
   avatarID: number;
+  isUpdated?: number;
 }
