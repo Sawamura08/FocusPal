@@ -35,6 +35,7 @@ export class LeaderboardsComponent implements OnInit {
 
   public topUsers: userLeaderboard[] = [];
 
+  /* FETCH ALL PLAYERS */
   public getTopUsers = () => {
     this.leader
       .fetchTopUsers()
@@ -44,6 +45,7 @@ export class LeaderboardsComponent implements OnInit {
       });
   };
 
+  /* SET THE USER PROFILE */
   public fetchTopUserProfile = (index: number) => {
     if (this.topUsers != undefined) {
       return `Avatars/${this.topUsers[index].profile}`;
@@ -52,6 +54,7 @@ export class LeaderboardsComponent implements OnInit {
     }
   };
 
+  /* FETCH OTHER USER */
   public fetchOtherTopUser = () => {
     return this.topUsers.slice(3);
   };

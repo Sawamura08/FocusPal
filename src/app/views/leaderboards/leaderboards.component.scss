@@ -208,6 +208,7 @@ main {
               }
 
               .players {
+                width: 100%;
                 list-style: none;
                 display: flex;
                 flex-direction: column;
@@ -226,7 +227,7 @@ main {
                   justify-content: space-between;
 
                   .player {
-                    width: 100%;
+                    width: 80%;
                     display: flex;
                     align-items: center;
                     gap: 1rem;
@@ -262,7 +263,7 @@ main {
                   }
 
                   .points {
-                    width: 100%;
+                    width: 20%;
                     font-family: $subText;
                     display: grid;
                     place-content: center;

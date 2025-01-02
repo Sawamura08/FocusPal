@@ -33,7 +33,6 @@ export class LeaderboardSyncService {
         .updateUserData(updatedData)
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe((value) => {
-          console.log(value);
           if (value != undefined && value.id != undefined) {
             this.changeUpdateStatus(data);
           }

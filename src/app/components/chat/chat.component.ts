@@ -8,7 +8,7 @@ import {
   inject,
   DestroyRef,
 } from '@angular/core';
-import { chatBot } from '../../class/chat-bot';
+import { backendHistory, chatBot } from '../../class/chat-bot';
 import {
   catchError,
   combineLatest,
@@ -17,6 +17,7 @@ import {
   Observable,
   of,
   Subscription,
+  switchMap,
 } from 'rxjs';
 import { chatEntry, histories } from '../../interfaces/message-model.interface';
 import { MessageStoreService } from '../../service/message-store.service';
@@ -27,6 +28,8 @@ import { PopModalService } from '../../service/pop-modal.service';
 import { slideRight } from '../../animation/slide-right.animate';
 import { NetworkStatusService } from '../../service/network-status.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ConversationHistoryService } from '../../service/conversation-history.service';
+import { SessionService } from '../../service/session.service';
 declare var AOS: any;
 
 @Component({
@@ -42,13 +45,11 @@ export class ChatComponent implements OnDestroy, OnInit, AfterViewInit {
     private convo: MessageStoreService,
     private gemini: AicontentGenerationService,
     private popModal: PopModalService,
-    private network: NetworkStatusService
+    private network: NetworkStatusService,
+    private convoHistory: ConversationHistoryService,
+    private session: SessionService
   ) {
-    this.chatBot = new chatBot();
-    this.histories = this.chatBot.histories;
-
-    /* SET UP THE HISTORY CONVERSATION */
-    this.convo.setHistories(this.histories);
+    this.chatBot = new chatBot(convoHistory, session);
   }
 
   ngOnInit(): void {
@@ -63,6 +64,9 @@ export class ChatComponent implements OnDestroy, OnInit, AfterViewInit {
 
     /* SUBSCRIBE TO CONFIRMATION MODAL SUBJECT */
     this.monitorConfirmationModal();
+
+    /* SET SESSION */
+    this.getSession();
   }
 
   ngAfterViewInit(): void {
@@ -71,23 +75,41 @@ export class ChatComponent implements OnDestroy, OnInit, AfterViewInit {
 
   /* INHERIT CHABOT */
   protected chatBot: chatBot;
+  public userId: number | undefined;
+  public isLoadingOngoing: boolean = false;
+
+  /* HISTORY */
+  public setHistory = () => {
+    this.convoHistory
+      .getUpdatedHistory()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((value) => {
+        this.histories = value;
+        /* SET UP THE HISTORY CONVERSATION */
+        this.convo.setHistories(this.histories);
+      });
+  };
 
   /* FETCH EXISTING CONVERSATION */
+  /* THIS ONLY FETCH THE CONVO IN BEHAVIOR SUBJECT */
   public conversation: chatEntry[] = [];
-  private conversationSubscribe!: Subscription;
   public fetchConversation = () => {
     const getConversation = this.convo.getConversation();
 
-    this.conversationSubscribe = combineLatest([getConversation]).subscribe({
-      next: ([conversation]) => {
-        this.conversation = conversation;
-      },
-      error: (err) => {
-        console.error('Error Conversation Subscription', err);
-      },
-    });
+    combineLatest([getConversation])
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: ([conversation]) => {
+          this.conversation = conversation;
 
-    this.subscriptionArr.push(this.conversationSubscribe);
+          if (this.conversation.length === 0) {
+            this.setHistory();
+          }
+        },
+        error: (err) => {
+          console.error('Error Conversation Subscription', err);
+        },
+      });
   };
 
   /* TO OVERFLOW THE TEXTAREA DEPENDING ON NUMBER OF TEXT */
@@ -108,30 +130,72 @@ export class ChatComponent implements OnDestroy, OnInit, AfterViewInit {
   /* END */
 
   /* SUBMIT PROMPT */
-  protected histories: histories[];
+  protected histories: histories[] = [];
   protected userInput: string = '';
+  protected conversationData: backendHistory | undefined; // for saving in backend
+  protected tempInputContainer: string = '';
   public sendPrompt = () => {
     if (this.userInput != '') {
+      /* SET TEMPORARY CONTAINER FOR USER INPUT */
+      this.tempInputContainer = this.userInput;
       this.convo.insertConversation(this.userInput);
       setTimeout(() => {
         this.scrollToBottom();
       }, 100);
-      /* SENT PROMPT TO GEMINI */
-      this.gemini.sendPromptRequest(this.userInput, this.histories).subscribe({
-        next: (value) => {},
-        error: (err) => console.error(err),
-        complete: () => {
-          setTimeout(() => {
-            this.scrollToBottom();
-          }, 100);
-        },
-      });
-    }
 
+      this.conversationData = {
+        userId: this.userId!,
+        role: 'user',
+        text: this.userInput,
+      };
+      if (
+        this.conversationData != undefined &&
+        this.conversationData.text != ''
+      ) {
+        /* SAVE THE CONVERSATION BEFORE SENDING THE PROMPT */
+        this.convoHistory
+          .saveConversation(this.conversationData)
+          .pipe(switchMap((value: backendHistory) => this.promptGemini()))
+          .subscribe({
+            next: (value) => {
+              // CHECK IF THE AI HAS A RESPONSE
+              if (value != undefined || value != '') {
+                this.saveAiReponse(value);
+              }
+            },
+            error: (err) => console.error(err),
+            complete: () => {
+              setTimeout(() => {
+                this.scrollToBottom();
+              }, 100);
+            },
+          });
+      }
+    }
     this.userInput = '';
     setTimeout(() => {
       this.overflowTextArea();
     }, 100);
+  };
+
+  public saveAiReponse = (response: string) => {
+    const responseData: backendHistory = {
+      userId: this.userId!,
+      role: 'model',
+      text: response,
+    };
+    this.convoHistory
+      .saveConversation(responseData)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe();
+  };
+
+  public promptGemini = () => {
+    /* SENT PROMPT TO GEMINI */
+    return this.gemini.sendPromptRequest(
+      this.tempInputContainer,
+      this.histories
+    );
   };
 
   /* END */
@@ -223,6 +287,15 @@ export class ChatComponent implements OnDestroy, OnInit, AfterViewInit {
     });
 
     this.subscriptionArr.push(this.internetSubsription);
+  };
+
+  /* FETCH SESSION */
+
+  public getSession = () => {
+    this.session
+      .getUser()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((value) => (this.userId = value?.userId));
   };
 
   ngOnDestroy(): void {

@@ -123,3 +123,7 @@
 <div class="confirm-modal" *ngIf="isConfirmModalOpen">
   <app-modal [data]="confirmationData" [confirmation]="true"></app-modal>
 </div>
+
+@if (isLoadingOngoing) {
+<div class="confirm-modal"><app-loading></app-loading></div>
+}
