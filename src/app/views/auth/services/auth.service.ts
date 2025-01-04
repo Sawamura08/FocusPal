@@ -10,7 +10,8 @@ import { ErrorResponse } from '../../../interfaces/error-response';
 export class AuthService {
   constructor(private http: HttpClient) {}
 
-  private readonly url = 'http://192.168.1.50:7242/api/user/UserAuth';
+  private readonly url =
+    'https://backendfocuspal-cnepbydaf0fqapc5.southeastasia-01.azurewebsites.net/api/user/UserAuth';
 
   public userAuth = (user: auth): Observable<authResponse | ErrorResponse> => {
     return this.http.post<authResponse>(this.url, user).pipe(

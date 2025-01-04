@@ -16,7 +16,7 @@ export class ConversationHistoryService {
 
   /* FETCHING USER HISTORY */
   private readonly url =
-    'http://192.168.1.50:7242/api/AiConversation/GetConversationAsync';
+    'https://backendfocuspal-cnepbydaf0fqapc5.southeastasia-01.azurewebsites.net/api/AiConversation/GetConversationAsync';
 
   public fetchUserHistory = (userId: number): Observable<backendHistory[]> => {
     return this.http.post<backendHistory[]>(this.url, userId).pipe(
@@ -38,7 +38,7 @@ export class ConversationHistoryService {
   };
 
   private readonly saveConvoUrl =
-    'http://192.168.1.50:7242/api/AiConversation/InsertConvo';
+    'https://backendfocuspal-cnepbydaf0fqapc5.southeastasia-01.azurewebsites.net/api/AiConversation/InsertConvo';
 
   public saveConversation = (
     data: backendHistory
@@ -52,7 +52,7 @@ export class ConversationHistoryService {
   };
 
   private readonly deleteConvoUrl =
-    'http://192.168.1.50:7242/api/AiConversation/DeleteConversation';
+    'https://backendfocuspal-cnepbydaf0fqapc5.southeastasia-01.azurewebsites.net/api/AiConversation/DeleteConversation';
 
   public deleteConversation = (userId: number): Observable<number> => {
     return this.http.post<number>(this.deleteConvoUrl, userId).pipe(
