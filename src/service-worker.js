@@ -1,5 +1,3 @@
-const { resolve } = require("@angular/compiler-cli");
-
 importScripts("ngsw-worker.js");
 
 // Handle sync events

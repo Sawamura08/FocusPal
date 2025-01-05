@@ -82,7 +82,9 @@ export class CalendarComponent implements OnInit, OnDestroy {
     this.week.shift();
     this.week.push(newDate);
 
-    this.filterbyDate(this.filterDateIndex!);
+    if (this.filterDateIndex != undefined) {
+      this.filterbyDate(this.filterDateIndex!);
+    }
   }
 
   /* GET PREVIOUS DAY */
@@ -94,7 +96,9 @@ export class CalendarComponent implements OnInit, OnDestroy {
     this.week.pop();
     this.week.splice(0, 0, newDate);
 
-    this.filterbyDate(this.filterDateIndex!);
+    if (this.filterDateIndex != undefined) {
+      this.filterbyDate(this.filterDateIndex!);
+    }
   }
 
   get currentMonthName(): string {
@@ -119,7 +123,16 @@ export class CalendarComponent implements OnInit, OnDestroy {
     this.filterDateIndex = index;
     const date = this.week[index];
 
-    const setDate: string = `${date?.year}-${date?.month + 1}-${date?.date}`;
+    // If a month is a single digit it must add 0 on it
+    // if month === 1 then make it 01 to match the new Date()
+    // SAME WITH DAY
+    const currentDate =
+      String(date?.month + 1).length === 1
+        ? `0${date?.month + 1}`
+        : date?.month + 1;
+    const currentDay =
+      String(date?.date).length === 1 ? `0${date?.date}` : date?.date;
+    const setDate: string = `${date?.year}-${currentDate}-${currentDay}`;
 
     /* SET NEW VALUE TO THE SUBJECT */
     this.destroySubscription$.next(true);

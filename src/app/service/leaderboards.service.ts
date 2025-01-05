@@ -12,7 +12,7 @@ export class LeaderboardsService {
   constructor(protected response: ResponseService, private http: HttpClient) {}
 
   private readonly url =
-    'http://192.168.1.50:7242/api/Leaderboard/insertNewUser';
+    'https://backendfocuspal-cnepbydaf0fqapc5.southeastasia-01.azurewebsites.net/api/Leaderboard/insertNewUser';
 
   public insertNewUser = (id: number): Observable<userLeaderboard> => {
     return this.http.post<userLeaderboard>(this.url, id).pipe(
@@ -24,7 +24,7 @@ export class LeaderboardsService {
   };
 
   private readonly updateUrl =
-    'http://192.168.1.50:7242/api/Leaderboard/updateLeaderboard';
+    'https://backendfocuspal-cnepbydaf0fqapc5.southeastasia-01.azurewebsites.net/api/Leaderboard/updateLeaderboard';
 
   public updateUserData = (
     data: updateRequest
@@ -38,7 +38,7 @@ export class LeaderboardsService {
   };
 
   private readonly topUsersUrl =
-    'http://192.168.1.50:7242/api/Leaderboard/GetLeaderboardTop';
+    'https://backendfocuspal-cnepbydaf0fqapc5.southeastasia-01.azurewebsites.net/api/Leaderboard/GetLeaderboardTop';
 
   public fetchTopUsers = (): Observable<userLeaderboard[]> => {
     return this.http.get<userLeaderboard[]>(this.topUsersUrl).pipe(

@@ -1,4 +1,10 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  DestroyRef,
+  inject,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import { Subscription, combineLatest, filter } from 'rxjs';
 
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
@@ -11,6 +17,7 @@ import { ModalType } from '../../../service/pop-modal.service';
 import { SessionService } from '../../../service/session.service';
 import { User } from '../../../database/db';
 import { TermsAgreementService } from '../../../service/terms-agreement.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-signup',
@@ -30,6 +37,7 @@ export class SignupComponent implements OnInit, OnDestroy {
   }
 
   subscriptions: Subscription[] = [];
+  public destroyRef = inject(DestroyRef);
   userDatas: FormGroup;
   constructor(
     private formBuild: FormBuilder,
@@ -87,6 +95,7 @@ export class SignupComponent implements OnInit, OnDestroy {
                 } else if ('ok' in value && !value.ok) {
                   this.endLoading(false);
                 } else {
+                  /* SUCCESS USER CREATION */
                   this.userSession = value;
                   this.addSession(this.userSession);
                   this.endLoading(true);
@@ -103,7 +112,6 @@ export class SignupComponent implements OnInit, OnDestroy {
         }
       });
     } else if (!this.networkStatus) {
-      console.log('no internet');
       this.modal = ModalType.NO_INTERNET;
     }
   };
@@ -130,9 +138,12 @@ export class SignupComponent implements OnInit, OnDestroy {
 
   private networkStatus: boolean = false;
   private checkNetworkStatus = (): boolean => {
-    this.networkService.networkStatus$().subscribe((value) => {
-      this.networkStatus = value;
-    });
+    this.networkService
+      .networkStatus$()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((value) => {
+        this.networkStatus = value;
+      });
 
     return this.networkStatus;
   };
@@ -145,10 +156,18 @@ export class SignupComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       this.isLoading = false;
 
-      if (loginSuccess)
-        this.route.navigate(['../login'], { relativeTo: this.actRoute });
+      if (loginSuccess) {
+        this.goToLogin();
+      }
     }),
       1500;
+  };
+
+  /* ------------- SUCCESS CREATION ------------- */
+  public goToLogin = () => {
+    setTimeout(() => {
+      this.route.navigate(['../login'], { relativeTo: this.actRoute });
+    }, 100);
   };
 
   /* ------------- ADD USER FOR INDEXDB -------------- */
@@ -165,6 +184,11 @@ export class SignupComponent implements OnInit, OnDestroy {
   modalData: any = {
     title: 'Email have already been used',
     imgPath: '/extra/warning.png',
+  };
+
+  successCreation: any = {
+    title: 'Account Created',
+    imgPath: '/extra/check.png',
   };
 
   /* warning No Internet */

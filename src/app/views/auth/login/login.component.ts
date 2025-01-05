@@ -173,9 +173,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.leaderboard
       .insertNewUser(userId)
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((value) => {
-        console.log(value);
-      });
+      .subscribe((value) => {});
   };
 
   /* SESSION */
