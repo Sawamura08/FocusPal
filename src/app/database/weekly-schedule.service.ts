@@ -1,7 +1,13 @@
 import { Injectable } from '@angular/core';
 import { db, Schedule } from './db';
 import { liveQuery } from 'dexie';
-import { switchMap, Observable, distinctUntilChanged, from } from 'rxjs';
+import {
+  switchMap,
+  Observable,
+  distinctUntilChanged,
+  from,
+  BehaviorSubject,
+} from 'rxjs';
 import { DatePipe } from '@angular/common';
 import { Repition, ScheduleService } from './schedule.service';
 import { SessionService } from '../service/session.service';
@@ -40,6 +46,18 @@ export class WeeklyScheduleService extends ScheduleService {
       })
     );
   }
+
+  public weeklySchedObservable$ = new BehaviorSubject<Days | undefined>(
+    undefined
+  );
+
+  public setNewWeeklySched = (sched: Days) => {
+    this.weeklySchedObservable$.next(sched);
+  };
+
+  public getWeeklySched = () => {
+    return this.weeklySchedObservable$.asObservable();
+  };
 
   public sundayIndex = 7;
   public getWeeklyTask = async (userId: number, date?: Date): Promise<any> => {
@@ -147,5 +165,9 @@ export class WeeklyScheduleService extends ScheduleService {
     const dailySched = await super.getAllTaskDefault(userId, currentDate);
 
     return dailySched;
+  };
+
+  public fetchFilteredSched = (userId: number, date: Date) => {
+    this.weeklySched$ = from(liveQuery(() => this.getWeeklyTask(userId, date)));
   };
 }

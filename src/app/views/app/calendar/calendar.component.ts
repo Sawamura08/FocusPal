@@ -24,6 +24,7 @@ import { ToastModalService } from '../../../service/toast-modal.service';
 import { toastModal } from '../../../interfaces/export.object';
 import { WeeklyScheduleService } from '../../../database/weekly-schedule.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { WeeklySchedComponent } from '../../../components/weekly-sched/weekly-sched.component';
 
 @Component({
   selector: 'app-calendar',
@@ -51,6 +52,9 @@ export class CalendarComponent implements OnInit, OnDestroy {
     this.currentStartDate = this.today; // Start with the current week
     this.today = this.calendar.getCurrentDate();
 
+    /* inherit class */
+    this.weeklySchedClass = new WeeklySchedComponent(weeklySched);
+
     /* subscribe to behavior subject */
     this.subscribeBehavior();
   }
@@ -67,6 +71,8 @@ export class CalendarComponent implements OnInit, OnDestroy {
     /* subscribe to the toast service  */
     this.toastSubscribe();
   }
+
+  public weeklySchedClass: WeeklySchedComponent;
 
   /* UPDATE THE WEEK SHOWS 5 DAYS */
   updateCurrentWeek(date: Date): void {
@@ -142,6 +148,14 @@ export class CalendarComponent implements OnInit, OnDestroy {
 
     /* CALL THE SUBSCRIBE FUNCTION AGAIN */
     this.getSchedByDayRepeat();
+
+    /* ---------- WEEKLY FILTER -------------- */
+    if (this.userId != undefined) {
+      const convertedDate = new Date(setDate);
+      this.weeklySchedClass.destroy$.next(true);
+      this.weeklySched.fetchFilteredSched(this.userId, convertedDate);
+      this.weeklySchedClass.getWeeklySched();
+    }
   };
   /* END */
 

@@ -1,21 +1,30 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  DestroyRef,
+  inject,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import {
   Days,
   WeeklyScheduleService,
 } from '../../database/weekly-schedule.service';
-import { SchedTypePipe } from '../../pipe/sched-type.pipe';
-import { Schedule } from '../../database/db';
+import { BehaviorSubject, Subject, takeUntil, tap } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-weekly-sched',
   templateUrl: './weekly-sched.component.html',
   styleUrl: './weekly-sched.component.scss',
 })
-export class WeeklySchedComponent implements OnInit {
+export class WeeklySchedComponent implements OnInit, OnDestroy {
   constructor(private weeklySched: WeeklyScheduleService) {}
 
   ngOnInit(): void {
     this.getWeeklySched();
+
+    this.fetchWeeklySched();
   }
 
   /* GET WEEKLY SCHED */
@@ -28,11 +37,26 @@ export class WeeklySchedComponent implements OnInit {
     'Saturday',
     'Sunday',
   ];
-  public schedList: Days | null = null;
-  private getWeeklySched = () => {
-    this.weeklySched.weeklySched$.subscribe({
-      next: (value) => (this.schedList = value),
-      error: (err) => console.error('Error On Subscribe Weekly Sched', err),
+
+  public destroy$ = new Subject<boolean>();
+  public destroyRef = inject(DestroyRef);
+  public schedList: Days | undefined;
+  public getWeeklySched = () => {
+    this.weeklySched.weeklySched$.pipe(takeUntil(this.destroy$)).subscribe({
+      next: (value) => {},
+      error: (err) => console.error('Error Subscribe', err),
     });
   };
+
+  public fetchWeeklySched = () => {
+    this.weeklySched
+      .getWeeklySched()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((value) => (this.schedList = value));
+  };
+
+  ngOnDestroy(): void {
+    this.destroy$.next(true);
+    this.destroy$.complete();
+  }
 }
