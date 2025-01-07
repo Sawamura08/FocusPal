@@ -124,7 +124,10 @@
           placeholder="Type Task Title"
         />
         <div class="error-container">
-          <div class="error-message" *ngIf="!validator('title')">
+          <div
+            class="error-message"
+            *ngIf="!validator('title') && title?.errors?.['whitespace']"
+          >
             <p>This field is required</p>
           </div>
         </div>

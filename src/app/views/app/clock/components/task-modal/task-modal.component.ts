@@ -15,6 +15,7 @@ import { slideUp } from '../../../../../animation/slide-up.animate';
 import { PopModalService } from '../../../../../service/pop-modal.service';
 import { catchError, EMPTY, firstValueFrom, of } from 'rxjs';
 import { confirm } from '../../../../../interfaces/export.object';
+import { noWhitespaceValidator } from '../../../../auth/signup/match-pass-validator';
 
 @Component({
   selector: 'app-task-modal',
@@ -34,10 +35,10 @@ export class TaskModalComponent implements OnInit {
     protected popModal: PopModalService
   ) {
     this.userInput = this.fb.group({
-      title: ['', Validators.required],
+      title: ['', [Validators.required, noWhitespaceValidator()]],
       pomodoro: ['', Validators.required],
       pomodoroCompleted: [0, Validators.required],
-      description: ['', Validators.required],
+      description: ['', [Validators.required, noWhitespaceValidator()]],
       status: [0, Validators.required],
       userId: ['', Validators.required],
     });

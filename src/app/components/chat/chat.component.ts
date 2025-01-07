@@ -135,7 +135,8 @@ export class ChatComponent implements OnDestroy, OnInit, AfterViewInit {
   protected conversationData: backendHistory | undefined; // for saving in backend
   protected tempInputContainer: string = '';
   public sendPrompt = () => {
-    if (this.userInput != '') {
+    const result = this.checkWhiteSpace();
+    if (this.userInput != '' && result) {
       /* SET TEMPORARY CONTAINER FOR USER INPUT */
       this.tempInputContainer = this.userInput;
       this.convo.insertConversation(this.userInput);
@@ -176,6 +177,11 @@ export class ChatComponent implements OnDestroy, OnInit, AfterViewInit {
     setTimeout(() => {
       this.overflowTextArea();
     }, 100);
+  };
+
+  /* CHECK IS THERE IS ONLY WHITE SPACE ON USER INPUT */
+  public checkWhiteSpace = () => {
+    return this.userInput.trim().length > 0 ? true : false;
   };
 
   public saveAiReponse = (response: string) => {

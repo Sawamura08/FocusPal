@@ -46,7 +46,7 @@ export class AddSchedComponent implements OnInit, OnDestroy {
       startTime: ['', Validators.required],
       endTime: ['', Validators.required],
       type: ['', Validators.required],
-      location: ['', Validators.required],
+      location: ['', [Validators.required, noWhitespaceValidator()]],
     });
   }
 

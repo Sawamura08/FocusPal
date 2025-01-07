@@ -15,7 +15,10 @@
             formControlName="title"
           />
           <div class="hint-text">
-            <div class="hints" *ngIf="!validators(title)">
+            <div
+              class="hints"
+              *ngIf="!validators(title) && title?.errors?.['whitespace']"
+            >
               <p>This is a required Field</p>
             </div>
           </div>

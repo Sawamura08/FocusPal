@@ -49,6 +49,7 @@ import { DateTimeService } from '../../service/date-time.service';
 import { SubTaskService } from '../../database/sub-task.service';
 import { GameUserDataService } from '../../database/game-user-data.service';
 import { GamifiedCompletionService } from '../gamified-completion-modal/service/gamified-completion.service';
+import { noWhitespaceValidator } from '../../views/auth/signup/match-pass-validator';
 
 @Component({
   selector: 'app-add-task',
@@ -75,7 +76,7 @@ export class AddTaskComponent implements OnInit, OnDestroy {
     protected gameData: GamifiedCompletionService
   ) {
     this.userInput = this.fb.group({
-      title: ['', Validators.required],
+      title: ['', [Validators.required, noWhitespaceValidator()]],
       description: [''],
       subTasks: [''],
       priority: ['', Validators.required],

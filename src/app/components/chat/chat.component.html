@@ -93,8 +93,9 @@
           class="submit"
           (click)="sendPrompt()"
           [ngClass]="{
-            isActive: userInput != ''
+            isActive: userInput != '' && checkWhiteSpace()
           }"
+          [disabled]="userInput === '' && !checkWhiteSpace()"
         >
           <i class="fa-solid fa-paper-plane"></i>
         </button>
