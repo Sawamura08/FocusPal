@@ -17,6 +17,7 @@
               class="userInputs"
               placeholder="Email"
               formControlName="email"
+              autocomplete="off"
             />
             <span class="icon" [ngClass]="email?.valid ? 'checkError' : ''"
               ><i class="fa-solid fa-check"></i
@@ -33,6 +34,7 @@
               class="userInputs"
               placeholder="Password"
               formControlName="password"
+              autocomplete="off"
             />
             <span class="icon" (click)="checkPass()"
               ><i
@@ -69,6 +71,19 @@
 
 <div class="warning" *ngIf="modal === ModalType.INCORRECT">
   <app-modal [data]="modalIncorrect"></app-modal>
+</div>
+
+<div class="warning" *ngIf="modal === ModalType.UNSUCCESSFUL">
+  <app-modal [data]="modalError"></app-modal>
+</div>
+
+<!-- RESEND EMAIL -->
+<div class="warning" *ngIf="modal === ModalType.SUCCESSFUL">
+  <app-modal [data]="successCreation"></app-modal>
+</div>
+
+<div class="warning" *ngIf="modal === ModalType.UNVERIFIED">
+  <app-modal [data]="modalUnverified"></app-modal>
 </div>
 
 <div class="warning" *ngIf="modal === ModalType.NO_INTERNET">

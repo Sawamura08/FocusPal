@@ -8,6 +8,7 @@ export enum ModalType {
   INCORRECT,
   SUCCESSFUL,
   UNSUCCESSFUL,
+  UNVERIFIED,
 }
 
 export interface updateMode {

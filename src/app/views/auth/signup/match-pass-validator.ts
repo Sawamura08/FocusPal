@@ -1,4 +1,9 @@
-import { FormGroup, ValidatorFn, AbstractControl } from '@angular/forms';
+import {
+  FormGroup,
+  ValidatorFn,
+  AbstractControl,
+  ValidationErrors,
+} from '@angular/forms';
 
 /* AbstractControl - defines general rules and properties of any form control 
     ValidatorFn - this checks each part of the house is built correctly*/
@@ -15,5 +20,12 @@ export function MatchPassValidator(
       return { passwordsMismatch: true };
     }
     return null;
+  };
+}
+
+export function noWhitespaceValidator(): ValidatorFn {
+  return (control: AbstractControl): ValidationErrors | null => {
+    const isValid = control.value?.trim().length > 0;
+    return isValid ? null : { whitespace: true };
   };
 }

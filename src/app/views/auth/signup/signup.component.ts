@@ -5,10 +5,13 @@ import {
   OnDestroy,
   OnInit,
 } from '@angular/core';
-import { Subscription, combineLatest, filter } from 'rxjs';
+import { Subscription, combineLatest, filter, take } from 'rxjs';
 
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { MatchPassValidator } from './match-pass-validator';
+import {
+  MatchPassValidator,
+  noWhitespaceValidator,
+} from './match-pass-validator';
 import { NetworkStatusService } from '../../../service/network-status.service';
 import { UserCreationService } from '../services/user-creation.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -53,7 +56,7 @@ export class SignupComponent implements OnInit, OnDestroy {
   ) {
     this.userDatas = this.formBuild.group(
       {
-        userName: ['', Validators.required],
+        userName: ['', [Validators.required, noWhitespaceValidator()]],
         email: [
           '',
           [
@@ -89,6 +92,7 @@ export class SignupComponent implements OnInit, OnDestroy {
   /* ------------- SUBMBIT FOR USER CREATION ------------- */
   createUserSubscription!: Subscription;
   signUpSubmit = () => {
+    this.userDatas.markAllAsTouched();
     if (this.userDatas.valid && this.networkStatus) {
       this.getUserDecision().then((data) => {
         if (data) {
@@ -113,9 +117,7 @@ export class SignupComponent implements OnInit, OnDestroy {
                         this.endLoading(false);
                       } else {
                         /* SUCCESS USER CREATION */
-                        this.userSession = value;
-                        this.addSession(this.userSession);
-                        this.endLoading(true);
+                        this.waitUntilEmailModalClose();
                       }
                       this.userDatas.reset();
                     },
@@ -135,6 +137,33 @@ export class SignupComponent implements OnInit, OnDestroy {
       this.modal = ModalType.NO_INTERNET;
     }
   };
+
+  /* WAIT UNTIL THE USER CLOSE THE SENT EMAIL MODAL */
+  private _waitUntilEmailModalClose = () => {
+    setTimeout(() => {
+      return new Promise((resolve, reject) => {
+        this.popModal.modalSubject$
+          .pipe(
+            filter((value) => value === ModalType.NONE),
+            take(1),
+            takeUntilDestroyed(this.destroyRef)
+          )
+          .subscribe({
+            next: () => {
+              this.endLoading(true);
+              resolve(true);
+            },
+            error: (err) => reject(err),
+          });
+      });
+    }, 1000);
+  };
+  public get waitUntilEmailModalClose() {
+    return this._waitUntilEmailModalClose;
+  }
+  public set waitUntilEmailModalClose(value) {
+    this._waitUntilEmailModalClose = value;
+  }
 
   disabledBtn = () => {
     if (this.userDatas.valid) {
@@ -188,13 +217,6 @@ export class SignupComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       this.route.navigate(['../login'], { relativeTo: this.actRoute });
     }, 100);
-  };
-
-  /* ------------- ADD USER FOR INDEXDB -------------- */
-  userSession: any;
-
-  private addSession = (user: User) => {
-    this.session.addUser(user);
   };
 
   /* ------------- END ADD USER FOR INDEXDB -------------- */

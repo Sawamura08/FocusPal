@@ -12,6 +12,8 @@ import { SessionService } from '../../../service/session.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { GameUserDataService } from '../../../database/game-user-data.service';
 import { LeaderboardsService } from '../../../service/leaderboards.service';
+import { FirebaseAuthService } from '../../../service/firebase-auth.service';
+import { User } from '../../../database/db';
 
 @Component({
   selector: 'app-login',
@@ -32,7 +34,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     private popModal: PopModalService,
     private session: SessionService,
     private gameConfig: GameUserDataService,
-    private leaderboard: LeaderboardsService
+    private leaderboard: LeaderboardsService,
+    private firebaseAuth: FirebaseAuthService
   ) {
     this.userInput = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -54,23 +57,37 @@ export class LoginComponent implements OnInit, OnDestroy {
   private userSubscribe!: Subscription;
   public formSubmitted: boolean = false;
 
-  public submitForms = (): void => {
+  public submitForms = async () => {
     const user = this.userInput.value;
     this.formSubmitted = true;
     if (this.networkStatus) {
-      this.userSubscribe = this.auth.userAuth(user).subscribe({
-        next: (values) => {
-          if ('success' in values && !values.success) {
-            this.modal = ModalType.INCORRECT;
+      /* AUTHENTICATE WITH FIREBASE BEFORE SENDING TO BACKEND */
+      await this.firebaseAuth
+        .signIn(user.email, user.password)
+        .then((value) => {
+          // IF USER IS ALREADY VERYFIED
+          if (value.result) {
+            this.auth
+              .userAuth(user)
+              .pipe(takeUntilDestroyed(this.destroyRef))
+              .subscribe({
+                next: (values) => {
+                  if ('success' in values && !values.success) {
+                    this.modal = ModalType.INCORRECT;
+                  } else {
+                    this.addSession(values.updateKeyValue);
+                    this.insertUserLeaderboard(values.updateKeyValue.userId);
+                    this.insertUserGameData();
+                  }
+                },
+                error: (err) => {
+                  console.error('Auth Failed', err);
+                },
+              });
           } else {
-            this.insertUserLeaderboard(values.updateKeyValue.userId);
-            this.insertUserGameData();
+            this.resendVerification(value.user);
           }
-        },
-        error: (err) => {
-          console.error('Auth Failed', err);
-        },
-      });
+        });
     } else {
       this.modal = ModalType.NO_INTERNET;
     }
@@ -133,10 +150,33 @@ export class LoginComponent implements OnInit, OnDestroy {
     imgPath: '/extra/warning.png',
   };
 
+  /* warning error */
+  modalError: any = {
+    title: 'An Error Occurred',
+    subText: 'Plase Try Again',
+    imgPath: '/extra/remove.png',
+  };
+
   /* warning No Internet */
   modalNoInternet: any = {
     title: 'No Internet Connection',
     imgPath: '/extra/warning.png',
+  };
+
+  /* SEND EMAIL */
+  successCreation: any = {
+    title: 'Account Created',
+    subText: 'Check your email & click the link to activate your account.',
+    imgPath: '/extra/email.gif',
+  };
+
+  /* warning unverified */
+  modalUnverified: any = {
+    title: 'Email Verification is pending',
+    subText:
+      'We have sent an email for Verification. Please Follow the instructions in email for logging your account.',
+    resendEmail: 'Resend Email',
+    imgPath: '/extra/check.png',
   };
 
   public ModalType = ModalType;
@@ -168,12 +208,17 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
   };
 
+  /* ADD SESSION */
+  public addSession = (user: User) => {
+    this.session.addUser(user);
+  };
+
   /* insert leaderboard data */
   public insertUserLeaderboard = (userId: number) => {
     this.leaderboard
       .insertNewUser(userId)
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((value) => {});
+      .subscribe();
   };
 
   /* SESSION */
@@ -189,6 +234,11 @@ export class LoginComponent implements OnInit, OnDestroy {
         takeUntilDestroyed(this.destroyRef)
       )
       .subscribe((value) => (this.userId = value?.userId));
+  };
+
+  /* RESEND VERIFICATION EMAIL */
+  public resendVerification = (userData: any) => {
+    this.firebaseAuth.setUserDataCredential(userData);
   };
 
   // unsubscribing

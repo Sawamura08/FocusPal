@@ -43,16 +43,21 @@ export class WeeklySchedComponent implements OnInit, OnDestroy {
   public schedList: Days | undefined;
   public getWeeklySched = () => {
     this.weeklySched.weeklySched$.pipe(takeUntil(this.destroy$)).subscribe({
-      next: (value) => {},
+      next: (value) => {
+        this.schedList = value;
+      },
       error: (err) => console.error('Error Subscribe', err),
     });
   };
 
   public fetchWeeklySched = () => {
-    this.weeklySched
+    /* this.weeklySched
       .getWeeklySched()
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((value) => (this.schedList = value));
+      .subscribe((value) => {
+        console.log(value);
+        this.schedList = value;
+      }); */
   };
 
   ngOnDestroy(): void {

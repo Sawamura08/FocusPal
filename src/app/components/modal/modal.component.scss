@@ -17,7 +17,6 @@ main {
     background: rgba(255, 255, 255, 0.7);
     padding: 1rem;
     border-radius: 1rem;
-    height: 40vh;
     width: 80vw;
 
     display: none;
@@ -31,10 +30,22 @@ main {
       text-align: center;
     }
 
+    .resend {
+      margin-block: 1rem;
+      text-decoration: underline;
+      font-size: 0.8rem;
+      font-family: $subText;
+      color: $textColor;
+    }
+
     .title,
     .update-title {
       color: $textColor;
       text-align: center;
+
+      small {
+        font-family: $subText;
+      }
     }
 
     .update-title {

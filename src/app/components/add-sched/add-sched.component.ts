@@ -18,6 +18,7 @@ import { confirmModal, toastModal } from '../../interfaces/export.object';
 import { DateTimeService } from '../../service/date-time.service';
 import { ToastModalService } from '../../service/toast-modal.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { noWhitespaceValidator } from '../../views/auth/signup/match-pass-validator';
 
 @Component({
   selector: 'app-add-sched',
@@ -38,7 +39,7 @@ export class AddSchedComponent implements OnInit, OnDestroy {
     private toast: ToastModalService
   ) {
     this.userInput = this.fb.group({
-      title: ['', Validators.required],
+      title: ['', [Validators.required, noWhitespaceValidator()]],
       repeat: ['', Validators.required],
       date: ['', Validators.required],
       daysOfWeek: [''],

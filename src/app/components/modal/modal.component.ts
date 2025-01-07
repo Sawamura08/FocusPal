@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { PopModalService } from '../../service/pop-modal.service';
+import { ModalType, PopModalService } from '../../service/pop-modal.service';
 import { slideDown } from './slide-down';
+import { FirebaseAuthService } from '../../service/firebase-auth.service';
 
 @Component({
   selector: 'app-modal',
@@ -9,7 +10,10 @@ import { slideDown } from './slide-down';
   animations: [slideDown],
 })
 export class ModalComponent implements OnInit {
-  constructor(private popModal: PopModalService) {}
+  constructor(
+    private popModal: PopModalService,
+    protected firebaseAuth: FirebaseAuthService
+  ) {}
   @Input() data: any;
   @Input() confirmation: boolean | null = null;
   public animateModal: boolean = true;
@@ -17,6 +21,8 @@ export class ModalComponent implements OnInit {
 
   ngOnInit(): void {
     this.text = this.confirmationModal();
+
+    this.fetchUserCredentials();
   }
 
   /* NORMAL MODAL */
@@ -55,4 +61,15 @@ export class ModalComponent implements OnInit {
     this.animateModal = false;
   };
   /* END */
+
+  public credentials: any;
+  /* GET USER CREDENTAILS FOR VERIFICATION */
+  public fetchUserCredentials = () => {
+    this.credentials = this.firebaseAuth.getUserCredential()();
+  };
+
+  public resendEmailVerify = () => {
+    this.firebaseAuth.sendEmail(this.credentials);
+    this.popModal.openModal(ModalType.SUCCESSFUL);
+  };
 }

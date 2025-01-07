@@ -33,6 +33,10 @@
         <button class="btn" (click)="close()">Okay</button>
       </div>
     </section>
+
+    <p class="resend" *ngIf="data.resendEmail" (click)="resendEmailVerify()">
+      {{ data?.resendEmail }}
+    </p>
   </div>
   }
 </main>

@@ -20,6 +20,7 @@
               id="userName"
               class="userInput"
               formControlName="userName"
+              autocomplete="off"
             />
             <span class="icon"><i class="fa-solid fa-check"></i></span>
           </div>
@@ -28,7 +29,10 @@
             class="error-container"
             *ngIf="userName?.invalid && (userName?.dirty || userName?.touched)"
           >
-            <p class="error" *ngIf="userName?.errors?.['required']">
+            <p
+              class="error"
+              *ngIf="userName?.errors?.['required'] || userName?.errors?.['whitespace']"
+            >
               This is a required Field
             </p>
           </div>
@@ -42,6 +46,7 @@
               id="email"
               class="userInput"
               formControlName="email"
+              autocomplete="off"
             />
             <span class="icon"><i class="fa-solid fa-check"></i></span>
           </div>
@@ -128,7 +133,13 @@
         </section>
 
         <section class="button-container">
-          <button class="btn" [ngStyle]="disabledBtn()">Sign Up</button>
+          <button
+            class="btn"
+            [ngStyle]="disabledBtn()"
+            [disabled]="!userDatas.valid"
+          >
+            Sign Up
+          </button>
         </section>
       </form>
 
