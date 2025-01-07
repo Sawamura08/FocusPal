@@ -1,4 +1,4 @@
-import { NgModule, isDevMode } from '@angular/core';
+import { NgModule, importProvidersFrom, isDevMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -31,6 +31,11 @@ import { RanksPipe } from './pipe/ranks.pipe';
 import { ExpToFillPipe } from './pipe/exp-to-fill.pipe';
 import { RankUpComponent } from './components/rank-up/rank-up.component';
 import { HamburgerInterfaceComponent } from './layouts/hamburger-interface/hamburger-interface.component';
+import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
+import { getAuth, provideAuth } from '@angular/fire/auth';
+import { environment } from './environtment';
+import { AngularFireModule } from '@angular/fire/compat';
+import { AngularFireAuthModule } from '@angular/fire/compat/auth';
 
 @NgModule({
   declarations: [
@@ -66,8 +71,16 @@ import { HamburgerInterfaceComponent } from './layouts/hamburger-interface/hambu
       registrationStrategy: 'registerWhenStable:30000',
     }),
     SharedModule,
+    AngularFireModule.initializeApp(environment.firebaseConfig),
+    AngularFireAuthModule,
   ],
-  providers: [provideHttpClient(), DatePipe, provideAnimationsAsync()],
+  providers: [
+    provideHttpClient(),
+    DatePipe,
+    provideAnimationsAsync(),
+    provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
+    provideAuth(() => getAuth()),
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

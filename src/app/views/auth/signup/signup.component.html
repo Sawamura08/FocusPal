@@ -152,6 +152,14 @@
   <app-modal [data]="modalNoInternet"></app-modal>
 </div>
 
+<div class="warning" *ngIf="modal === ModalType.SUCCESSFUL">
+  <app-modal [data]="successCreation"></app-modal>
+</div>
+
+<div class="warning" *ngIf="modal === ModalType.UNSUCCESSFUL">
+  <app-modal [data]="InvalidEmail"></app-modal>
+</div>
+
 <div class="terms-conditions" *ngIf="isTermsOpen">
   <app-terms-conditions></app-terms-conditions>
 </div>

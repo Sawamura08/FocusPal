@@ -25,6 +25,7 @@
     <img [src]="data?.imgPath" alt="" />
     <div class="title">
       <h4>{{ data?.title }}</h4>
+      <small *ngIf="data.subText"> {{ data?.subText }}</small>
     </div>
 
     <section class="button-section">

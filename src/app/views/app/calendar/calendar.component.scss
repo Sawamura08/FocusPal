@@ -133,6 +133,7 @@ main {
 
     .container {
       width: 100%;
+      color: $textColor;
 
       .schedules {
         width: 100%;
@@ -143,9 +144,8 @@ main {
           width: 80%;
           padding: 0.5rem;
           border-radius: 10px;
-          background: linear-gradient(to right, $mainColor, $shadow);
+          background: linear-gradient(to right, #f5c0ef, #fff5f2);
           box-shadow: 0 3px 2px $textColor;
-          color: white;
           margin-block: 0.5rem;
 
           .type {
@@ -163,8 +163,15 @@ main {
 
           .title {
             font-size: 1rem;
+            font-family: $fontFamily;
           }
         }
+      }
+    }
+
+    .container {
+      .schedules:nth-child(odd) > .sched {
+        background: linear-gradient(to right, #f99492, #fff5f2);
       }
     }
 

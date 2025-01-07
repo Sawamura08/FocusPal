@@ -18,6 +18,7 @@ import { SessionService } from '../../../service/session.service';
 import { User } from '../../../database/db';
 import { TermsAgreementService } from '../../../service/terms-agreement.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { FirebaseAuthService } from '../../../service/firebase-auth.service';
 
 @Component({
   selector: 'app-signup',
@@ -47,12 +48,20 @@ export class SignupComponent implements OnInit, OnDestroy {
     private actRoute: ActivatedRoute,
     private popModal: PopModalService,
     private session: SessionService,
-    private terms: TermsAgreementService
+    private terms: TermsAgreementService,
+    private fireAuth: FirebaseAuthService
   ) {
     this.userDatas = this.formBuild.group(
       {
         userName: ['', Validators.required],
-        email: ['', [Validators.required, Validators.email]],
+        email: [
+          '',
+          [
+            Validators.required,
+            Validators.email,
+            Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$'),
+          ],
+        ],
         password: ['', Validators.required],
         confirmPassword: ['', Validators.required],
       },
@@ -85,30 +94,41 @@ export class SignupComponent implements OnInit, OnDestroy {
         if (data) {
           this.isLoading = true;
           const userInfo = this.userDatas.value;
-          this.createUserSubscription = this.createUserService
-            .createUser(userInfo)
-            .subscribe({
-              next: (value) => {
-                if ('success' in value && !value.success) {
-                  this.endLoading(false);
-                  this.popModal.openModal(ModalType.EMAIL_USED);
-                } else if ('ok' in value && !value.ok) {
-                  this.endLoading(false);
-                } else {
-                  /* SUCCESS USER CREATION */
-                  this.userSession = value;
-                  this.addSession(this.userSession);
-                  this.endLoading(true);
-                }
-                this.userDatas.reset();
-              },
-              error: (err) => {
-                console.error('User Creation Failed', err);
-                this.isLoading = false;
-              },
+          this.fireAuth
+            .signUpAuthFirebase(
+              this.userDatas.value.email,
+              this.userDatas.value.password
+            )
+            .then((res) => {
+              // check whether the user creation is successful or not
+              if (res) {
+                this.createUserSubscription = this.createUserService
+                  .createUser(userInfo)
+                  .subscribe({
+                    next: (value) => {
+                      if ('success' in value && !value.success) {
+                        this.endLoading(false);
+                        this.popModal.openModal(ModalType.EMAIL_USED);
+                      } else if ('ok' in value && !value.ok) {
+                        this.endLoading(false);
+                      } else {
+                        /* SUCCESS USER CREATION */
+                        this.userSession = value;
+                        this.addSession(this.userSession);
+                        this.endLoading(true);
+                      }
+                      this.userDatas.reset();
+                    },
+                    error: (err) => {
+                      console.error('User Creation Failed', err);
+                      this.isLoading = false;
+                    },
+                  });
+              }
+              this.userDatas.reset();
             });
+
           this.terms.decision(false);
-          this.subscriptions.push(this.createUserSubscription);
         }
       });
     } else if (!this.networkStatus) {
@@ -188,6 +208,12 @@ export class SignupComponent implements OnInit, OnDestroy {
 
   successCreation: any = {
     title: 'Account Created',
+    subText: 'Check your email & click the link to activate your account.',
+    imgPath: '/extra/email.gif',
+  };
+
+  InvalidEmail: any = {
+    title: 'AThe email format is invalid. Please enter a valid email',
     imgPath: '/extra/check.png',
   };
 
@@ -201,7 +227,10 @@ export class SignupComponent implements OnInit, OnDestroy {
   modal: ModalType = ModalType.NONE;
 
   private modalSubscribe = () => {
-    this.popModal.getModalStatus().subscribe((data) => (this.modal = data));
+    this.popModal
+      .getModalStatus()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((data) => (this.modal = data));
   };
 
   /* -------- end of modal data -------- */
