@@ -251,7 +251,17 @@ export class ChatComponent implements OnDestroy, OnInit, AfterViewInit {
     const response = await this.userConfirmationResponse();
 
     if (response) {
-      console.log('Delete', response);
+      this.convoHistory
+        .deleteConversation(this.userId!)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe((value) => {
+          if (value > 0) {
+            this.convo.clearConversation();
+            this.convoHistory.setNewHistory([]);
+            this.conversation = [];
+            this.histories = [];
+          }
+        });
       this.popModal.setConfirmaModalStatus(false);
     }
   };
