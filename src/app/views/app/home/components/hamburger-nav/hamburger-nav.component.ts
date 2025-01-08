@@ -90,22 +90,28 @@ export class HamburgerNavComponent implements OnInit {
     const routeModule = this.navLinks[link];
     let routingLink;
 
-    /* CHECK WHERE PATH TO GO */
-    /* HOME AND HAMBURGER HAD DIFFERENT PATH */
-    if (this.currentPath === 'home') {
-      routingLink = `../../hamburger-interface/${routeModule}`;
-    } else {
-      if (routeModule === 'home') {
-        routingLink = '../../apps/home';
+    // check if current link is the same to the go to link
+    if (this.currentPath != routeModule) {
+      /* CHECK WHERE PATH TO GO */
+      /* HOME AND HAMBURGER HAD DIFFERENT PATH */
+      if (this.currentPath === 'home') {
+        routingLink = `../../hamburger-interface/${routeModule}`;
       } else {
-        routingLink = `/hamburger-interface/${routeModule}`;
+        if (routeModule === 'home') {
+          routingLink = '../../apps/home';
+        } else {
+          routingLink = `/hamburger-interface/${routeModule}`;
+        }
       }
+
+      this.route.navigate([routingLink], { relativeTo: this.actRoute });
+
+      /* CLOSE HAMBURGER MODAL */
+      this.hamburger$.setHamburgerModalStatus(modalStatus.close);
+    } else {
+      // CLOSE SINCE IT CLICKS ON THE SAME MODULE
+      window.location.reload();
     }
-
-    this.route.navigate([routingLink], { relativeTo: this.actRoute });
-
-    /* CLOSE HAMBURGER MODAL */
-    this.hamburger$.setHamburgerModalStatus(modalStatus.close);
   };
 
   /* THIS WILL DETERMINE WHICH ROUTING LINK TO USE */
