@@ -50,6 +50,7 @@ import { SubTaskService } from '../../database/sub-task.service';
 import { GameUserDataService } from '../../database/game-user-data.service';
 import { GamifiedCompletionService } from '../gamified-completion-modal/service/gamified-completion.service';
 import { noWhitespaceValidator } from '../../views/auth/signup/match-pass-validator';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-add-task',
@@ -73,7 +74,8 @@ export class AddTaskComponent implements OnInit, OnDestroy {
     private dateTime: DateTimeService,
     protected subTaskService: SubTaskService,
     protected gamified: GameUserDataService,
-    protected gameData: GamifiedCompletionService
+    protected gameData: GamifiedCompletionService,
+    protected datePipe: DatePipe
   ) {
     this.userInput = this.fb.group({
       title: ['', [Validators.required, noWhitespaceValidator()]],
@@ -271,6 +273,61 @@ export class AddTaskComponent implements OnInit, OnDestroy {
     }
   };
 
+  /* RESTRICT PAST DATES ON DATE SELECTOR */
+  public startDaterestrictDates = (date: Date | null): boolean => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    //CHECKER FOR THE START DATE AND DUE DATE
+    // Ensuring dueDate >= startDate;
+    const dueDate = this.userInput.get('dueDate')?.value;
+    const dueDateTime = dueDate ? new Date(dueDate).setHours(0, 0, 0, 0) : null;
+    return (
+      (date || today) >= today &&
+      (!dueDateTime || (date ? date.getTime() : today.getTime()) <= dueDateTime)
+    ); // Only allow today and future dates
+  };
+
+  public dueDaterestrictDates = (date: Date | null): boolean => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    //CHECKER FOR THE START DATE AND DUE DATE
+    // Ensuring dueDate >= startDate;
+    const startDate = this.userInput.get('startDate')?.value;
+    const startDateTime = startDate
+      ? new Date(startDate).setHours(0, 0, 0, 0)
+      : null;
+    return (
+      (date || today) >= today &&
+      (!startDateTime ||
+        (date ? date.getTime() : today.getTime()) >= startDateTime)
+    ); // Only allow today and future dates
+  };
+
+  /* CHECK DUETIME IF IT'S PAST THE CURRENT TIME (FOR TODAY DUE DATES ONLY) */
+  public modalType = ModalType;
+  public dueDateTimeValidityStatus: ModalType = ModalType.NONE;
+  public checkDueTime = () => {
+    const dueDate = this.userInput.get('dueDate')?.value;
+    const dueTime = this.userInput.get('dueTime')?.value;
+    const today = new Date();
+    const currentTime = new Date();
+    today.setHours(0, 0, 0, 0);
+    const todayMilliseconds = today.getTime();
+
+    // check if the user select today as due date
+    if (dueDate.getTime() === todayMilliseconds) {
+      if (dueTime.getTime() > currentTime.getTime()) {
+        return 'VALID';
+      } else {
+        return 'INVALID';
+      }
+    } else {
+      return 'VALID';
+    }
+  };
+
   /* ADD OR UPDATE SUBTASK */
 
   public subTaksInput: string = '';
@@ -445,14 +502,19 @@ export class AddTaskComponent implements OnInit, OnDestroy {
     this.addTaskConfig.setCategoryValue(this.subTaskList);
 
     this.userInput.markAllAsTouched();
+    const isDueDateTimeValid = this.checkDueTime();
 
-    if (this.userInput.valid) {
+    if (isDueDateTimeValid === 'INVALID') {
+      this.dueDateTimeValidityStatus = ModalType.INCORRECT;
+    }
+
+    if (this.userInput.valid && isDueDateTimeValid === 'VALID') {
+      this.dueDateTimeValidityStatus = ModalType.NONE;
       /* INSERT */
       const taskId = await this.task.insertTask(
         this.userId!,
         this.userInput.value
       );
-
       if (taskId) {
         this.closeTaskModal();
         this.route.navigate(['task'], { relativeTo: this.actRoute });
@@ -603,8 +665,9 @@ export class AddTaskComponent implements OnInit, OnDestroy {
   /* HANDLES OBSERBABLES CONFIRMATION MODAL */
   public modalModeObservable = () => {
     const confirmModal = this.popModal.getConfirmModalStatus();
+    const errorModal = this.popModal.getModalStatus();
 
-    combineLatest([confirmModal])
+    combineLatest([confirmModal, errorModal])
       .pipe(
         takeUntilDestroyed(this.destroyRef),
         catchError((err) => {
@@ -613,10 +676,17 @@ export class AddTaskComponent implements OnInit, OnDestroy {
         })
       )
       .subscribe({
-        next: ([isConfirmModalOpen]) => {
+        next: ([isConfirmModalOpen, isErrorModalOpen]) => {
           this.isConfirmModalOpen = isConfirmModalOpen;
+          this.dueDateTimeValidityStatus = isErrorModalOpen;
         },
       });
+  };
+
+  public popUpModalErrorData: any = {
+    title:
+      'The selected due time has already passed. Please pick a time in the future.',
+    imgPath: '/extra/remove.png',
   };
 
   /* CONFIRMATION MODAL FOR TASK*/

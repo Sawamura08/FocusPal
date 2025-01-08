@@ -2,7 +2,10 @@
   class="add-task-background"
   [@slide]
   *ngIf="animateModal"
-  [ngClass]="{ editMode: isConfirmModalOpen }"
+  [ngClass]="{
+    editMode:
+      isConfirmModalOpen || dueDateTimeValidityStatus === modalType.INCORRECT
+  }"
 >
   <div class="add-task-container">
     <div class="modal-header">
@@ -205,6 +208,7 @@
               <input
                 matInput
                 [matDatepicker]="startDate"
+                [matDatepickerFilter]="startDaterestrictDates"
                 formControlName="startDate"
               />
               <mat-hint>MM/DD/YYYY</mat-hint>
@@ -229,6 +233,7 @@
                 matInput
                 [matDatepicker]="dueDate"
                 formControlName="dueDate"
+                [matDatepickerFilter]="dueDaterestrictDates"
               />
               <mat-hint>MM/DD/YYYY</mat-hint>
               <mat-datepicker-toggle
@@ -263,11 +268,8 @@
         </div>
 
         <ngx-material-timepicker #timePickers></ngx-material-timepicker>
-        <!-- <div class="hint-text">
-          <div
-            class="hints"
-            *ngIf="!validators(startTime) || invalidStartTime === false"
-          >
+        <!-- <div class="error-container">
+          <div class="error-message" *ngIf="!dueTime">
             <p>This is a required Field</p>
           </div>
         </div> -->
@@ -439,6 +441,13 @@
   @if (isConfirmModalOpen) {
   <div class="confirmModal">
     <app-modal [data]="confirm"></app-modal>
+  </div>
+  }
+
+  <!-- IF THE ENTERED DUE DATE HAD ALREADY PASSED -->
+  @if (dueDateTimeValidityStatus === modalType.INCORRECT) {
+  <div class="confirmModal">
+    <app-modal [data]="popUpModalErrorData"></app-modal>
   </div>
   }
 </div>
