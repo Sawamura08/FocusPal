@@ -1,6 +1,10 @@
-<main>
+<main [ngClass]="{ leaderboardloading: data.text }">
   <div class="loader-container">
     <div class="loader"></div>
+    @if(data) {
+    <div class="loader-text">{{ data.text }}</div>
+    }@else {
     <div class="loader-text">Loading...</div>
+    }
   </div>
 </main>

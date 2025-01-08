@@ -99,3 +99,9 @@
     </div>
   </section>
 </main>
+
+@if (LeaderboardLoading) {
+<div class="loading">
+  <app-loading [data]="loadingText"></app-loading>
+</div>
+}

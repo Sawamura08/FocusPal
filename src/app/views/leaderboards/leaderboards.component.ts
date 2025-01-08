@@ -27,6 +27,8 @@ export class LeaderboardsComponent implements OnInit {
     isHome: true,
   };
   public destroyRef = inject(DestroyRef);
+  public loadingText = { text: 'Fetching Top Users...' };
+  public LeaderboardLoading: boolean = true;
 
   isOtherLeaderShowed: boolean = false;
   public showOtherLeaders = () => {
@@ -42,6 +44,12 @@ export class LeaderboardsComponent implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((value) => {
         this.topUsers = value;
+
+        if (this.topUsers.length > 0) {
+          setTimeout(() => {
+            this.LeaderboardLoading = false;
+          }, 1500);
+        }
       });
   };
 

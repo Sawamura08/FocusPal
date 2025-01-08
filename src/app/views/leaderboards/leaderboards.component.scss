@@ -3,6 +3,7 @@
 
 main {
   width: 100%;
+  position: relative;
 
   header {
     z-index: 3;
@@ -275,6 +276,36 @@ main {
 
           .show {
             transform: translateY(50%);
+          }
+        }
+      }
+    }
+  }
+}
+
+.loading {
+  width: 100%;
+  height: 100dvh;
+  position: absolute;
+  top: 0;
+  z-index: 2;
+}
+
+@media all and (min-width: 300px) and (min-height: 800px) and (orientation: portrait) {
+  main {
+    .container {
+      .content {
+        .leaderboards {
+          .podium {
+            .top-performer {
+              top: -7dvh;
+            }
+
+            .top-performer {
+              .performer:nth-child(2) {
+                margin-top: 4rem;
+              }
+            }
           }
         }
       }
