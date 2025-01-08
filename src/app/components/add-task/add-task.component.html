@@ -268,11 +268,14 @@
         </div>
 
         <ngx-material-timepicker #timePickers></ngx-material-timepicker>
-        <!-- <div class="error-container">
-          <div class="error-message" *ngIf="!dueTime">
+        <div class="hint-text">
+          <div
+            class="hints"
+            *ngIf="!validator('dueTimes') || invalidDueTime === true"
+          >
             <p>This is a required Field</p>
           </div>
-        </div> -->
+        </div>
       </section>
 
       <section class="button-container">

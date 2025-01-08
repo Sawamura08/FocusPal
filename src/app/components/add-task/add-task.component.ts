@@ -158,6 +158,10 @@ export class AddTaskComponent implements OnInit, OnDestroy {
     return this.userInput.get('tags');
   }
 
+  get dueTimes() {
+    return this.userInput.get('dueTime');
+  }
+
   /* END */
 
   /* SUBSCRIBE TASK MODAL */

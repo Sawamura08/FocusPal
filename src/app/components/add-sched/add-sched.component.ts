@@ -176,6 +176,28 @@ export class AddSchedComponent implements OnInit, OnDestroy {
     return true;
   };
 
+  public restrictDates = (date: Date | null) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    return (date || today) >= today;
+  };
+
+  public restrictStartTime = () => {
+    if (this.newEndTime) {
+      return this.newEndTime;
+    } else {
+      return '00:00';
+    }
+  };
+
+  public restrictEndTime = () => {
+    if (this.newStartTime) {
+      return this.newStartTime;
+    } else {
+      return '00:00';
+    }
+  };
   /* END */
 
   /* SUBMIT SCHED */

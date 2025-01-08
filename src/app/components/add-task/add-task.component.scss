@@ -106,6 +106,18 @@
             z-index: 1;
           }
         }
+
+        .hint-text {
+          margin-top: 0.5rem;
+          width: 100%;
+
+          .hints > p {
+            text-align: center;
+            color: red;
+            font-size: 0.6rem;
+            font-family: $subText;
+          }
+        }
       }
 
       .select {

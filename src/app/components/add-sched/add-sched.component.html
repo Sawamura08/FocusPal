@@ -48,7 +48,12 @@
         <section class="form-input" *ngIf="currentType === 0">
           <mat-form-field class="date-picker">
             <mat-label>Choose a date</mat-label>
-            <input matInput [matDatepicker]="picker" formControlName="date" />
+            <input
+              matInput
+              [matDatepicker]="picker"
+              formControlName="date"
+              [matDatepickerFilter]="restrictDates"
+            />
             <mat-hint>MM/DD/YYYY</mat-hint>
 
             <mat-datepicker-toggle
@@ -85,6 +90,7 @@
             <label for="startTimePicker" class="timeLabel">Start Time</label>
             <input
               [ngxTimepicker]="timePickers"
+              [min]="restrictStartTime()"
               name="startTimePicker"
               class="time-picker"
               id="startTimePicker"
@@ -111,6 +117,7 @@
             <label for="endTime" class="timeLabel">End Time</label>
             <input
               [ngxTimepicker]="endTimePickers"
+              [min]="restrictEndTime()"
               name="endTime"
               class="time-picker"
               id="endTime"
@@ -124,10 +131,7 @@
             <input type="text" name="" id="" formControlName="endTime" hidden />
             <!-- END -->
             <div class="hint-text">
-              <div
-                class="hints"
-                *ngIf="!validators(endTime) || invalidEndTime === false"
-              >
+              <div class="hints" *ngIf="!validators(endTime)">
                 <p>This is a required Field</p>
               </div>
             </div>
