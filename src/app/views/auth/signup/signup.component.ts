@@ -139,7 +139,7 @@ export class SignupComponent implements OnInit, OnDestroy {
   };
 
   /* WAIT UNTIL THE USER CLOSE THE SENT EMAIL MODAL */
-  private _waitUntilEmailModalClose = () => {
+  private waitUntilEmailModalClose = () => {
     setTimeout(() => {
       return new Promise((resolve, reject) => {
         this.popModal.modalSubject$
@@ -158,12 +158,6 @@ export class SignupComponent implements OnInit, OnDestroy {
       });
     }, 1000);
   };
-  public get waitUntilEmailModalClose() {
-    return this._waitUntilEmailModalClose;
-  }
-  public set waitUntilEmailModalClose(value) {
-    this._waitUntilEmailModalClose = value;
-  }
 
   disabledBtn = () => {
     if (this.userDatas.valid) {

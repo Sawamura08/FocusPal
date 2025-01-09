@@ -24,3 +24,12 @@ export enum RankExp {
   Diamond = 4000,
   Champion = 7000,
 }
+
+export enum gameTitles {
+  'Task Traninee',
+  'Effort Enforcer',
+  'Goal Getter',
+  'Planner Prodigy',
+  'Execution Expert',
+  'Task Titan',
+}

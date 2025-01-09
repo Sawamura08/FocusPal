@@ -9,7 +9,7 @@ export const hamburgerLinks = [
 /* THIS IS USE TO ROUTE THROUGH THE APPLICATION */
 export const navigateLinks = [
   'home',
-  'userProfile',
+  'user-profile',
   'leaderboards',
   'classSchedule',
   'settings',

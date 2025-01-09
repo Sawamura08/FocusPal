@@ -36,6 +36,7 @@ import { getAuth, provideAuth } from '@angular/fire/auth';
 import { environment } from './environtment';
 import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFireAuthModule } from '@angular/fire/compat/auth';
+import { UserProfileComponent } from './views/user-profile/user-profile.component';
 
 @NgModule({
   declarations: [
@@ -50,6 +51,7 @@ import { AngularFireAuthModule } from '@angular/fire/compat/auth';
     ExpToFillPipe,
     RankUpComponent,
     HamburgerInterfaceComponent,
+    UserProfileComponent,
   ],
   imports: [
     BrowserModule,

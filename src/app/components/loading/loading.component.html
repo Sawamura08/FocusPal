@@ -1,4 +1,4 @@
-<main [ngClass]="{ leaderboardloading: data.text }">
+<main [ngClass]="{ leaderboardloading: data != '' }">
   <div class="loader-container">
     <div class="loader"></div>
     @if(data) {

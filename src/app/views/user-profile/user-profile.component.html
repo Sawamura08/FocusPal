@@ -1,0 +1,75 @@
+<main>
+  <header><app-header [homeData]="homeHeaderData"></app-header></header>
+
+  <div class="container">
+    @if (userInfo && inGameData) {
+    <section class="user-container">
+      <div class="user-profile">
+        <figure>
+          <img [src]="setProfileImage(inGameData.avatarID)" alt="Avatar" />
+        </figure>
+        <div class="user-info">
+          <span class="bell" (click)="changeNotificationStatus()">
+            <i
+              class="fa-solid"
+              [ngClass]="isNotificationOn ? 'fa-bell' : 'fa-bell-slash'"
+            ></i>
+          </span>
+          <h3 class="user-name">
+            {{ userInfo.userName }}
+            <span class="edit"><i class="fa-sharp fa-solid fa-pen"></i></span>
+          </h3>
+          <small
+            ><span class="star"><i class="fa-sharp fa-solid fa-star"></i></span
+            >{{ gameTitles[inGameData.rank - 1] }}
+            <span
+              >| {{ this.neededExp }}XP till
+              {{ rankInterface[inGameData.rank + 1] }}</span
+            ></small
+          >
+        </div>
+      </div>
+      <div class="progress-container">
+        <div class="progress-bar">
+          <div class="progress" [ngStyle]="{ width: getRankProgress() }"></div>
+          <p class="percent">{{ expProgressPercent }}%</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="game-data-container">
+      <section class="game-data">
+        <figure class="icon"><img src="extra/fire.png" alt="fire" /></figure>
+        <h4>Coming Soon</h4>
+        <p class="title">Streak</p>
+      </section>
+      <section class="game-data">
+        <figure class="icon">
+          <img src="extra/experience.png" alt="experience" />
+        </figure>
+        <h4>{{ inGameData.currentExp }}</h4>
+        <p class="title">XP Points</p>
+      </section>
+      <section class="game-data">
+        <figure class="icon">
+          <img [src]="setRankImage(inGameData.rank)" alt="Rank Badge" />
+        </figure>
+        <h4>{{ rankInterface[inGameData.rank] }}</h4>
+        <p class="title">Rank</p>
+      </section>
+    </div>
+    }
+
+    <!-- MODAL -->
+    @if(isNotifTextShowed) {
+    <div
+      class="popover-notification"
+      [ngClass]="{ textAnimate: isNotifTextShowed }"
+    >
+      <div class="popover">
+        {{ notificationText }}
+      </div>
+    </div>
+    }
+  </div>
+</main>

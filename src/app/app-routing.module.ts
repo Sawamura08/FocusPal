@@ -84,6 +84,13 @@ const routes: Routes = [
             (m) => m.LeaderboardsModule
           ),
       },
+      {
+        path: 'user-profile',
+        loadChildren: () =>
+          import('./views/user-profile/user-profile.module').then(
+            (m) => m.UserProfileModule
+          ),
+      },
     ],
   },
 ];

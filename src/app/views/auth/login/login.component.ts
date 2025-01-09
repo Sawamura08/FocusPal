@@ -77,7 +77,6 @@ export class LoginComponent implements OnInit, OnDestroy {
                   } else {
                     this.addSession(values.updateKeyValue);
                     this.insertUserLeaderboard(values.updateKeyValue.userId);
-                    this.insertUserGameData();
                   }
                 },
                 error: (err) => {
@@ -209,8 +208,10 @@ export class LoginComponent implements OnInit, OnDestroy {
   };
 
   /* ADD SESSION */
-  public addSession = (user: User) => {
-    this.session.addUser(user);
+  public addSession = async (user: User) => {
+    await this.session.addUser(user);
+
+    this.insertUserGameData();
   };
 
   /* insert leaderboard data */

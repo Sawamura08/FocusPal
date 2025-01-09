@@ -1,0 +1,207 @@
+@use "../../app.component.scss" as *;
+@use "../../icons/font-awesome-6-pro-main/css/all.css" as *;
+
+main {
+  width: 100%;
+  height: 100%;
+  position: relative;
+
+  background: url("/background/background1.png");
+  background-size: cover;
+  background-position: center;
+  color: $textColor;
+  font-family: $subText;
+
+  header {
+    position: relative;
+    z-index: 2;
+  }
+
+  .container {
+    width: 100%;
+    height: 100%;
+    padding: 1rem;
+
+    .user-container {
+      width: 100%;
+      padding: 1rem;
+      box-shadow: 0 2px 3px $textColor;
+      border-radius: 1rem;
+      background-color: $neutralColor;
+      margin-top: 1rem;
+
+      .user-profile {
+        width: 100%;
+        display: flex;
+        gap: 1rem;
+        margin-block: 1rem;
+
+        figure {
+          width: 30%;
+
+          img {
+            width: 100%;
+            border-radius: 100%;
+            border: 2px solid $shadow;
+            padding: 0.5rem;
+          }
+        }
+        .user-info {
+          width: 70%;
+          display: flex;
+          gap: 0.5rem;
+          flex-direction: column;
+          justify-content: center;
+          position: relative;
+
+          .user-name {
+            font-size: 1rem;
+            font-family: $fontFamily;
+
+            .edit > i {
+              margin-inline-start: 0.25rem;
+              opacity: 0.4;
+            }
+          }
+
+          small {
+            font-size: 0.8rem;
+            color: $shadow;
+
+            span {
+              color: gray;
+            }
+
+            .star {
+              color: $yellow;
+              margin-inline-end: 0.25rem;
+            }
+          }
+
+          .bell {
+            position: absolute;
+            top: 0;
+            right: 0;
+
+            i {
+              font-size: 1.25rem;
+              color: $shadow;
+            }
+          }
+        }
+      }
+    }
+
+    .progress-container {
+      width: 100%;
+
+      .progress-bar {
+        width: 100%;
+        height: 1.5rem;
+        border-radius: 1rem;
+        background-color: #641e16;
+        position: relative;
+
+        .progress {
+          height: 100%;
+          border-radius: 1rem;
+          background-color: $shadow;
+          width: 50%;
+        }
+
+        .percent {
+          position: absolute;
+          left: 50%;
+          top: 0;
+          transform: translateX(-50%);
+          font-family: $fontFamily;
+          font-size: 1rem;
+          color: $neutralColor;
+        }
+      }
+    }
+
+    .game-data-container {
+      width: 100%;
+      display: flex;
+      justify-content: space-evenly;
+
+      margin-block: 1rem;
+
+      .game-data {
+        padding: 0.5rem;
+        box-shadow: 0 2px 3px $textColor;
+        border-radius: 1rem;
+        width: 30%;
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+
+        .icon > img {
+          width: 2.5rem;
+          height: 2.5rem;
+        }
+
+        h4 {
+          font-family: $fontFamily;
+          font-size: 0.9rem;
+        }
+
+        .title {
+          font-size: 0.8rem;
+          font-family: $subText;
+        }
+      }
+    }
+
+    .game-data-container {
+      .game-data:first-child {
+        h4 {
+          font-size: 0.8rem;
+        }
+      }
+    }
+
+    .popover-notification {
+      width: 8rem;
+      height: 2rem;
+      padding: 0.25rem;
+      background: linear-gradient(
+        to top,
+        rgba(0, 0, 0, 0.8),
+        rgba(0, 0, 0, 0.8),
+        rgba(0, 0, 0, 0.8)
+      );
+      display: grid;
+      place-content: center;
+      border-radius: 8px;
+
+      position: absolute;
+      top: 60%;
+      left: 50%;
+      transform: translate(-50%, 100%);
+
+      .popover {
+        text-align: center;
+        font-size: 0.7rem;
+        color: $neutralColor;
+      }
+    }
+
+    .textAnimate {
+      animation: popover 2s ease-in-out;
+    }
+
+    @keyframes popover {
+      0% {
+        opacity: 0;
+      }
+      50% {
+        opacity: 1;
+      }
+    }
+  }
+}
