@@ -17,7 +17,9 @@
           </span>
           <h3 class="user-name">
             {{ userInfo.userName }}
-            <span class="edit"><i class="fa-sharp fa-solid fa-pen"></i></span>
+            <span class="edit" (click)="openEditProfileModal()"
+              ><i class="fa-sharp fa-solid fa-pen"></i
+            ></span>
           </h3>
           <small
             ><span class="star"><i class="fa-sharp fa-solid fa-star"></i></span
@@ -73,3 +75,7 @@
     }
   </div>
 </main>
+
+<div class="modal" *ngIf="fetchEditProfileModalStatus()">
+  <app-edit-profile [userInfo]="userInfo"></app-edit-profile>
+</div>

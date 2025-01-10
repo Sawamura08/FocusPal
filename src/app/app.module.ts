@@ -37,6 +37,7 @@ import { environment } from './environtment';
 import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFireAuthModule } from '@angular/fire/compat/auth';
 import { UserProfileComponent } from './views/user-profile/user-profile.component';
+import { UserProfileModule } from './views/user-profile/user-profile.module';
 
 @NgModule({
   declarations: [
@@ -66,6 +67,7 @@ import { UserProfileComponent } from './views/user-profile/user-profile.componen
     ReactiveFormsModule,
     FormsModule,
     NgxMaterialTimepickerModule,
+    UserProfileModule,
     ServiceWorkerModule.register('service-worker.js', {
       enabled: !isDevMode(),
       // Register the ServiceWorker as soon as the application is stable

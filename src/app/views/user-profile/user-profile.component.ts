@@ -7,6 +7,8 @@ import { filter } from 'rxjs';
 import { GameUserDataService } from '../../database/game-user-data.service';
 import { userGameData } from '../../interfaces/game.interface';
 import { gameTitles, rankInfo } from '../../interfaces/game';
+import { EditProfileService } from './components/edit-profile/edit-profile.service';
+import { modalStatus } from '../../Objects/modal.details';
 
 @Component({
   selector: 'app-user-profile',
@@ -16,7 +18,8 @@ import { gameTitles, rankInfo } from '../../interfaces/game';
 export class UserProfileComponent implements OnInit {
   constructor(
     protected session: SessionService,
-    protected userInGameInfo: GameUserDataService
+    protected userInGameInfo: GameUserDataService,
+    protected editProfile: EditProfileService
   ) {}
 
   ngOnInit(): void {
@@ -85,7 +88,6 @@ export class UserProfileComponent implements OnInit {
 
     /* SET DATE CONFIGURATION */
     this.getNeededExp();
-    console.log(this.inGameData);
   };
 
   public setProfileImage = (fileName: number) => {
@@ -110,5 +112,15 @@ export class UserProfileComponent implements OnInit {
 
   public getRankProgress = () => {
     return `${this.expProgressPercent}%`;
+  };
+
+  /* FOR MODAL */
+  /* GET MODAL STATUS */
+  public fetchEditProfileModalStatus = () => {
+    return this.editProfile.getEditProfileModalStatus();
+  };
+
+  public openEditProfileModal = () => {
+    this.editProfile.setEditProfileModalStatus(modalStatus.open);
   };
 }
