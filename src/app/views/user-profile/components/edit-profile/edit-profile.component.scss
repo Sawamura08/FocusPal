@@ -1,0 +1,146 @@
+@use "../../../../app.component.scss" as *;
+@use "../../../../icons/font-awesome-6-pro-main/css/all.css" as *;
+
+main {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  background: url("/background/background2.png");
+  background-size: cover;
+  background-position: center;
+  font-family: $subText;
+  opacity: 0;
+
+  .container {
+    padding: 1rem;
+    width: 100%;
+    .modal-nav {
+      width: 100%;
+      position: relative;
+      display: flex;
+      justify-content: center;
+
+      h3 {
+        font-family: $fontFamily;
+        font-size: 1.25rem;
+      }
+
+      .icon > i {
+        font-size: 1.25rem;
+        position: absolute;
+        top: 3px;
+        left: 0;
+        margin-inline-start: 1rem;
+        opacity: 0.7;
+      }
+    }
+  }
+
+  .edit-profile-container {
+    width: 100%;
+
+    .edit-profile-content {
+      width: 100%;
+      margin-top: 2rem;
+
+      .user-profile-content {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        .profile-img {
+          width: 30%;
+          img {
+            width: 100%;
+            border-radius: 100%;
+            border: 2px solid $shadow;
+            padding: 0.5rem;
+          }
+        }
+
+        .username-input {
+          margin-top: 1rem;
+          width: 60%;
+          text-align: center;
+
+          label {
+            font-family: $fontFamily;
+            font-size: 1.25rem;
+          }
+
+          .error-hint {
+            font-size: 0.7rem;
+            color: red;
+          }
+
+          input {
+            width: 100%;
+            padding: 0.5rem;
+            font-family: $subText;
+            border-radius: 1rem;
+            box-shadow: 0 2px 3px $textColor;
+            outline: none;
+            border: none;
+            text-align: center;
+          }
+        }
+      }
+
+      .avatars-container {
+        width: 100%;
+        text-align: center;
+        margin-block: 2rem;
+
+        .change-avatar {
+          font-size: 1.25rem;
+          font-family: $fontFamily;
+        }
+
+        figure {
+          margin-block-start: 1rem;
+          width: 100%;
+          display: flex;
+          gap: 0.5rem;
+          flex-wrap: wrap;
+          justify-content: space-between;
+
+          .avatars {
+            width: 20%;
+            border-radius: 100%;
+            border: 2px solid $shadow;
+            padding: 0.5rem;
+          }
+
+          .selected {
+            background-color: $mainColor;
+          }
+        }
+      }
+
+      .button-container {
+        width: 100%;
+        text-align: center; // A quick centering method for inline-block buttons
+
+        .btn {
+          display: inline-block; // Works with text-align
+          width: 50%;
+          @include buttonTheme($mainColor, $neutralColor, $shadow);
+
+          &:active {
+            @include buttonOnClick($shadow);
+          }
+        }
+      }
+    }
+  }
+}
+
+.modal {
+  width: 100%;
+  height: 100dvh;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+}

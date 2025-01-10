@@ -1,0 +1,63 @@
+<main @slide *ngIf="isAnimation">
+  <div class="container">
+    <nav class="modal-nav">
+      <span class="icon" (click)="closeEditModal()"
+        ><i class="fa-thin fa-arrow-left"></i
+      ></span>
+      <h3>Profile</h3>
+    </nav>
+
+    @if (userInfo && updateGameData) {
+    <section class="edit-profile-container">
+      <div class="edit-profile-content">
+        <div class="user-profile-content">
+          <figure class="profile-img">
+            <img [src]="setAvatarPath(currentAvatar!)" alt="Avatars" />
+          </figure>
+          <div class="username-input">
+            <label for="username">Username</label>
+            <input
+              type="text"
+              id="username"
+              name="username"
+              [(ngModel)]="userName"
+              (blur)="checkError()"
+              (input)="checkError()"
+              autocomplete="off"
+            />
+            <small *ngIf="isError" class="error-hint">
+              This field is required
+            </small>
+          </div>
+        </div>
+
+        <section class="avatars-container">
+          <h3 class="change-avatar">Change Avatar</h3>
+          <figure>
+            <img
+              [src]="setAvatarPath(avatar)"
+              alt="Avatars"
+              class="avatars"
+              (click)="setAvatar(i)"
+              [ngClass]="{ selected: selectedAvatar === i }"
+              *ngFor="let avatar of avatarFileNames; index as i"
+            />
+          </figure>
+        </section>
+
+        <section class="button-container">
+          <button class="btn" (click)="saveChanges()">Save</button>
+        </section>
+      </div>
+    </section>
+    }
+  </div>
+</main>
+
+@if(confirmationModalStatus) {
+
+<div class="modal">
+  <app-modal [data]="confirmTextData" [confirmation]="true"></app-modal>
+</div>
+
+}
