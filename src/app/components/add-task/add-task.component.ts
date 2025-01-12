@@ -229,26 +229,28 @@ export class AddTaskComponent implements OnInit, OnDestroy {
   // COMPLETE THE TASK
   public isTaskComplete: boolean = false;
   public setTaskCompletion = async () => {
-    if (!this.isTaskComplete) {
-      this.taskData.status = taskCompletion.COMPLETE;
-      //this.taskData.completeAnimationStatus = true;
-      this.isTaskComplete = true;
-    } else {
-      this.taskData.status = taskCompletion.PENDING;
-      this.isTaskComplete = false;
-    }
+    const restriction = await this.restrictTaskCompletion();
+    if (!restriction) {
+      if (!this.isTaskComplete) {
+        this.taskData.status = taskCompletion.COMPLETE;
+        //this.taskData.completeAnimationStatus = true;
+        this.isTaskComplete = true;
+      } else {
+        this.taskData.status = taskCompletion.PENDING;
+        this.isTaskComplete = false;
+      }
 
-    // update the task status
-    const result = await this.task.setTaskCompletetionStatus(this.taskData);
-
-    if (
-      result.value &&
-      result.updateKeyValue === taskCompletion.COMPLETE &&
-      !this.taskData.completeAnimationStatus
-    ) {
-      this.setTaskCompletionData();
-    } else {
-      this.closeTaskModal();
+      // update the task status
+      const result = await this.task.setTaskCompletetionStatus(this.taskData);
+      if (
+        result.value &&
+        result.updateKeyValue === taskCompletion.COMPLETE &&
+        !this.taskData.completeAnimationStatus
+      ) {
+        this.setTaskCompletionData();
+      } else {
+        this.closeTaskModal();
+      }
     }
   };
 
@@ -275,6 +277,40 @@ export class AddTaskComponent implements OnInit, OnDestroy {
       this.taskData.completeAnimationStatus = true;
       const result = await this.task.setTaskCompletetionStatus(this.taskData);
     }
+  };
+
+  /* MODAL DATA (COMPLETE DATA IS DISABLED) */
+  public unsuccessfulTaskCompleteData: any = {
+    title: 'Tasks must be active for at least 15 minutes before completion',
+    imgPath: '/extra/info.png',
+  };
+
+  /* Restrict immediate completion of the task */
+  public restrictTaskCompletion = (): Promise<boolean | null> => {
+    return new Promise((resolve, reject) => {
+      const restrictionResult = this.restrictCompletionConfig();
+
+      resolve(restrictionResult);
+    });
+  };
+
+  /* THE TASK MUST BE COMPLETED AFTER 15MINS */
+  public restrictCompletionConfig = () => {
+    if (this.taskData != undefined) {
+      const taskCreated = this.taskData.createdAt.getTime();
+      const currentDateTime = new Date().getTime();
+      const restrictedMinutesInMilliseconds = 15 * 60 * 1000;
+      const acceptedTimeOfCompletion =
+        taskCreated + restrictedMinutesInMilliseconds;
+
+      if (currentDateTime >= acceptedTimeOfCompletion) {
+        return false;
+      } else {
+        this.popModal.openModal(ModalType.UNSUCCESSFUL);
+        return true;
+      }
+    }
+    return null;
   };
 
   /* RESTRICT PAST DATES ON DATE SELECTOR */
@@ -311,7 +347,7 @@ export class AddTaskComponent implements OnInit, OnDestroy {
 
   /* CHECK DUETIME IF IT'S PAST THE CURRENT TIME (FOR TODAY DUE DATES ONLY) */
   public modalType = ModalType;
-  public dueDateTimeValidityStatus: ModalType = ModalType.NONE;
+  public modalTypeStatus: ModalType = ModalType.NONE;
   public checkDueTime = () => {
     const dueDate = this.userInput.get('dueDate')?.value;
     const dueTime = this.userInput.get('dueTime')?.value;
@@ -509,11 +545,11 @@ export class AddTaskComponent implements OnInit, OnDestroy {
     const isDueDateTimeValid = this.checkDueTime();
 
     if (isDueDateTimeValid === 'INVALID') {
-      this.dueDateTimeValidityStatus = ModalType.INCORRECT;
+      this.modalTypeStatus = ModalType.INCORRECT;
     }
 
     if (this.userInput.valid && isDueDateTimeValid === 'VALID') {
-      this.dueDateTimeValidityStatus = ModalType.NONE;
+      this.modalTypeStatus = ModalType.NONE;
       /* INSERT */
       const taskId = await this.task.insertTask(
         this.userId!,
@@ -682,7 +718,7 @@ export class AddTaskComponent implements OnInit, OnDestroy {
       .subscribe({
         next: ([isConfirmModalOpen, isErrorModalOpen]) => {
           this.isConfirmModalOpen = isConfirmModalOpen;
-          this.dueDateTimeValidityStatus = isErrorModalOpen;
+          this.modalTypeStatus = isErrorModalOpen;
         },
       });
   };

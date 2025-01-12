@@ -4,7 +4,9 @@
   *ngIf="animateModal"
   [ngClass]="{
     editMode:
-      isConfirmModalOpen || dueDateTimeValidityStatus === modalType.INCORRECT
+      isConfirmModalOpen ||
+      modalTypeStatus === modalType.INCORRECT ||
+      modalTypeStatus === modalType.UNSUCCESSFUL
   }"
 >
   <div class="add-task-container">
@@ -448,9 +450,13 @@
   }
 
   <!-- IF THE ENTERED DUE DATE HAD ALREADY PASSED -->
-  @if (dueDateTimeValidityStatus === modalType.INCORRECT) {
+  @if (modalTypeStatus === modalType.INCORRECT) {
   <div class="confirmModal">
     <app-modal [data]="popUpModalErrorData"></app-modal>
+  </div>
+  } @if (modalTypeStatus === modalType.UNSUCCESSFUL) {
+  <div class="confirmModal">
+    <app-modal [data]="unsuccessfulTaskCompleteData"></app-modal>
   </div>
   }
 </div>

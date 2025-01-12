@@ -11,6 +11,7 @@ import { confirm } from '../../../../interfaces/export.object';
 import { updateRequest } from '../../../leaderboards/model/leaderboardClass';
 import { LeaderboardsService } from '../../../../service/leaderboards.service';
 import { slideRight } from '../../../../animation/slide-right.animate';
+import { LeaderboardSyncService } from '../../../../components/gamified-completion-modal/service/leaderboard-sync.service';
 
 @Component({
   selector: 'app-edit-profile',
@@ -23,7 +24,8 @@ export class EditProfileComponent implements OnInit {
     protected editProfile: EditProfileService,
     protected gameData: GameUserDataService,
     protected popModal: PopModalService,
-    protected leader: LeaderboardsService
+    protected leader: LeaderboardsService,
+    protected sync: LeaderboardSyncService
   ) {}
 
   ngOnInit(): void {
@@ -118,8 +120,11 @@ export class EditProfileComponent implements OnInit {
     this.updateUserData = structuredClone(this.userInfo!);
     this.updateUserData.userName = this.userName;
 
+    /* NOT_UPDATED === YET TO BE UPDATED ON SERVER */
+    const NOT_UPDATED = 0;
     /* USER GAME DATA INFO */
     this.updateGameData.avatarID = this.selectedAvatar!;
+    this.updateGameData.isUpdated = NOT_UPDATED;
   };
 
   /* update user data INDEXEDB */
@@ -152,6 +157,7 @@ export class EditProfileComponent implements OnInit {
       .subscribe((value) => {
         this.isAnimation = false;
         this.popModal.setConfirmaModalStatus(modalStatus.close);
+        this.sync.changeUpdateStatus(this.updateGameData);
         // wait until animation of close modal completes
         setTimeout(() => {
           this.editProfile.setEditProfileModalStatus(modalStatus.close);
