@@ -162,7 +162,8 @@ export class AppsComponent extends navigation implements OnInit, OnDestroy {
   public checkUserLeaderboardUpdate = async () => {
     if (this.networkStatus && this.userId !== undefined) {
       const result = await this.leader.checkUpdateStatus(this.userId);
-      if (result != undefined && result.value.isUpdated === 0) {
+
+      if (result && result.value != undefined && result.value.isUpdated === 0) {
         this.leader.updateUserData(result.value);
       }
     }

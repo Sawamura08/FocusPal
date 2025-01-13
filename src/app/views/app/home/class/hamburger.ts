@@ -1,10 +1,12 @@
-export const hamburgerLinks = [
+/* export const hamburgerLinks = [
   'Home',
   'User Profile',
   'Leaderboards',
   'Class Schedule',
   'Settings',
-];
+]; */
+
+export const hamburgerLinks = ['Home', 'User Profile', 'Leaderboards'];
 
 /* THIS IS USE TO ROUTE THROUGH THE APPLICATION */
 export const navigateLinks = [
