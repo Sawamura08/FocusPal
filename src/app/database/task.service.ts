@@ -119,10 +119,13 @@ export class taskService {
         .where('status')
         .equals(pending)
         .toArray();
-
       /* FILTER TO GET THE PAST DUE TASK */
       const unFinishedTask = result.filter((task) => {
-        return currentDate > task.dueDate.getTime();
+        const exactDueDateTime = this.getExactDueDateTime(
+          task.dueDate,
+          task.dueTime
+        );
+        return currentDate > exactDueDateTime;
       });
 
       return this.setTaskPastDueStatus(unFinishedTask);
@@ -130,6 +133,22 @@ export class taskService {
       console.log('Error Fetching task due Date');
       return [];
     }
+  };
+
+  /* GET THE EXACT TIME OF THE DUE DATE AND TIME*/
+  /* ADD DUE TIME AND DUE DATE */
+  public getExactDueDateTime = (dueDate: Date, dueTime: Date) => {
+    const dueDateMilliseconds = dueDate.getTime();
+    /* EXTRACT THE TIME ONTO THE DUE TIME */
+    const hours = dueTime.getHours();
+    const minutes = dueTime.getMinutes();
+    const seconds = dueTime.getSeconds();
+    const dueTimeInMilliseconds =
+      (hours * 3600 + minutes * 60 + seconds) * 1000;
+
+    /* ADD THE DUE TIME AND DATETIME */
+    const exactDueDateTime = dueDateMilliseconds + dueTimeInMilliseconds;
+    return exactDueDateTime;
   };
 
   /* UPDATE TASK TO PAST DUE */
@@ -140,7 +159,6 @@ export class taskService {
       // change the value
       copyTask.status = taskCompletion.PAST_DUE;
       const udpatedTask = copyTask;
-
       try {
         db.taskList.update(task.taskId!, udpatedTask);
       } finally {

@@ -86,4 +86,8 @@ export class TaskFilterControlComponent
       )
       .subscribe((filters) => (this.choosenFilter = filters));
   };
+
+  override ngOnDestroy(): void {
+    this.task$.setTaskProgressFilter(0);
+  }
 }
