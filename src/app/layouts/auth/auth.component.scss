@@ -1,0 +1,42 @@
+@use "../../app.component.scss" as *;
+@use "../../icons/font-awesome-6-pro-main/css/all.css" as *;
+
+main {
+  width: 100%;
+  height: 100dvh;
+}
+
+.under-development {
+  display: none;
+}
+
+@media all and (orientation: landscape) {
+  main {
+    display: none;
+  }
+
+  .under-development {
+    width: 100%;
+    height: 100dvh;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+
+    figure {
+      width: 45%;
+      img {
+        width: 100%;
+      }
+    }
+
+    .text {
+      width: 50%;
+      h4 {
+        color: $shadow;
+        text-align: center;
+        font-family: $fontFamily;
+      }
+    }
+  }
+}

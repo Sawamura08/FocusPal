@@ -56,12 +56,14 @@ export class LoginComponent implements OnInit, OnDestroy {
   public userInput: FormGroup;
   private userSubscribe!: Subscription;
   public formSubmitted: boolean = false;
+  public isLoading: boolean = false;
 
   public submitForms = async () => {
     const user = this.userInput.value;
     this.formSubmitted = true;
     if (this.networkStatus) {
       /* AUTHENTICATE WITH FIREBASE BEFORE SENDING TO BACKEND */
+      this.isLoading = true;
       await this.firebaseAuth
         .signIn(user.email, user.password)
         .then((value) => {
@@ -72,6 +74,9 @@ export class LoginComponent implements OnInit, OnDestroy {
               .pipe(takeUntilDestroyed(this.destroyRef))
               .subscribe({
                 next: (values) => {
+                  setTimeout(() => {
+                    this.isLoading = false;
+                  }, 1500);
                   if ('success' in values && !values.success) {
                     this.modal = ModalType.INCORRECT;
                   } else {
@@ -90,6 +95,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     } else {
       this.modal = ModalType.NO_INTERNET;
     }
+    this.isLoading = false;
     this.formSubmitted = false;
     this.userInput.reset();
   };

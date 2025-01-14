@@ -89,3 +89,10 @@
 <div class="warning" *ngIf="modal === ModalType.NO_INTERNET">
   <app-modal [data]="modalNoInternet"></app-modal>
 </div>
+
+@if (isLoading) {
+<div class="warning">
+  <app-loading></app-loading>
+</div>
+
+}
