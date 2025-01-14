@@ -18,8 +18,7 @@ export class DateTimeService {
   // CONVERT START AND END TIME TO 24HOUR FORMAT
 
   public transformTimeToDate = (timeValue: string) => {
-    const dateToday = new Date().toISOString().split('T')[0];
-    /*    startTime: new Date(dateToday + 'T' + '18:30'), */
+    const dateToday = new Date().toLocaleDateString('en-CA');
     let hours24Format: string;
     const start = timeValue.split(' ');
     const time = start[0];
@@ -42,7 +41,6 @@ export class DateTimeService {
     } else {
       hours24Format = `${paddedHour}:${minutes}`; // Ensure padding for AM/single-digit hours
     }
-
     return new Date(dateToday + 'T' + hours24Format);
   };
 }
