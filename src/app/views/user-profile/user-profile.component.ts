@@ -43,7 +43,7 @@ export class UserProfileComponent implements OnInit {
   public gameTitles = gameTitles;
   public expProgressPercent!: number;
 
-  public changeNotificationStatus = () => {
+  /* public changeNotificationStatus = () => {
     clearTimeout(this.timeoutId);
     if (!this.isNotifTextShowed) {
       this.isNotifTextShowed = true;
@@ -64,7 +64,7 @@ export class UserProfileComponent implements OnInit {
         this.changeNotificationStatus();
       }, 100);
     }
-  };
+  }; */
 
   /* GET SESSION */
   public fetchSession = () => {

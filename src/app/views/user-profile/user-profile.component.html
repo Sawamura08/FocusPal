@@ -9,12 +9,12 @@
           <img [src]="setProfileImage(inGameData.avatarID)" alt="Avatar" />
         </figure>
         <div class="user-info">
-          <span class="bell" (click)="changeNotificationStatus()">
+          <!-- <span class="bell" (click)="changeNotificationStatus()">
             <i
               class="fa-solid"
               [ngClass]="isNotificationOn ? 'fa-bell' : 'fa-bell-slash'"
             ></i>
-          </span>
+          </span> -->
           <h3 class="user-name">
             {{ userInfo.userName }}
             <span class="edit" (click)="openEditProfileModal()"

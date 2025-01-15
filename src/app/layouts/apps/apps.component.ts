@@ -61,6 +61,18 @@ export class AppsComponent extends navigation implements OnInit, OnDestroy {
 
     /* CHECK NETWORK */
     this.checkNetworkStatus();
+
+    if ('Notification' in window) {
+      Notification.requestPermission().then((permission) => {
+        if (permission === 'granted') {
+          console.log('Notifications allowed by user');
+        } else if (permission === 'denied') {
+          console.log('Notifications denied by user');
+        } else {
+          console.log('User has not made a decision yet');
+        }
+      });
+    }
   }
 
   public navigate = (button: buttonValues) => {

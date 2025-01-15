@@ -1,10 +1,17 @@
 importScripts("ngsw-worker.js");
 
 // Handle sync events
-self.addEventListener("sync", async (event) => {
+/* self.addEventListener("sync", async (event) => {
   if (event.tag === "SYNC-DATA") {
     event.waitUntil(fetchSession());
   }
+}); */
+
+self.addEventListener("activate", async (event) => {
+  console.log("activated");
+  setInterval(() => {
+    checkDueDateToday();
+  }, 10000);
 });
 
 const openDataBase = () => {
@@ -16,9 +23,64 @@ const openDataBase = () => {
   });
 };
 
+const checkDueDateToday = async () => {
+  try {
+    const db = await openDataBase();
+
+    const transaction = db.transaction("taskList", "readonly");
+    const taskList = transaction.objectStore("taskList");
+
+    const objectRequest = taskList.openCursor();
+    let taskDueToday = [];
+
+    objectRequest.onsuccess = (event) => {
+      const cursor = event.target.result;
+      if (cursor) {
+        const session = cursor.value;
+        const today = new Date().setHours(0, 0, 0, 0);
+        if (session.dueDate.getTime() === today) {
+          taskDueToday.push(session);
+
+          showNotification(
+            `Task Reminder`,
+            `Task "${session.title}" is due today!`
+          );
+        }
+
+        cursor.continue();
+      }
+    };
+
+    objectRequest.onerror = (error) => {
+      console.error(
+        "Error fetching data from IndexedDB:",
+        error.target.errorCode
+      );
+    };
+  } catch {
+    console.error("Error Opening the Database");
+  }
+};
+
+const showNotification = (title, body) => {
+  if (Notification.permission === "granted") {
+    self.registration.showNotification(title, {
+      body: body,
+      icon: "/icons/icon-72x72.png", // Optional: Add a path to an icon
+      vibrate: [200, 100, 200], // Optional: Add vibration for mobile devices
+      actions: [
+        // Optional: Add action buttons to the notification
+        { action: "view", title: "View Task" },
+        { action: "dismiss", title: "Dismiss" },
+      ],
+    });
+  } else {
+    console.warn("Notification permission not granted!");
+  }
+};
+
 const fetchSession = async () => {
   try {
-    console.log("here running");
     const db = await openDataBase();
 
     const transaction = db.transaction("userList", "readonly");

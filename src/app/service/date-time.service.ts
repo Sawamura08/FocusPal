@@ -41,6 +41,7 @@ export class DateTimeService {
     } else {
       hours24Format = `${paddedHour}:${minutes}`; // Ensure padding for AM/single-digit hours
     }
+    console.log(new Date(dateToday + 'T' + hours24Format));
     return new Date(dateToday + 'T' + hours24Format);
   };
 }
