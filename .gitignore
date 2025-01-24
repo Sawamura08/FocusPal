@@ -43,5 +43,6 @@ Thumbs.db
 
 #fonts
 environtment.ts
+src/app/interfaces/gemini-config.ts
 
 text.txt

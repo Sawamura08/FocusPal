@@ -34,6 +34,8 @@ import { taskService } from '../../../database/task.service';
 import { ResponseService } from '../../../service/reponse.service';
 import { taskCompletion } from '../../../interfaces/export.object';
 import { HamburgerObservableService } from './service/hamburger-observable.service';
+import { ErrorResponse } from '../../../interfaces/error-response';
+import { isErrorResponse } from '../../../guards/type-guards';
 
 @Component({
   selector: 'app-home',
@@ -65,13 +67,6 @@ export class HomeComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnInit(): void {
     this.getGreeting();
-
-    /* FOR SETTING PROGRESS BAR STYLE */
-    this.setProgressBarStyle();
-    this.setPendingBatStyle();
-
-    /* FETCH PENDING TASK */
-    this.getPendingTask();
 
     /* FETCH CLASS SCHED TODAY */
     this.getSchedToday();
@@ -128,6 +123,13 @@ export class HomeComponent implements OnInit, OnChanges, OnDestroy {
           /* FETCH COMPLETED TASK */
           this.fetchCompletedTask();
           this.fetchUserGameData();
+
+          /* FETCH PENDING TASK */
+          this.getPendingTask();
+
+          /* FOR SETTING PROGRESS BAR STYLE */
+          this.setProgressBarStyle();
+          this.setPendingBatStyle();
         },
       });
   };
@@ -210,17 +212,18 @@ export class HomeComponent implements OnInit, OnChanges, OnDestroy {
   /* GET PENDING TASK */
 
   public pendingTaskList: Task[] | null = null;
-  private taskListSubscribe!: Subscription;
-  public getPendingTask = () => {
-    this.taskListSubscribe = this.filterTask.allTaskByStatus$.subscribe({
-      next: (value) => {
-        this.pendingTaskList = value;
-        this.pendingTask = value.length;
-      },
-      error: (err) => console.log('Error Subscribe on TaskList', err),
-    });
 
-    this.subscriptionArr?.push(this.taskListSubscribe);
+  public getPendingTask = async () => {
+    const result: Task[] | ErrorResponse = await this.task.fetchTaskTracker(
+      this.userId!
+    );
+
+    if (!isErrorResponse(result)) {
+      this.pendingTaskList = result;
+      this.pendingTask = result.length;
+
+      this.setPendingBatStyle();
+    }
   };
 
   /* END */

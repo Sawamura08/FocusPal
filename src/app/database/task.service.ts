@@ -176,4 +176,18 @@ export class taskService {
       return this.Response.errorResponse();
     }
   };
+
+  /* FETCH TASK PENDING AND COMPLETED */
+  public fetchTaskTracker = async (id: number) => {
+    try {
+      const result = await db.taskList.where('userId').equals(id).toArray();
+
+      const pendingAndCompletedTask = result.filter((task) => {
+        return task.status === 0 || task.status === 2 ? true : false;
+      });
+      return pendingAndCompletedTask;
+    } catch {
+      return this.Response.errorResponse();
+    }
+  };
 }

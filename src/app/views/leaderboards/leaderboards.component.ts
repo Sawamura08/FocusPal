@@ -20,6 +20,7 @@ export class LeaderboardsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.LeaderboardLoading = true;
     this.getTopUsers();
   }
   public homeHeaderData: headerType = {

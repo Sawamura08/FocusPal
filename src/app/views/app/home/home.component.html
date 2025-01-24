@@ -60,7 +60,7 @@
             </span>
 
             <span class="info-container">
-              <p class="sub-task">2 sub-task left</p>
+              <p class="sub-task">{{ task.subTasks?.length }} sub-task</p>
 
               <p class="due-date">{{ task.dueDate | date : "longDate" }}</p>
             </span>
