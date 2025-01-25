@@ -13,7 +13,7 @@ export const navigateLinks = [
   'home',
   'user-profile',
   'leaderboards',
-  'classSchedule',
+  'class-sched',
   'settings',
 ];
 

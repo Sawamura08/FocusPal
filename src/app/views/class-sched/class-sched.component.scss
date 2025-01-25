@@ -1,0 +1,108 @@
+@use "../../app.component.scss" as *;
+@use "../../icons/font-awesome-6-pro-main/css/all.css" as *;
+
+main {
+  width: 100%;
+  height: 100dvh;
+  overflow-y: auto;
+  position: relative;
+  background: url("/background/background1.png");
+  background-size: cover;
+  background-position: center;
+  color: $textColor;
+
+  header {
+    width: 100%;
+    margin-block-end: 1rem;
+  }
+
+  .button-container {
+    width: 70%;
+    margin-inline: auto;
+
+    .btn {
+      width: 100%;
+      @include buttonTheme($mainColor, $neutralColor, $shadow);
+
+      &:active {
+        @include buttonOnClick($shadow);
+      }
+    }
+  }
+
+  .sched-container {
+    width: 100%;
+    margin-block-start: 1rem;
+    list-style-type: none;
+    padding: 1rem;
+
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    .active {
+      font-size: 1.25rem;
+      font-family: $fontFamily;
+      text-align: center;
+      color: $textColor;
+    }
+
+    .sched-list {
+      width: 100%;
+      box-shadow: 0 2px 4px $textColor;
+      border-radius: 1rem;
+      padding: 1rem;
+      display: flex;
+      background: linear-gradient(to right, #f5c0ef, #fff5f2);
+
+      .sched-data {
+        width: 90%;
+        font-family: $subText;
+
+        .title {
+          font-family: $fontFamily;
+        }
+
+        .time {
+          font-size: 0.9rem;
+        }
+      }
+
+      figure {
+        width: 10%;
+        display: grid;
+        place-content: center;
+
+        span {
+          color: gray;
+          width: 2rem;
+          height: 2rem;
+          border-radius: 50%;
+          background-color: #ededed;
+
+          i {
+            font-size: 2rem;
+          }
+        }
+
+        .selected {
+          color: $updateColor;
+          background-color: #eee;
+        }
+      }
+    }
+  }
+
+  .sched-container > .sched-list:nth-child(even) {
+    background: linear-gradient(to right, #f99492, #fff5f2);
+  }
+}
+
+.modal {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100dvh;
+  z-index: 2;
+}

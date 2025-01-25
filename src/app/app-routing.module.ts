@@ -91,6 +91,13 @@ const routes: Routes = [
             (m) => m.UserProfileModule
           ),
       },
+      {
+        path: 'class-sched',
+        loadChildren: () =>
+          import('./views/class-sched/class-sched.module').then(
+            (m) => m.ClassSchedModule
+          ),
+      },
     ],
   },
 ];

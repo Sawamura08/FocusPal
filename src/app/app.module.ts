@@ -38,6 +38,7 @@ import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFireAuthModule } from '@angular/fire/compat/auth';
 import { UserProfileComponent } from './views/user-profile/user-profile.component';
 import { UserProfileModule } from './views/user-profile/user-profile.module';
+import { ClassSchedComponent } from './views/class-sched/class-sched.component';
 
 @NgModule({
   declarations: [
@@ -53,6 +54,7 @@ import { UserProfileModule } from './views/user-profile/user-profile.module';
     RankUpComponent,
     HamburgerInterfaceComponent,
     UserProfileComponent,
+    ClassSchedComponent,
   ],
   imports: [
     BrowserModule,

@@ -110,7 +110,6 @@ export class ScheduleService implements OnInit {
     date?: string
   ): Promise<Schedule[]> {
     /* CHECK WHETHER THE date has value or null */
-
     const dateSelected: string =
       date ?? this.datePipe.transform(new Date(), 'yyyy-MM-dd') ?? '2024-01-01';
     const dayToday = new Date(dateSelected).getDay();
@@ -147,7 +146,6 @@ export class ScheduleService implements OnInit {
         );
         return converted[0] - converted[1];
       });
-
       return sched;
     } catch (err) {
       console.error('Failed to fetch schedules', err);
@@ -185,5 +183,20 @@ export class ScheduleService implements OnInit {
     if (!days) return false;
 
     return days.some((day) => day === dateSelected);
+  };
+
+  public getAllClassSched = async () => {
+    try {
+      const result = await db.schedList.where('type').equals(0).toArray();
+
+      const custom = result.filter((sched) => {
+        return sched.repeat === 2 ? true : sched.repeat === 1 ? true : false;
+      });
+
+      return custom;
+    } catch (err) {
+      console.log('Error Update Sched', err);
+      return [];
+    }
   };
 }

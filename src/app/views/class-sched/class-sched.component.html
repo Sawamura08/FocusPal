@@ -1,0 +1,38 @@
+<main>
+  <header><app-header [homeData]="homeHeaderData"></app-header></header>
+
+  @if (schedList) {
+  <ul class="sched-container">
+    <h1 class="active">List of Active Classes</h1>
+    <li class="sched-list" *ngFor="let sched of schedList; index as i">
+      <div class="sched-data">
+        <h3 class="title">{{ sched.title }}</h3>
+        <p class="time">
+          {{ sched.startTime | date : "h:mm a" }} -
+          {{ sched.endTime | date : "h:mm a" }}
+        </p>
+        <h6 class="location">{{ sched.location }}</h6>
+      </div>
+      <figure>
+        <span
+          class="icon-container"
+          [ngClass]="setSelectedSched(sched.schedId!)"
+          (click)="selectSched(sched.schedId!)"
+        >
+          <i class="fa-sharp fa-regular fa-circle-check"></i>
+        </span>
+      </figure>
+    </li>
+  </ul>
+  }
+
+  <div class="button-container">
+    <button class="btn" (click)="generateSched()">Generate Schedule</button>
+  </div>
+</main>
+
+@if (isErrorExist === modalType.INCORRECT) {
+<div class="modal">
+  <app-modal [data]="noSchedMessage"></app-modal>
+</div>
+}
