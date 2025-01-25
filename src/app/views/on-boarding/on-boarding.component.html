@@ -1,0 +1,17 @@
+<main>
+  <section class="container">
+    <figure class="fig-container">
+      <img [src]="setImagePath(currentIndex)" alt="college students" />
+    </figure>
+    <section class="message-container">
+      <h1>{{ onBoardingData[currentIndex].title }}</h1>
+      <p>{{ onBoardingData[currentIndex].text }}</p>
+    </section>
+  </section>
+  <div class="button-container">
+    <button class="btn" (click)="next()">Next</button>
+    @if (currentIndex < 2) {
+    <p class="skip" (click)="skipOnboarding()">Skip</p>
+    }
+  </div>
+</main>

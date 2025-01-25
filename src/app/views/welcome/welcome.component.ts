@@ -31,4 +31,10 @@ export class WelcomeComponent implements OnInit {
     if (id)
       this.route.navigate(['../../apps/home'], { relativeTo: this.actRoute });
   };
+
+  public onBoarding: boolean = false;
+
+  public goToOnBoarding = () => {
+    this.onBoarding = true;
+  };
 }
