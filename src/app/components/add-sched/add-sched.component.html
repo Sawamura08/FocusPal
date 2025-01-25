@@ -91,6 +91,7 @@
             <input
               [ngxTimepicker]="timePickers"
               [min]="restrictStartTime()"
+              [max]="maxRestrictStartTime()"
               name="startTimePicker"
               class="time-picker"
               id="startTimePicker"
@@ -118,6 +119,7 @@
             <input
               [ngxTimepicker]="endTimePickers"
               [min]="restrictEndTime()"
+              [max]="maxRestrictEndTime()"
               name="endTime"
               class="time-picker"
               id="endTime"

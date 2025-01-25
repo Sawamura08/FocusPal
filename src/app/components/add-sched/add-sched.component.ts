@@ -183,21 +183,28 @@ export class AddSchedComponent implements OnInit, OnDestroy {
     return (date || today) >= today;
   };
 
-  public restrictStartTime = () => {
-    if (this.newEndTime) {
-      return this.newEndTime;
-    } else {
+  public restrictStartTime = (): string => {
+    if (this.newEndTime && this.newStartTime) {
       return '00:00';
+    } else if (!this.newEndTime) {
+      return '00:00';
+    } else {
+      return this.newEndTime;
     }
   };
 
-  public restrictEndTime = () => {
-    if (this.newStartTime) {
-      return this.newStartTime;
-    } else {
-      return '00:00';
-    }
+  public maxRestrictStartTime = (): string => {
+    return '11:59 PM';
   };
+
+  public restrictEndTime = (): string => {
+    return this.newStartTime || '00:00';
+  };
+
+  public maxRestrictEndTime = (): string => {
+    return '11:59 PM';
+  };
+
   /* END */
 
   /* SUBMIT SCHED */
