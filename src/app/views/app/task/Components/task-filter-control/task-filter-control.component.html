@@ -17,7 +17,7 @@
   </ul>
   @if (choosenFilter) {
   <ul class="filter-list">
-    @if (choosenFilter.category) {
+    @if (choosenFilter.category != undefined) {
     <li
       class="filter"
       [ngClass]="{ category: choosenFilter.category != undefined }"
@@ -27,7 +27,7 @@
     }
     <!-- PERSONAL -->
 
-    @if (choosenFilter.tags) {
+    @if (choosenFilter.tags != undefined) {
     <li class="filter" [ngClass]="{ tags: choosenFilter.tags != undefined }">
       <!-- PERSONAL -->
       @if (choosenFilter.category === taskCategories.PERSONAL) {
@@ -41,7 +41,7 @@
     }
 
     <!-- PRIORITY -->
-    @if (choosenFilter.priority) {
+    @if (choosenFilter.priority != undefined) {
     <li
       class="filter"
       [ngClass]="{ priority: choosenFilter.priority != undefined }"

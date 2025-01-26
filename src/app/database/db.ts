@@ -34,6 +34,8 @@ export interface SubTasks {
 export interface User {
   userId: number;
   userName: string;
+  quotes?: Date; // is code already triggered?
+  currentQuoteIndex?: number;
 }
 
 export interface Schedule {
@@ -61,10 +63,10 @@ export class localDB extends Dexie {
 
   constructor() {
     super('myDB');
-    this.version(39).stores({
+    this.version(41).stores({
       taskList:
         '++taskId, userId, title,description,subTask, status, priority, startDate, dueDate,dueTime , createdAt, taskCategory, tags ,isSync, isUpdated,isQueued,completeAnimationStatus',
-      userList: 'userId,userName',
+      userList: 'userId,userName,quotes,currentQuoteIndex',
       schedList:
         '++schedId,userId,title,date,startTime,endTime,repeat,type,isActive,daysOfWeek,location',
       subTaskList: '++subTaskId,taskSubtaskId,subTask,taskId,status',

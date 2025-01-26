@@ -15,7 +15,7 @@ import { fetchResponse } from '../../../interfaces/fetch-response';
 import { FetchHomeDataService } from '../../../service/fetch-home-data.service';
 import { SetProgressBar } from '../../../class/set-progress-bar';
 import { FilterTaskService } from '../../../database/filter-task.service';
-import { Schedule, Task, User } from '../../../database/db';
+import { db, Schedule, Task, User } from '../../../database/db';
 import {
   combineLatest,
   Subscription,
@@ -36,6 +36,8 @@ import { taskCompletion } from '../../../interfaces/export.object';
 import { HamburgerObservableService } from './service/hamburger-observable.service';
 import { ErrorResponse } from '../../../interfaces/error-response';
 import { isErrorResponse } from '../../../guards/type-guards';
+import { DatePipe } from '@angular/common';
+import { quotes } from '../../../JSON/quotes';
 
 @Component({
   selector: 'app-home',
@@ -60,7 +62,8 @@ export class HomeComponent implements OnInit, OnChanges, OnDestroy {
     protected task: taskService,
     protected gameData: GameUserDataService,
     protected response: ResponseService,
-    protected hamburger$: HamburgerObservableService
+    protected hamburger$: HamburgerObservableService,
+    protected datePipe: DatePipe
   ) {
     this.Progress = new SetProgressBar();
   }
@@ -72,6 +75,8 @@ export class HomeComponent implements OnInit, OnChanges, OnDestroy {
     this.getSchedToday();
 
     this.getUser();
+
+    this.setFocusPalAnimation();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -101,6 +106,56 @@ export class HomeComponent implements OnInit, OnChanges, OnDestroy {
   };
   /* end */
 
+  /* SET UP  FOCUS PAL ANIMATION */
+  public animationIntervalId: any;
+  public animateFocusPal = '';
+  public setFocusPalAnimation = () => {
+    this.animationIntervalId = setInterval(() => {
+      this.animateFocusPal = this.animateFocusPal ? '' : 'animate';
+    }, 4000);
+  };
+
+  /* QUOTES OF THE DAY */
+  public quoteDate: Date | undefined;
+  public currentQuoteIndex: number | undefined;
+  public todayQuote: { quote: string; author: string } | undefined;
+  public checkQuoteStatus = () => {
+    const dateToday = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
+    const lastCheck = this.datePipe.transform(this.quoteDate, 'yyyy-MM-dd');
+
+    if (lastCheck === null || dateToday != lastCheck) {
+      this.fetchQuote();
+    } else {
+      this.todayQuote = quotes[this.currentQuoteIndex!];
+    }
+  };
+
+  public fetchQuote = () => {
+    const index = Math.floor(Math.random() * quotes.length);
+    if (this.currentQuoteIndex && index === this.currentQuoteIndex) {
+      this.fetchQuote();
+    } else {
+      this.todayQuote = quotes[index];
+      this.updateQuote(index);
+    }
+  };
+
+  // update the quote status it means it's already send 1 quote for today
+  public updateQuote = async (index: number) => {
+    const updateData: User = {
+      userId: this.userId!,
+      userName: this.username!,
+      quotes: new Date(),
+      currentQuoteIndex: index,
+    };
+
+    try {
+      const result = await db.userList.update(this.userId!, updateData);
+    } catch (err) {
+      console.log('Error on update', err);
+    }
+  };
+
   /* FETCH USERNAME */
   public username: string | undefined = undefined;
   public userInfo!: User;
@@ -120,6 +175,8 @@ export class HomeComponent implements OnInit, OnChanges, OnDestroy {
         next: (value) => {
           this.username = value?.userName;
           this.userId = value?.userId;
+          this.quoteDate = value?.quotes;
+          this.currentQuoteIndex = value?.currentQuoteIndex;
           /* FETCH COMPLETED TASK */
           this.fetchCompletedTask();
           this.fetchUserGameData();
@@ -130,6 +187,8 @@ export class HomeComponent implements OnInit, OnChanges, OnDestroy {
           /* FOR SETTING PROGRESS BAR STYLE */
           this.setProgressBarStyle();
           this.setPendingBatStyle();
+          /* check quote status */
+          this.checkQuoteStatus();
         },
       });
   };
@@ -262,6 +321,7 @@ export class HomeComponent implements OnInit, OnChanges, OnDestroy {
 
   /* ON DESTROY */
   ngOnDestroy(): void {
+    clearInterval(this.animationIntervalId);
     if (this.subscriptionArr)
       this.subscriptionArr.forEach((subs) => subs.unsubscribe());
   }

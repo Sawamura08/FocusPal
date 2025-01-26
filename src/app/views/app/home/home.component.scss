@@ -51,6 +51,67 @@ main {
       }
     }
 
+    .quotes-container {
+      width: 100%;
+      margin-block: 1rem;
+      padding: 1rem;
+      border-radius: 1rem;
+      box-shadow: 0 3px 2px $textColor;
+      background: linear-gradient(to right, #f99492, #fff5f2);
+      font-family: $fontFamily;
+      color: #33415c;
+
+      position: relative;
+      z-index: 1;
+      overflow: hidden;
+
+      .quotes {
+        font-size: 1.5rem;
+        text-align: right;
+      }
+
+      h4 {
+        display: inline-block;
+        padding: 0.75rem;
+        text-align: center;
+        background-color: $neutralColor;
+        border-radius: 1rem;
+        font-size: 1rem;
+      }
+
+      .author {
+        font-size: 1rem;
+        font-family: $subText;
+      }
+
+      figure > img {
+        width: 10rem;
+        height: 10rem;
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        z-index: 1;
+
+        transform: rotate(-45deg) translate(0, 110%);
+      }
+
+      figure > .animate {
+        animation: sdyney 4s ease-in-out infinite;
+      }
+
+      @keyframes sdyney {
+        from {
+          transform: rotate(-45deg) translate(0, 110%);
+        }
+        50% {
+          transform: rotate(-45deg) translate(0, 30%);
+        }
+        to {
+          transform: rotate(-45deg) translate(0, 110%);
+        }
+      }
+    }
+
     .summary-container {
       margin-block: 1rem;
       width: 100%;

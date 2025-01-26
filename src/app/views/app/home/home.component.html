@@ -9,6 +9,21 @@
       <p class="username">Hello, {{ username }} 👋</p>
     </section>
 
+    <section class="quotes-container">
+      <h4>Today's Quotes</h4>
+      <h3 class="quotes">''</h3>
+      <h3 class="quotes">{{ todayQuote?.quote }}</h3>
+      <h6 class="author">{{ todayQuote?.author }}</h6>
+
+      <figure>
+        <img
+          src="FocusPal Logo/3.png"
+          alt="FocusPal Logo"
+          [ngClass]="animateFocusPal"
+        />
+      </figure>
+    </section>
+
     <section class="summary-container">
       <ul class="summary-list">
         <li class="list">

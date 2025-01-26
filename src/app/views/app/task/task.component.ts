@@ -62,6 +62,8 @@ export class TaskComponent implements OnDestroy {
 
     /* CHANGE TASK STATUS IF PAST DUE */
     this.changeStatusPastDue();
+
+    //this.fetchAllTask();
   }
 
   /* GET SESSION FOR USER */

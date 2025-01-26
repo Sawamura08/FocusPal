@@ -1,7 +1,13 @@
-import { Injectable, VERSION } from '@angular/core';
+import { DestroyRef, inject, Injectable, OnInit, VERSION } from '@angular/core';
 import { liveQuery } from 'dexie';
 import { db, Task, User } from './db';
-import { Observable, from } from 'rxjs';
+import {
+  Observable,
+  distinctUntilChanged,
+  from,
+  switchMap,
+  throttleTime,
+} from 'rxjs';
 import Dexie, { Table } from 'dexie';
 import { DatePipe } from '@angular/common';
 import { ScheduleService } from './schedule.service';
@@ -9,6 +15,8 @@ import { TaskObservableService } from '../service/task-observable.service';
 import { taskCompletion } from '../interfaces/export.object';
 import { SubTaskService } from './sub-task.service';
 import { ResponseService } from '../service/reponse.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { taskFilter } from '../interfaces/Request';
 
 @Injectable({
   providedIn: 'root',
@@ -16,6 +24,7 @@ import { ResponseService } from '../service/reponse.service';
 export class taskService {
   public taskList$: Observable<Task[]>;
   userList$: Observable<User[]>;
+  public destroyRef = inject(DestroyRef);
 
   constructor(
     protected datePipe: DatePipe,
@@ -25,20 +34,49 @@ export class taskService {
     protected Response: ResponseService
   ) {
     /* ----------- QUERY FETCH data from DB REACTIVELY/ ON LIVE */
-    this.taskList$ = from(liveQuery(() => this.getTaskList()));
+    this.taskList$ = from(liveQuery(() => this.getAllTask()));
     this.userList$ = from(liveQuery(() => db.userList.toArray()));
+    this.getTaskList();
   }
 
   /* GET ALL TASK */
-  public getTaskList = async (): Promise<Task[]> => {
+  public filterData: taskFilter | undefined;
+  public getTaskList = () => {
+    this.task$
+      .getUserTaskFilter()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (value) => {
+          this.filterData = value;
+        },
+        error: (err) => console.log('Error fetching filters', err),
+      });
+  };
+
+  public getAllTask = async () => {
     const progress = this.task$.getTaskProgressFilter()();
 
     const sched = await db.taskList
       .where('status')
       .equals(progress)
       .sortBy('dueDate');
-    this.task$.setNewTaskList(sched);
-    return sched;
+    if (this.filterData != undefined) {
+      const updatedSched = sched.filter(
+        (schedData) =>
+          (this.filterData?.priority === null ||
+            schedData.priority === this.filterData!.priority) &&
+          (this.filterData?.category === null ||
+            schedData.taskCategory === this.filterData!.category) &&
+          (this.filterData?.tags === null ||
+            schedData.tags === this.filterData!.tags)
+      );
+
+      this.task$.setNewTaskList(updatedSched);
+      return updatedSched;
+    } else {
+      this.task$.setNewTaskList(sched);
+      return sched;
+    }
   };
 
   /* GET USER SESSION */
