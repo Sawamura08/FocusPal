@@ -36,3 +36,9 @@
   <app-modal [data]="noSchedMessage"></app-modal>
 </div>
 }
+<!-- SUCCSSS -->
+@if (isErrorExist === modalType.SUCCESSFUL) {
+<div class="modal">
+  <app-sched-viewer [schedList]="scheduleToGenerate"></app-sched-viewer>
+</div>
+}

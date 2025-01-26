@@ -26,6 +26,7 @@ export class ClassSchedComponent implements OnInit {
   public schedList: Schedule[] = [];
   public isErrorExist: ModalType = ModalType.NONE;
   public modalType = ModalType;
+  public scheduleToGenerate: Schedule[] = [];
   public noSchedMessage = {
     imgPath: '/extra/remove.png',
     title: 'No Schedule Selected',
@@ -59,7 +60,33 @@ export class ClassSchedComponent implements OnInit {
   public generateSched = () => {
     if (this.schedSelected.length === 0) {
       this.isErrorExist = ModalType.INCORRECT;
+    } else {
+      this.setSchedViewer();
+      this.isErrorExist = this.modalType.SUCCESSFUL;
+      this.schedSelected = [];
+      setTimeout(() => {
+        this.scheduleToGenerate = [];
+      }, 1000);
     }
+  };
+
+  /* SET THE SELECTED SCHED TO THE SCHED VIEWER */
+  public setSchedViewer = () => {
+    this.schedSelected.forEach((sched) => {
+      const schedIndex = this.schedList.findIndex(
+        (index) => index.schedId === sched
+      );
+
+      this.scheduleToGenerate.push(this.schedList[schedIndex]);
+    });
+    this.scheduleToGenerate.sort((a, b) => {
+      const converted: number[] = this.schedule.getTimeBySched(
+        a.startTime,
+        b.startTime
+      );
+
+      return converted[0] - converted[1];
+    });
   };
 
   public fetchModalStatus = () => {

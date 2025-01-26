@@ -39,6 +39,7 @@ import { AngularFireAuthModule } from '@angular/fire/compat/auth';
 import { UserProfileComponent } from './views/user-profile/user-profile.component';
 import { UserProfileModule } from './views/user-profile/user-profile.module';
 import { ClassSchedComponent } from './views/class-sched/class-sched.component';
+import { ClassSchedModule } from './views/class-sched/class-sched.module';
 
 @NgModule({
   declarations: [
@@ -70,6 +71,7 @@ import { ClassSchedComponent } from './views/class-sched/class-sched.component';
     FormsModule,
     NgxMaterialTimepickerModule,
     UserProfileModule,
+    ClassSchedModule,
     ServiceWorkerModule.register('service-worker.js', {
       enabled: !isDevMode(),
       // Register the ServiceWorker as soon as the application is stable

@@ -1,0 +1,136 @@
+@use "../../../../app.component.scss" as *;
+@use "../../../../icons/font-awesome-6-pro-main/css/all.css" as *;
+
+.container {
+  width: 100%;
+  height: 100dvh;
+  overflow-y: scroll;
+  padding-block-end: 2rem;
+  position: relative;
+  background: url("/background/background2.png");
+  background-size: cover;
+  background-position: center;
+  color: $textColor;
+  opacity: 0;
+
+  .screenshot {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    header {
+      width: 100%;
+
+      .img-container {
+        width: 80%;
+        margin-inline: auto;
+
+        img {
+          width: 100%;
+        }
+      }
+    }
+
+    .schedule-container {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+      padding-inline: 0.5rem;
+      list-style-type: none;
+
+      .sched-day {
+        width: 47%;
+        box-shadow: 0 3px 4px $textColor;
+        border-radius: 1rem;
+        font-family: $subText;
+        background: linear-gradient(to right, #f99492, #fff5f2);
+        display: flex;
+        flex-direction: column;
+
+        .sched-title {
+          padding: 0.5rem;
+          border-top-left-radius: 1rem;
+          border-top-right-radius: 1rem;
+          text-align: center;
+          font-family: $fontFamily;
+          font-size: 1rem;
+          color: $textColor;
+        }
+
+        .sched-data {
+          width: 100%;
+          padding: 0.5rem;
+          /* justify-self: center;
+          flex-grow: 1;
+          display: flex;
+          flex-direction: column;
+          justify-content: center; */
+
+          .title-time {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            .title {
+              font-family: $fontFamily;
+              font-size: 0.9rem;
+            }
+
+            .location {
+              font-size: 0.7rem;
+              font-family: $subText;
+            }
+          }
+
+          .time {
+            font-size: 0.7rem;
+            margin: 0;
+          }
+        }
+      }
+    }
+
+    .schedule-container .sched-day:nth-child(2),
+    .schedule-container .sched-day:nth-child(3),
+    .schedule-container .sched-day:nth-child(6) {
+      background: linear-gradient(to right, #f5c0ef, #fff5f2);
+    }
+
+    .button-container {
+      margin-block-start: 1rem;
+      padding-block: 1rem;
+      width: 50%;
+      margin-inline: auto;
+
+      .btn {
+        @include buttonTheme($mainColor, $neutralColor, $shadow);
+        width: 100%;
+
+        &:active {
+          @include buttonOnClick($shadow);
+        }
+      }
+    }
+  }
+}
+
+.icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  border: 1px solid $textColor;
+  border-radius: 50%;
+  position: absolute;
+  top: 2%;
+  left: 2%;
+  z-index: 2;
+  padding: 1rem;
+  opacity: 0.7;
+
+  display: grid;
+  place-content: center;
+}

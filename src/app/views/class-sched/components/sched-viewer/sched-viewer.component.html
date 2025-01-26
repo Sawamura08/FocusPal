@@ -1,0 +1,140 @@
+<section class="container" id="screenshot" *ngIf="isAnimated" @slide>
+  <div class="screenshot">
+    <header>
+      <figure class="img-container">
+        <img src="/extra/week.png" alt="This Week" />
+      </figure>
+    </header>
+
+    <ul class="schedule-container">
+      <li class="sched-day" *ngIf="checkScheduledDay(1)">
+        <div class="sched-title">
+          <h3 class="day">Monday</h3>
+        </div>
+        <ng-container *ngFor="let sched of permanentSchedList; index as i">
+          <div class="sched-data" *ngIf="isSchedInDays(sched.daysOfWeek!, 1)">
+            <div class="title-time">
+              <h3 class="title">{{ sched.title }}</h3>
+              <p class="location">{{ sched.location }}</p>
+            </div>
+            <p class="time">
+              {{ sched.startTime | date : "h:mm:a" }} -
+              {{ sched.endTime | date : "h:mm:a" }}
+            </p>
+          </div>
+        </ng-container>
+      </li>
+      <li class="sched-day" *ngIf="checkScheduledDay(2)">
+        <div class="sched-title">
+          <h3 class="day">Tuesday</h3>
+        </div>
+        <ng-container *ngFor="let sched of permanentSchedList; index as i">
+          <div class="sched-data" *ngIf="isSchedInDays(sched.daysOfWeek!, 2)">
+            <div class="title-time">
+              <h3 class="title">{{ sched.title }}</h3>
+              <p class="location">{{ sched.location }}</p>
+            </div>
+            <p class="time">
+              {{ sched.startTime | date : "h:mm:a" }} -
+              {{ sched.endTime | date : "h:mm:a" }}
+            </p>
+          </div>
+        </ng-container>
+      </li>
+      <li class="sched-day" *ngIf="checkScheduledDay(3)">
+        <div class="sched-title">
+          <h3 class="day">Wednesday</h3>
+        </div>
+        <ng-container *ngFor="let sched of permanentSchedList; index as i">
+          <div class="sched-data" *ngIf="isSchedInDays(sched.daysOfWeek!, 3)">
+            <div class="title-time">
+              <h3 class="title">{{ sched.title }}</h3>
+              <p class="location">{{ sched.location }}</p>
+            </div>
+            <p class="time">
+              {{ sched.startTime | date : "h:mm:a" }} -
+              {{ sched.endTime | date : "h:mm:a" }}
+            </p>
+          </div>
+        </ng-container>
+      </li>
+      <li class="sched-day" *ngIf="checkScheduledDay(4)">
+        <div class="sched-title">
+          <h3 class="day">Thursday</h3>
+        </div>
+        <ng-container *ngFor="let sched of permanentSchedList; index as i">
+          <div class="sched-data" *ngIf="isSchedInDays(sched.daysOfWeek!, 4)">
+            <div class="title-time">
+              <h3 class="title">{{ sched.title }}</h3>
+              <p class="location">{{ sched.location }}</p>
+            </div>
+            <p class="time">
+              {{ sched.startTime | date : "h:mm:a" }} -
+              {{ sched.endTime | date : "h:mm:a" }}
+            </p>
+          </div>
+        </ng-container>
+      </li>
+      <li class="sched-day" *ngIf="checkScheduledDay(5)">
+        <div class="sched-title">
+          <h3 class="day">Friday</h3>
+        </div>
+        <ng-container *ngFor="let sched of permanentSchedList; index as i">
+          <div class="sched-data" *ngIf="isSchedInDays(sched.daysOfWeek!, 5)">
+            <div class="title-time">
+              <h3 class="title">{{ sched.title }}</h3>
+              <p class="location">{{ sched.location }}</p>
+            </div>
+            <p class="time">
+              {{ sched.startTime | date : "h:mm:a" }} -
+              {{ sched.endTime | date : "h:mm:a" }}
+            </p>
+          </div>
+        </ng-container>
+      </li>
+      <li class="sched-day" *ngIf="checkScheduledDay(6)">
+        <div class="sched-title">
+          <h3 class="day">Saturday</h3>
+        </div>
+        <ng-container *ngFor="let sched of permanentSchedList; index as i">
+          <div class="sched-data" *ngIf="isSchedInDays(sched.daysOfWeek!, 6)">
+            <div class="title-time">
+              <h3 class="title">{{ sched.title }}</h3>
+              <p class="location">{{ sched.location }}</p>
+            </div>
+            <p class="time">
+              {{ sched.startTime | date : "h:mm:a" }} -
+              {{ sched.endTime | date : "h:mm:a" }}
+            </p>
+          </div>
+        </ng-container>
+      </li>
+      <li class="sched-day" *ngIf="checkScheduledDay(7)">
+        <div class="sched-title">
+          <h3 class="day">Sunday</h3>
+        </div>
+        <ng-container *ngFor="let sched of permanentSchedList; index as i">
+          <div class="sched-data" *ngIf="isSchedInDays(sched.daysOfWeek!, 7)">
+            <div class="title-time">
+              <h3 class="title">{{ sched.title }}</h3>
+              <p class="location">{{ sched.location }}</p>
+            </div>
+            <p class="time">
+              {{ sched.startTime | date : "h:mm:a" }} -
+              {{ sched.endTime | date : "h:mm:a" }}
+            </p>
+          </div>
+        </ng-container>
+      </li>
+    </ul>
+    @if(!isScreenshotClick) {
+    <div class="button-container">
+      <button class="btn" (click)="downloadSched()">Download</button>
+    </div>
+    }
+  </div>
+</section>
+
+<span class="icon" (click)="closeModal()"
+  ><i class="fa-thin fa-arrow-left"></i
+></span>
